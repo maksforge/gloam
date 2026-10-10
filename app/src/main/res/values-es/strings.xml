@@ -58,6 +58,14 @@
     <string name="dim_warmth_label">Calidez</string>
     <string name="dim_warmth_color_label">Color</string>
 
+    <string name="preset_reading">Lectura</string>
+    <string name="preset_reading_hint">Oscuro y casi sin tono, para que el texto conserve el contraste.</string>
+    <string name="preset_evening">Noche</string>
+    <string name="preset_evening_hint">Atenuación ligera y mucha calidez, para las horas antes de apagar la luz.</string>
+    <string name="preset_in_bed">En la cama</string>
+    <string name="preset_in_bed_hint">Casi a oscuras y en rojo intenso, para una habitación con la luz apagada.</string>
+    <string name="presets_hint">Toca uno para empezar a atenuar con él y luego ajusta lo que quieras arriba.</string>
+
     <string name="controls_open_app">Abrir Gloam</string>
     <string name="panel_close">Cerrar los controles</string>
 

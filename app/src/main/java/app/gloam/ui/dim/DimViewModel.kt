@@ -134,6 +134,17 @@ class DimViewModel(
     }
 
     /**
+     * Writes a preset's three values. **Starting the shade is not this one's job** — the screen does
+     * that after calling this, through the same permission branch as its Start button, because
+     * starting a service needs a `Context`.
+     */
+    fun applyPreset(preset: Preset) {
+        viewModelScope.launch {
+            preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
+        }
+    }
+
+    /**
      * Records the intent **and the deadline it comes with**, in one write.
      *
      * **Starting the service is the screen's job, not this one's** — a `ViewModel` has no `Context`

@@ -456,6 +456,26 @@ class AppPreferences(
         store.edit { it[Keys.WARMTH_COLOR] = warmthColor.coerceIn(0, 100) }
     }
 
+    /**
+     * All three of a preset's values in **one** edit, rather than the three setters above in a row.
+     *
+     * One transaction, so the store never holds a half-applied preset — the new dim level under the
+     * old tint — for a process death or a backup to catch, and it is one disk write instead of
+     * three. It does not promise the shade a single repaint: the service collects these as separate
+     * `Flow`s, and the ramp bounds every combination of them anyway.
+     */
+    suspend fun setDimLevelAndWarmth(
+        dimLevel: Int,
+        warmth: Int,
+        warmthColor: Int,
+    ) {
+        store.edit {
+            it[Keys.DIM_LEVEL] = dimLevel.coerceIn(0, 100)
+            it[Keys.WARMTH] = warmth.coerceIn(0, 100)
+            it[Keys.WARMTH_COLOR] = warmthColor.coerceIn(0, 100)
+        }
+    }
+
     suspend fun setLauncherCompact(enabled: Boolean) {
         store.edit { it[Keys.LAUNCHER_COMPACT] = enabled }
     }
