@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0](https://github.com/srednimax/gloam/compare/v1.0.0...v1.1.0) (2026-10-10)
+
+
+### Features
+
+* presets for reading, evening and in bed ([3027bd3](https://github.com/srednimax/gloam/commit/3027bd3dda6d425c98fce7eee05cbc60a5f58fe3))
+
+
+### Bug Fixes
+
+* upload the feature graphic with the listing, not only by hand ([6061ec4](https://github.com/srednimax/gloam/commit/6061ec49ae973b29424f3022ae6a1eda3ac7887e))
+
 ## [1.0.0](https://github.com/srednimax/gloam/compare/v0.9.0...v1.0.0) (2026-09-25)
 
 
