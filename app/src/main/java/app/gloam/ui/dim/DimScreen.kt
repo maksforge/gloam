@@ -253,6 +253,20 @@ fun DimScreen(
         requestNotifications()
     }
 
+    /**
+     * Start, by whichever route the notification permission leaves open. Shared by the Start button
+     * and the presets, so a preset tap can never start a shade the button would have asked first.
+     */
+    fun startOrAsk() {
+        when {
+            // Granted, or one denial already spent. Android permits two denials before the dialog
+            // stops appearing, and the second is spent only by a deliberate tap on a control that
+            // says *Allow notifications* — never by somebody who came here to dim their screen.
+            notificationsOn || rationaleLeft -> beginDimming()
+            else -> askForNotifications()
+        }
+    }
+
     Scaffold(
         modifier = modifier,
         topBar = { TopAppBar(title = { Text(stringResource(R.string.dim_title)) }) },
@@ -314,18 +328,19 @@ fun DimScreen(
                 onWarmth = viewModel::setWarmth,
                 onWarmthColor = viewModel::setWarmthColor,
                 onToggleRunning = {
-                    when {
-                        state.shadeUp -> {
-                            viewModel.endShade(ShadeEnd.ByHand)
-                            context.stopShade()
-                        }
-                        // Granted, or one denial already spent. Android permits two denials before
-                        // the dialog stops appearing, and the second is spent only by a deliberate
-                        // tap on a control that says *Allow notifications* — never by somebody who
-                        // came here to dim their screen.
-                        notificationsOn || rationaleLeft -> beginDimming()
-                        else -> askForNotifications()
+                    if (state.shadeUp) {
+                        viewModel.endShade(ShadeEnd.ByHand)
+                        context.stopShade()
+                    } else {
+                        startOrAsk()
                     }
+                },
+                // A preset is "turn on reading", not "move the sliders to reading's numbers", so it
+                // starts a shade that is down. One that is already up just follows the new values,
+                // because the service collects them — restarting it would re-set the deadline.
+                onPreset = { preset ->
+                    viewModel.applyPreset(preset)
+                    if (!state.shadeUp) startOrAsk()
                 },
             )
 

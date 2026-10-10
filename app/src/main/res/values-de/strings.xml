@@ -59,6 +59,14 @@
     <string name="dim_warmth_label">Wärme</string>
     <string name="dim_warmth_color_label">Farbe</string>
 
+    <string name="preset_reading">Lesen</string>
+    <string name="preset_reading_hint">Dunkel und kaum getönt, damit Text seinen Kontrast behält.</string>
+    <string name="preset_evening">Abend</string>
+    <string name="preset_evening_hint">Leicht abgedunkelt und stark warm, für die Stunden, bevor das Licht ausgeht.</string>
+    <string name="preset_in_bed">Im Bett</string>
+    <string name="preset_in_bed_hint">Fast dunkel und tiefrot, für einen Raum mit ausgeschaltetem Licht.</string>
+    <string name="presets_hint">Tippe auf eine Vorgabe, um damit abzudunkeln. Darüber kannst du danach alles anpassen.</string>
+
     <string name="controls_open_app">Gloam öffnen</string>
     <string name="panel_close">Steuerung schließen</string>
 

@@ -105,6 +105,7 @@ fun DimControls(
     onWarmth: (Int) -> Unit,
     onWarmthColor: (Int) -> Unit,
     onToggleRunning: () -> Unit,
+    onPreset: (Preset) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -151,10 +152,47 @@ fun DimControls(
             modifier = Modifier.padding(horizontal = Spacing.base, vertical = Spacing.base),
         )
 
+        PresetRow(
+            selected = Preset.matching(dimLevel, warmth, warmthColor),
+            onPreset = onPreset,
+            modifier = Modifier.padding(start = Spacing.base, end = Spacing.base, bottom = Spacing.base),
+        )
+
         RunButton(
             running = running,
             onToggleRunning = onToggleRunning,
             modifier = Modifier.padding(horizontal = Spacing.base),
+        )
+    }
+}
+
+/**
+ * The presets as chips, and **one line under them saying what the lit one is for** — which is the
+ * help a user asked for, put where the choice is made rather than behind an icon nobody taps.
+ *
+ * [selected] is derived from the values by [Preset.matching], never stored, so dragging any control
+ * off a preset's numbers unlights its chip and the line falls back to the general hint.
+ */
+@Composable
+private fun PresetRow(
+    selected: Preset?,
+    onPreset: (Preset) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.hair)) {
+        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.tight)) {
+            Preset.entries.forEach { preset ->
+                FilterChip(
+                    selected = preset == selected,
+                    onClick = { onPreset(preset) },
+                    label = { Text(stringResource(preset.label)) },
+                )
+            }
+        }
+        Text(
+            text = stringResource(selected?.hint ?: R.string.presets_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

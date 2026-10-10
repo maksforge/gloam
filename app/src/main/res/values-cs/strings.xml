@@ -57,6 +57,14 @@
     <string name="dim_warmth_label">Teplo barvy</string>
     <string name="dim_warmth_color_label">Odstín</string>
 
+    <string name="preset_reading">Čtení</string>
+    <string name="preset_reading_hint">Tma a skoro žádný odstín, aby text neztratil kontrast.</string>
+    <string name="preset_evening">Večer</string>
+    <string name="preset_evening_hint">Lehké ztmavení a silné teplo barvy na hodiny před zhasnutím.</string>
+    <string name="preset_in_bed">V posteli</string>
+    <string name="preset_in_bed_hint">Skoro tma a sytě červená, pro pokoj se zhasnutým světlem.</string>
+    <string name="presets_hint">Klepnutím na jednu začneš ztmavovat od ní, pak můžeš upravit cokoli nad tím.</string>
+
     <string name="controls_open_app">Otevřít Gloam</string>
     <string name="panel_close">Zavřít ovládání</string>
 
