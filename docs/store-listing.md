@@ -1248,3 +1248,64 @@ Se você testou o Gloam: nada mudou desde a última versão de teste. Obrigado p
 
 Для тестувальників: від останньої тестової версії нічого не змінилося. Дякуємо за тестування.
 ```
+
+### 1.1.0 — presets
+
+**One owner-visible change, so one paragraph.** A user asked for somewhere that says which settings
+suit which use, and for buttons that switch between them; presets are both, and the note names the
+three in each language's own chip labels so a reader can find them. **No sleep, eyes or blue light**,
+the brief's §2.2 — *Evening* and *In bed* are situations, and the note leaves them as that.
+
+**English** — 283/500:
+
+```
+New: presets. Under Warmth there are now three, Reading, Evening and In bed. One tap sets the dim level, the warmth and its colour together and starts dimming, and a line under them says what each one is for. Move any control afterwards and you are simply on your own settings again.
+```
+
+**Polish** — 325/500:
+
+```
+Nowość: gotowe ustawienia. Pod ciepłem barwy są teraz trzy: Czytanie, Wieczór i W łóżku. Jedno dotknięcie ustawia razem poziom przyciemnienia, ciepło barwy i odcień, i włącza przyciemnianie, a linijka pod nimi mówi, do czego służy każde z nich. Gdy potem przesuniesz dowolną kontrolkę, wracasz po prostu do własnych ustawień.
+```
+
+**Czech** — 285/500:
+
+```
+Novinka: předvolby. Pod teplem barvy jsou teď tři: Čtení, Večer a V posteli. Jedno klepnutí nastaví úroveň ztmavení, teplo barvy i odstín najednou a začne ztmavovat, a řádek pod nimi říká, k čemu se která hodí. Když pak posuneš kterýkoli ovladač, jsi zase prostě na vlastním nastavení.
+```
+
+**German** — 312/500:
+
+```
+Neu: Vorgaben. Unter Wärme gibt es jetzt drei: Lesen, Abend und Im Bett. Ein Tippen stellt Abdunkelungsstufe, Wärme und Farbe zusammen ein und startet das Abdunkeln, und eine Zeile darunter sagt, wofür jede gedacht ist. Verschiebst du danach einen Regler, bist du einfach wieder bei deinen eigenen Einstellungen.
+```
+
+**Spanish** — 303/500:
+
+```
+Novedad: ajustes predefinidos. Bajo Calidez hay ahora tres: Lectura, Noche y En la cama. Un toque fija a la vez el nivel de atenuación, la calidez y su color y empieza a atenuar, y una línea debajo dice para qué sirve cada uno. Si después mueves cualquier control, vuelves sin más a tus propios ajustes.
+```
+
+**French** — 345/500:
+
+```
+Nouveau : des préréglages. Sous Chaleur, il y en a maintenant trois : Lecture, Soirée et Au lit. Un seul appui règle ensemble le niveau d'assombrissement, la chaleur et sa couleur, et lance l'assombrissement ; une ligne en dessous dit à quoi sert chacun. Déplacez ensuite n'importe quel réglage et vous retrouvez simplement vos propres réglages.
+```
+
+**Italian** — 312/500:
+
+```
+Novità: le preimpostazioni. Sotto Calore ora ce ne sono tre: Lettura, Sera e A letto. Un tocco imposta insieme il livello di oscuramento, il calore e il suo colore e avvia l'oscuramento, e una riga sotto dice a cosa serve ciascuna. Se poi sposti un controllo qualsiasi, torni semplicemente alle tue impostazioni.
+```
+
+**Brazilian Portuguese** — 316/500:
+
+```
+Novidade: predefinições. Abaixo de Calidez agora há três: Leitura, Noite e Na cama. Um toque ajusta juntos o nível de escurecimento, a calidez e a cor dela e começa a escurecer, e uma linha abaixo diz para que serve cada uma. Se depois você mover qualquer controle, volta simplesmente às suas próprias configurações.
+```
+
+**Ukrainian** — 299/500:
+
+```
+Нове: готові налаштування. Під теплотою тепер є три: Читання, Вечір і У ліжку. Один дотик разом задає рівень затемнення, теплоту та її відтінок і вмикає затемнення, а рядок під ними каже, для чого кожне з них. Якщо потім посунеш будь-який елемент керування, просто повернешся до власних налаштувань.
+```
