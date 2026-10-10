@@ -11,6 +11,7 @@ so a listing change is still one diff in one file, reviewed in a PR like anythin
                                     full_description.txt
                                     changelogs/<versionCode>.txt
                                     images/phoneScreenshots/1_home.png …
+    fastlane/metadata/android/en-US/images/featureGraphic.png
 
 ⚠️ **Changelogs are named by versionCode, not by semver.** `406.txt`, not `1.9.0.txt` — supply keys
 release notes to the build they belong to, and a name Play cannot match is silently ignored rather
@@ -20,6 +21,13 @@ derives it from; pass `--version-code` when generating for a build that is not t
 Screenshots are copied from `art/play-screenshots/`, whose filenames carry both their order and their
 locale — `1_home-pl.png`. The locale suffix is stripped on the way in, because supply already knows
 the language from the directory it is putting the file in.
+
+The feature graphic is copied from `art/play-feature-graphic.png` into the **default language only**.
+Play shows a language with no graphic of its own the default's — the Console labels it a *common*
+asset — so one file is the whole listing's graphic, and copying it into every locale would turn that
+one asset into nine overrides to keep in step. It is here at all because a graphic that only the
+Console holds goes stale without anyone noticing: the 16:9-crop fix sat in this repository from
+2026-09-05 while Play served the old file until 2026-10-10.
 
 ⚠ **A blank field is written as no file at all, never as an empty one.** An empty file is a value:
 supply reads it and asks Play to store `""`, and Play refuses the whole edit - *"This app has no short
@@ -65,6 +73,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LISTING = ROOT / "docs" / "store-listing.md"
 SCREENSHOTS = ROOT / "art" / "play-screenshots"
+FEATURE_GRAPHIC = ROOT / "art" / "play-feature-graphic.png"
+DEFAULT_LOCALE = "en-US"
 
 # Reuse the release-note parser rather than growing a second one — same document, same fenced-block
 # shape, and the locale table must not be allowed to disagree between the two.
@@ -180,6 +190,20 @@ def copy_screenshots(out: Path) -> dict[str, int]:
     return counts
 
 
+def copy_feature_graphic(out: Path) -> bool:
+    """`art/play-feature-graphic.png` -> the default language's `images/featureGraphic.png`.
+
+    Returns whether there was one to copy. `make-feature-graphic.py` regenerates the source; this only
+    carries it, so a re-render reaches Play on the next listing upload with nothing else to remember.
+    """
+    if not FEATURE_GRAPHIC.is_file():
+        return False
+    target = out / DEFAULT_LOCALE / "images"
+    target.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(FEATURE_GRAPHIC, target / "featureGraphic.png")
+    return True
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True, help="fastlane/metadata/android")
@@ -224,6 +248,7 @@ def main() -> int:
             (changelogs / f"{code}.txt").write_text(notes[locale] + "\n", encoding="utf-8")
 
     shots = copy_screenshots(args.out)
+    graphic = copy_feature_graphic(args.out)
     complete = sorted(locale for locale, fields in listings.items() if all(fields.get(f) for f in LIMITS))
     incomplete = sorted(set(listings) - set(complete))
     print(
@@ -232,6 +257,7 @@ def main() -> int:
         + f"  notes: {len(notes)} (release {release}, changelog {code}.txt)"
     )
     print(f"screenshots: {sum(shots.values())} across {len(shots)} locales" if shots else "screenshots: none (art/play-screenshots/ absent — text-only run)")
+    print(f"feature graphic: {DEFAULT_LOCALE}" if graphic else "feature graphic: none (art/play-feature-graphic.png absent)")
 
     for gap in gaps:
         print(f"{'FAILED' if args.strict else 'WARNING'}: {gap}", file=sys.stderr)
