@@ -1,8 +1,9 @@
 name: Publish to Play (production)
 
 # Manual only, and gated twice more on top of that. This is the one workflow that can put a build
-# in front of every owner, so nothing about it is automatic: you trigger it, the `production`
-# environment holds it until you approve, and the rollout reaches a fraction of installs first.
+# in front of every owner, so nothing about it is automatic: you trigger it, and the `production`
+# environment holds it until you approve. The rollout defaults to everyone: with Gloam's user count
+# a 10% stage reaches almost nobody and only delays the release. Pick a fraction when that changes.
 #
 # The internal-track workflow (publish-play.yml) stays the automatic one, because a bad build there
 # is visible only to you. Nothing about that reasoning transfers here.
@@ -37,9 +38,9 @@ on:
       rollout:
         # A choice, not free text: supply wants a FRACTION, so typing 10 to mean "10%" would ask
         # Play for 1000%. The options are the only values anyone actually wants.
-        description: 'Staged rollout — 0.1 means 10% of owners. Widen later from the Console.'
+        description: 'Rollout — 1.0 is every owner; 0.1 means 10%, widened later from the Console.'
         type: choice
-        default: '0.1'
+        default: '1.0'
         options:
           - '0.01'
           - '0.05'

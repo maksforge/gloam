@@ -396,17 +396,19 @@ version in the dialog.
 accepted, not that any tester has the build. Later releases on a track Play has already reviewed
 appear within minutes.
 
-## Going to production (manual, gated, staged)
+## Going to production (manual, gated)
 
 `.github/workflows/publish-play-production.yml` — **Run workflow**, never automatic. It is the only
-path that can reach every owner, so it carries three independent brakes:
+path that can reach every owner, so it carries two independent brakes, and a third you can opt into:
 
 1. **You trigger it.** `workflow_dispatch` only; no push, tag or schedule reaches it.
 2. **You approve it.** The job declares `environment: production`. ⚠️ **Add yourself as the sole
    required reviewer on that environment in repo settings** — without a reviewer configured the
    environment is just a label and gates nothing.
-3. **Staged rollout.** `rollout` defaults to `0.1`, so a bad build reaches a tenth of installs and
-   you widen from the Console once it looks clean.
+3. **Staged rollout, when it is worth having.** `rollout` defaults to `1.0`, everyone, since
+   2026-10-11: with Gloam's user count a 10% stage reaches almost nobody, so it only delays the
+   release without catching anything first. Pick `0.1` or lower once there are enough owners for a
+   fraction to mean something, and widen from the Console once it looks clean.
 
 And a fourth for the first run: **`dry_run` defaults to true**, which passes `--validate_only` —
 Play validates the whole edit and discards it. Nothing publishes, nothing is sent for review. Untick
@@ -444,7 +446,7 @@ promotion: it moves the release already sitting on `from_track` instead of looki
 | --- | --- | --- |
 | `track` | `production` | destination - also `beta` / `alpha`, though closed testing now has its own workflow above |
 | `from_track` | `internal` | source track holding the build being promoted |
-| `rollout` | `0.1` | fraction of users; `1.0` is everyone |
+| `rollout` | `1.0` | fraction of users; `1.0` is everyone, `0.1` a tenth |
 | `version_code` | *(blank)* | which build to promote; blank asks Play what is on `from_track` |
 | `update_listing` | `false` | push descriptions + screenshots as well |
 | `dry_run` | `true` | validate against Play, commit nothing |
