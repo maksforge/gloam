@@ -18,9 +18,10 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import app.gloam.shade.PANEL_SIDE_MARGIN_DP
 import app.gloam.shade.ShadeEnd
 import app.gloam.shade.canDrawShade
-import app.gloam.shade.dismissPanel
+import app.gloam.shade.dismissPanelAndBubble
 import app.gloam.shade.escapeHatchLive
 import app.gloam.shade.panelOnScreen
+import app.gloam.shade.showControlsBubble
 import app.gloam.shade.startShade
 import app.gloam.shade.stopShade
 import app.gloam.theme.AppTheme
@@ -75,13 +76,20 @@ import kotlinx.coroutines.launch
  * UI, under the shade. `EscapeHatch.kt`'s inventory does not gain a row for it.
  */
 class ControlsActivity : AppCompatActivity() {
+    /**
+     * Whether this window closing should leave the bubble behind. True for Back and a tap outside,
+     * which is the user turning back to what they were reading; false for every way out that says
+     * something else — the ✕, the cog, a forward to the full app, the panel taking over (ADR-0016).
+     */
+    private var leavesBubble = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // **One edge bar at a time, the one opened last** (`panelOnScreen` has the why). Opening this
         // takes a panel down, and first rather than after the guards: the forward to the full app is
         // an opening too, and the panel's own cog already closes the panel on its way there.
-        dismissPanel()
+        dismissPanelAndBubble()
 
         // Before anything is composed: a dialog with a broken start button on it is worse than no
         // dialog, and so is a dialog the user asked the icon not to open. `finish()` from `onCreate`
@@ -95,7 +103,7 @@ class ControlsActivity : AppCompatActivity() {
 
         // The other half: a panel appearing *after* this opened is the user asking for that one, so
         // this one goes. `drop(1)` skips the value current at subscription — a panel that is up right
-        // now is one [dismissPanel] above is already taking down, not a new one.
+        // now is one [dismissPanelAndBubble] above is already taking down, not a new one.
         //
         // Kotlin note: `lifecycleScope` is cancelled in `onDestroy`, so this wait needs no manual
         // unsubscribe — the `AbortController` is the Activity's own lifetime. Not `repeatOnLifecycle`:
@@ -103,6 +111,7 @@ class ControlsActivity : AppCompatActivity() {
         // is back on screen the moment the user returns.
         lifecycleScope.launch {
             panelOnScreen.drop(1).first { up -> up }
+            leavesBubble = false
             finish()
         }
 
@@ -162,7 +171,10 @@ class ControlsActivity : AppCompatActivity() {
                         onStart = ::startShade,
                         onStop = ::stopShade,
                         onOpenApp = ::openFullApp,
-                        onClose = ::finish,
+                        onClose = {
+                            leavesBubble = false
+                            finish()
+                        },
                         modifier = Modifier.fillMaxSize(),
                     )
                 }
@@ -187,7 +199,7 @@ class ControlsActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         // A second tap on the icon is an opening as well, for `onCreate`'s rule.
-        dismissPanel()
+        dismissPanelAndBubble()
         // `isFinishing` for [forwardIfUnusable]'s reason: this window may already be on its way out,
         // and starting the full app twice is two task animations for one tap.
         if (!isFinishing) forwardIfFullAppWanted(intent)
@@ -217,6 +229,16 @@ class ControlsActivity : AppCompatActivity() {
         if (app.launcherCompact || !intent.hasCategory(Intent.CATEGORY_LAUNCHER)) return false
         openFullApp()
         return true
+    }
+
+    /**
+     * The service decides whether there is a shade for the bubble to sit over; this only says the
+     * controls were put away rather than dismissed. A Home press stops this window without finishing
+     * it, so it leaves nothing.
+     */
+    override fun onDestroy() {
+        if (isFinishing && leavesBubble) showControlsBubble()
+        super.onDestroy()
     }
 
     /**
@@ -275,6 +297,7 @@ class ControlsActivity : AppCompatActivity() {
      * says *how this Activity was entered*, and a start from inside the app is not the icon.
      */
     private fun openFullApp() {
+        leavesBubble = false
         startActivity(Intent(this, MainActivity::class.java).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         finish()
     }

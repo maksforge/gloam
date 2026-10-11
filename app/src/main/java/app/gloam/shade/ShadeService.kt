@@ -17,11 +17,18 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.FrameLayout
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VectorConverter
+import androidx.compose.animation.core.spring
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.core.app.NotificationCompat
 import app.gloam.MainActivity
 import app.gloam.MainApplication
 import app.gloam.R
 import app.gloam.data.AppPreferences
+import app.gloam.data.ThemeMode
 import app.gloam.work.AppChannel
 import app.gloam.work.ensureNotificationChannels
 import kotlinx.coroutines.CoroutineScope
@@ -49,6 +56,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.coroutineContext
+import kotlin.math.abs
 import kotlin.math.min
 
 /** The notification's Stop action, delivered straight to the service so it needs no Activity. */
@@ -399,6 +407,47 @@ class ShadeService : Service() {
             onBufferOverflow = BufferOverflow.DROP_OLDEST,
         )
 
+    /** The bubble's host while it is up. Built per appearance, for [panelHost]'s reason. */
+    private var bubbleHost: PanelHost? = null
+
+    private var bubbleParams: WindowManager.LayoutParams? = null
+
+    /** Where the bubble was when the current drag began; the drag is an offset from it. */
+    private var dragOrigin: BubblePosition? = null
+
+    /**
+     * The ✕ window, added *before* the bubble and drawn empty until a drag starts. Before, because
+     * windows of one app stack in the order they were added, and the bubble must be dropped *onto*
+     * the ✕ rather than slide under it. It is untouchable, so lying in wait costs the app below
+     * nothing.
+     */
+    private var targetHost: PanelHost? = null
+
+    private var targetParams: WindowManager.LayoutParams? = null
+
+    private val overTarget = MutableStateFlow(false)
+
+    private val bubbleDragging = MutableStateFlow(false)
+
+    private val bubblePressed = MutableStateFlow(false)
+
+    /** True for the moment between a drop on the ✕ and the window going, while the bubble shrinks away. */
+    private val bubbleLeaving = MutableStateFlow(false)
+
+    /** Which edge the bubble is tucked into while it rests; `null` while it is held or flying. */
+    private val bubbleTucked = MutableStateFlow<BubbleSide?>(null)
+
+    /** The spring into an edge after a release; cancelled by the next press. */
+    private var settleJob: Job? = null
+
+    /** The theme the bubble's three windows were drawn in, read once when the bubble appeared. */
+    private var bubbleTheme = ThemeMode.DARK
+
+    private var promptHost: PanelHost? = null
+
+    /** The prompt's timeout, for the panel's idle timeout's reason: a window drawn where nobody can reach it still goes. */
+    private var promptJob: Job? = null
+
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
@@ -438,7 +487,13 @@ class ShadeService : Service() {
 
         // The compact controls opening, asking for the panel to go: one edge bar at a time, the one
         // opened last. See [panelOnScreen].
-        panelDismissals.onEach { removePanelWindow() }.launchIn(scope)
+        floatingDismissals
+            .onEach {
+                removePanelWindow()
+                removeBubbleWindow()
+            }.launchIn(scope)
+        bubbleRequests.onEach { showBubble() }.launchIn(scope)
+        preferences.controlsBubble.onEach { enabled -> if (!enabled) removeBubbleWindow() }.launchIn(scope)
 
         // Separate from the combine above so the release half, a one-value flow, costs nothing: it
         // emits once, before or after the first settings, and either order ends painted correctly.
@@ -570,6 +625,8 @@ class ShadeService : Service() {
         // Before the shade, because the panel is a child of the shade's lifetime rather than a peer
         // of it: there is no state in which the panel is up and the shade is not. This is the third
         // of the panel's three ways out, and the only one the user does not ask for.
+        removePromptWindow()
+        removeBubbleWindow()
         removePanelWindow()
         removeShadeWindow()
         // After the removal, never before: the removal finishes on this thread. See [ShadeThread.quit].
@@ -722,6 +779,7 @@ class ShadeService : Service() {
             // — the summon then restores the shade first and opens the panel over it, rather than
             // opening a panel with nothing underneath.
             addShadeWindow()
+            removeBubbleWindow()
             addPanelWindow(state)
         }
     }
@@ -807,8 +865,12 @@ class ShadeService : Service() {
                 onTouch = { panelTouches.tryEmit(Unit) },
                 // A tap on the app behind the panel is the user going back to what they were doing.
                 // The panel is a control summoned for a moment, so that is a dismissal — the same
-                // answer the close button gives, reached without aiming at anything.
-                onOutside = ::removePanelWindow,
+                // answer the close button gives, reached without aiming at anything — except that
+                // this one leaves the bubble behind, and the button does not (ADR-0016).
+                onOutside = {
+                    removePanelWindow()
+                    showBubble()
+                },
             )
 
         host.setContent {
@@ -925,6 +987,10 @@ class ShadeService : Service() {
      */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        // The bubble inherits ADR-0011's rotation hazard: a position kept from landscape can be off
+        // a portrait display, and a touchable window nobody can see is the trap.
+        settleBubble(velocityX = 0f, velocityY = 0f, animate = false)
+        placeDismissTarget()
         val view = panelView ?: return
         val params = panelParams ?: return
         val manager = windowManager ?: return
@@ -996,6 +1062,379 @@ class ShadeService : Service() {
                 }
             }
         }
+
+    /**
+     * Leave the bubble on screen, or do nothing.
+     *
+     * Only over a running shade with neither the panel nor a bubble already up, and only while the
+     * preference says so — all read here rather than at the callers, because a request can arrive
+     * from the compact controls closing a moment after the shade was stopped from them.
+     */
+    private fun showBubble() {
+        if (bubbleHost != null || panelView != null || shadeView == null) return
+        scope.launch {
+            if (!preferences.controlsBubble.first()) return@launch
+            if (!preferences.shadeIntent.first().running) return@launch
+            addBubbleWindow(preferences.themeMode.first())
+        }
+    }
+
+    /** The app's area of the display: the bounds minus the system bars and the cutout. */
+    private fun bubbleArea(manager: WindowManager): BubbleArea {
+        val metrics = manager.currentWindowMetrics
+        val insets =
+            metrics.windowInsets.getInsetsIgnoringVisibility(
+                WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout(),
+            )
+        val bounds = metrics.bounds
+        return BubbleArea(
+            left = insets.left,
+            top = insets.top,
+            right = bounds.width() - insets.right,
+            bottom = bounds.height() - insets.bottom,
+        )
+    }
+
+    private fun bubbleSizePx(manager: WindowManager): Int {
+        val bounds = manager.currentWindowMetrics.bounds
+        return bubbleSidePx(BUBBLE_SIZE_DP, resources.displayMetrics.density, min(bounds.width(), bounds.height()))
+    }
+
+    private fun bubblePeekPx() = (BUBBLE_PEEK_DP * resources.displayMetrics.density).toInt()
+
+    /**
+     * The bubble's three windows share a coordinate system: the whole display, origin top-left.
+     * `fitInsetsTypes = 0` is what makes `x`/`y` display pixels, the same frame `MotionEvent.rawX`
+     * reports in — see [BubbleTouchLayout].
+     */
+    private fun displayFrameParams(
+        width: Int,
+        height: Int,
+        flags: Int,
+    ) = WindowManager
+        .LayoutParams(
+            width,
+            height,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+            flags,
+            PixelFormat.TRANSLUCENT,
+        ).apply {
+            gravity = Gravity.TOP or Gravity.START
+            fitInsetsTypes = 0
+            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+        }
+
+    private fun addBubbleWindow(theme: ThemeMode) {
+        if (bubbleHost != null || panelView != null || shadeView == null) return
+        val manager = windowManager ?: return
+        if (!canDrawShade()) return
+        bubbleTheme = theme
+        bubbleLeaving.value = false
+        bubblePressed.value = false
+
+        addDismissTargetWindow(manager)
+
+        val size = bubbleSizePx(manager)
+        val area = bubbleArea(manager)
+        // The trailing edge, centred — where the bar it stands in for was.
+        val fallback = BubblePosition(area.right, (area.top + area.bottom - size) / 2)
+        val (position, side) = tuckToEdge(lastBubblePosition ?: fallback, size, area, bubblePeekPx())
+        bubbleTucked.value = side
+
+        val host = PanelHost(this, BubbleTouchLayout(this, bubbleGestures))
+        host.view.contentDescription = getString(R.string.bubble_open)
+        host.setContent {
+            BubbleContent(
+                themeMode = theme,
+                pressed = bubblePressed,
+                leaving = bubbleLeaving,
+                tucked = bubbleTucked,
+            )
+        }
+        val params =
+            displayFrameParams(size, size, BUBBLE_WINDOW_FLAGS).apply {
+                x = position.x
+                y = position.y
+            }
+        runCatching { manager.addView(host.view, params) }
+            .onSuccess {
+                bubbleHost = host
+                bubbleParams = params
+                host.show()
+            }.onFailure {
+                host.destroy()
+                removeDismissTargetWindow()
+            }
+    }
+
+    private val bubbleGestures =
+        object : BubbleGestures {
+            override fun onPressChange(pressed: Boolean) {
+                if (pressed) settleJob?.cancel()
+                bubblePressed.value = pressed
+            }
+
+            override fun onTap() {
+                removeBubbleWindow()
+                showPanel()
+            }
+
+            override fun onDragStart() {
+                val params = bubbleParams ?: return
+                dragOrigin = BubblePosition(params.x, params.y)
+                overTarget.value = false
+                bubbleTucked.value = null
+                bubbleDragging.value = true
+            }
+
+            override fun onDrag(
+                dxPx: Float,
+                dyPx: Float,
+            ) {
+                val origin = dragOrigin ?: return
+                val params = bubbleParams ?: return
+                val manager = windowManager ?: return
+                val area = bubbleArea(manager)
+                val wanted = BubblePosition(origin.x + dxPx.toInt(), origin.y + dyPx.toInt())
+                var position =
+                    clampBubble(wanted, params.width, params.height, bubbleDragArea(area, params.width, bubblePeekPx()))
+                val target = targetParams
+                val over = target != null && bubbleOverTarget(position, params.width, target)
+                // Close enough counts as on it: the bubble jumps to the ✕'s centre and stays there
+                // until the finger pulls it clear, so a drop is never a near miss.
+                if (over && target != null) {
+                    val centred =
+                        BubblePosition(
+                            target.x + (target.width - params.width) / 2,
+                            target.y + (target.height - params.height) / 2,
+                        )
+                    position = clampBubble(centred, params.width, params.height, area)
+                }
+                overTarget.value = over
+                moveBubble(position)
+            }
+
+            override fun onDragEnd(
+                cancelled: Boolean,
+                velocityX: Float,
+                velocityY: Float,
+            ) {
+                dragOrigin = null
+                bubbleDragging.value = false
+                val dropped = !cancelled && overTarget.value
+                overTarget.value = false
+                if (dropped) {
+                    bubbleLeaving.value = true
+                    scope.launch {
+                        delay(BUBBLE_EXIT_MS.toLong())
+                        removeBubbleWindow()
+                        onBubbleThrownAway()
+                    }
+                } else {
+                    settleBubble(velocityX, velocityY, animate = true)
+                }
+            }
+        }
+
+    private fun moveBubble(position: BubblePosition) {
+        val params = bubbleParams ?: return
+        val view = bubbleHost?.view ?: return
+        if (params.x == position.x && params.y == position.y) return
+        params.x = position.x
+        params.y = position.y
+        runCatching { windowManager?.updateViewLayout(view, params) }
+    }
+
+    private fun bubbleOverTarget(
+        bubble: BubblePosition,
+        bubbleSize: Int,
+        target: WindowManager.LayoutParams,
+    ): Boolean =
+        overDismissTarget(
+            bubbleCenterX = bubble.x + bubbleSize / 2f,
+            bubbleCenterY = bubble.y + bubbleSize / 2f,
+            targetCenterX = target.x + target.width / 2f,
+            targetCenterY = target.y + target.height / 2f,
+            radiusPx = target.width.toFloat(),
+        )
+
+    /**
+     * Tuck the bubble into an edge — sprung after a release, at once after a rotation.
+     *
+     * **A spring carrying the finger's velocity**, which is what makes a flick feel thrown rather
+     * than placed: the release speed is both projected to choose the edge and handed to the spring
+     * as its starting velocity, so the bubble leaves the finger at the speed it was moving.
+     *
+     * Compose's `Animatable`, though nothing here is composed: it only needs a frame clock, and
+     * `AndroidUiDispatcher.Main` is the main thread with one attached — each frame then becomes an
+     * `updateViewLayout`, because what moves is the *window*. Kotlin note: cancelling [settleJob] is
+     * how a press stops the spring mid-flight, the way an `AbortController` would stop a JS tween.
+     */
+    private fun settleBubble(
+        velocityX: Float,
+        velocityY: Float,
+        animate: Boolean,
+    ) {
+        val params = bubbleParams ?: return
+        val manager = windowManager ?: return
+        val area = bubbleArea(manager)
+        val start = BubblePosition(params.x, params.y)
+        val projected =
+            BubblePosition(
+                start.x + (velocityX * BUBBLE_FLING_PROJECTION_S).toInt(),
+                start.y + (velocityY * BUBBLE_FLING_PROJECTION_S).toInt(),
+            )
+        val (end, side) = tuckToEdge(projected, params.width, area, bubblePeekPx())
+        lastBubblePosition = end
+        settleJob?.cancel()
+        if (!animate) {
+            moveBubble(end)
+            bubbleTucked.value = side
+            return
+        }
+        val bounds = bubbleDragArea(area, params.width, bubblePeekPx())
+        settleJob =
+            scope.launch(AndroidUiDispatcher.Main) {
+                // The shape docks the moment the bubble touches the edge, not on the way there: a tab
+                // drawn flat for an edge it has not reached yet shows a gap at the border. The
+                // overshoot is clamped at the tuck, so the first crossing is exactly the arrival.
+                val dockWithin = 2 * resources.displayMetrics.density
+                val position = Animatable(Offset(start.x.toFloat(), start.y.toFloat()), Offset.VectorConverter)
+                position.animateTo(
+                    targetValue = Offset(end.x.toFloat(), end.y.toFloat()),
+                    animationSpec = spring(dampingRatio = 0.72f, stiffness = Spring.StiffnessMediumLow),
+                    initialVelocity = Offset(velocityX, velocityY),
+                ) {
+                    // Clamped every frame: the spring overshoots, and an overshoot must never carry
+                    // the bubble further off screen than the tuck itself.
+                    val onScreen =
+                        clampBubble(
+                            BubblePosition(value.x.toInt(), value.y.toInt()),
+                            params.width,
+                            params.height,
+                            bounds,
+                        )
+                    moveBubble(onScreen)
+                    // The clamped position, not the spring's: the spring's value is past the edge
+                    // for the whole overshoot, while the bubble on screen is already at it.
+                    if (bubbleTucked.value == null && abs(onScreen.x - end.x) < dockWithin) bubbleTucked.value = side
+                }
+                bubbleTucked.value = side
+            }
+    }
+
+    private fun addDismissTargetWindow(manager: WindowManager) {
+        if (targetHost != null) return
+        val side = (DISMISS_TARGET_DP * resources.displayMetrics.density).toInt()
+        val host = PanelHost(this, FrameLayout(this))
+        bubbleDragging.value = false
+        host.setContent { DismissTargetContent(bubbleTheme, bubbleDragging, overTarget) }
+        val params = displayFrameParams(side, side, DISMISS_TARGET_WINDOW_FLAGS)
+        runCatching { manager.addView(host.view, params) }
+            .onSuccess {
+                targetHost = host
+                targetParams = params
+                placeDismissTarget()
+                host.show()
+            }.onFailure { host.destroy() }
+    }
+
+    /** Bottom centre of the app's area; re-run on rotation, which moves both. */
+    private fun placeDismissTarget() {
+        val params = targetParams ?: return
+        val view = targetHost?.view ?: return
+        val manager = windowManager ?: return
+        val area = bubbleArea(manager)
+        val gap = (DISMISS_TARGET_BOTTOM_DP * resources.displayMetrics.density).toInt()
+        params.x = (area.left + area.right - params.width) / 2
+        params.y = area.bottom - gap - params.height
+        runCatching { manager.updateViewLayout(view, params) }
+    }
+
+    private fun removeBubbleWindow() {
+        settleJob?.cancel()
+        settleJob = null
+        bubbleTucked.value = null
+        dragOrigin = null
+        removeDismissTargetWindow()
+        val host = bubbleHost ?: return
+        runCatching { windowManager?.removeView(host.view) }
+        host.destroy()
+        bubbleHost = null
+        bubbleParams = null
+    }
+
+    private fun removeDismissTargetWindow() {
+        val host = targetHost ?: return
+        runCatching { windowManager?.removeView(host.view) }
+        host.destroy()
+        targetHost = null
+        targetParams = null
+    }
+
+    /** The first time only, ask whether the user wants the bubble at all. */
+    private fun onBubbleThrownAway() {
+        scope.launch {
+            if (preferences.bubbleAsked.first()) return@launch
+            preferences.setBubbleAsked()
+            addPromptWindow()
+        }
+    }
+
+    /**
+     * The question, in a window of its own because it has to be read at maximum dim: an Activity
+     * would be under the shade (ADR-0011). Shaped like the panel — not focusable, a tap outside
+     * closes it, and it goes on its own after [PANEL_IDLE_TIMEOUT_MS].
+     */
+    private fun addPromptWindow() {
+        if (promptHost != null) return
+        val manager = windowManager ?: return
+        if (!canDrawShade()) return
+        val host = PanelHost(this, onTouch = {}, onOutside = ::removePromptWindow)
+        host.setContent {
+            BubblePromptContent(
+                themeMode = bubbleTheme,
+                onTurnOff = {
+                    scope.launch { preferences.setControlsBubble(false) }
+                    removePromptWindow()
+                },
+                onKeep = ::removePromptWindow,
+            )
+        }
+        val density = resources.displayMetrics.density
+        val params =
+            WindowManager
+                .LayoutParams(
+                    promptWidthPx(manager.currentWindowMetrics.bounds.width(), density),
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                    PANEL_WINDOW_FLAGS,
+                    PixelFormat.TRANSLUCENT,
+                ).apply {
+                    gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
+                    y = (DISMISS_TARGET_BOTTOM_DP * density).toInt()
+                    fitInsetsTypes = WindowInsets.Type.systemBars()
+                }
+        runCatching { manager.addView(host.view, params) }
+            .onSuccess {
+                promptHost = host
+                host.show()
+                promptJob =
+                    scope.launch {
+                        delay(PANEL_IDLE_TIMEOUT_MS)
+                        removePromptWindow()
+                    }
+            }.onFailure { host.destroy() }
+    }
+
+    private fun removePromptWindow() {
+        promptJob?.cancel()
+        promptJob = null
+        val host = promptHost ?: return
+        runCatching { windowManager?.removeView(host.view) }
+        host.destroy()
+        promptHost = null
+    }
 
     /**
      * The panel's auto-off chips — **the mirror of `DimViewModel.setAutoOff`, and the same pair of

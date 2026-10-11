@@ -108,6 +108,8 @@ class AppPreferences(
          */
         val SHADE_BEGAN_AT = longPreferencesKey("shade_began_at")
         val LAUNCHER_COMPACT = booleanPreferencesKey("launcher_compact")
+        val CONTROLS_BUBBLE = booleanPreferencesKey("controls_bubble")
+        val BUBBLE_ASKED = booleanPreferencesKey("controls_bubble_asked")
         val SCHEDULE_ENABLED = booleanPreferencesKey("schedule_enabled")
         val SCHEDULE_ON_MINUTES = intPreferencesKey("schedule_on_minutes")
         val SCHEDULE_OFF_MINUTES = intPreferencesKey("schedule_off_minutes")
@@ -253,6 +255,15 @@ class AppPreferences(
      * phase reads as permission to branch the whole app on it.
      */
     val launcherCompact: Flow<Boolean> = store.data.map { it[Keys.LAUNCHER_COMPACT] ?: true }
+
+    /** Whether closing the controls over a running shade leaves the bubble behind (CONTEXT.md). */
+    val controlsBubble: Flow<Boolean> = store.data.map { it[Keys.CONTROLS_BUBBLE] ?: true }
+
+    /**
+     * Whether the user has already been asked, on throwing the bubble away, if they want it at all.
+     * Asked once per install; a restore carrying it over is a user who has already answered.
+     */
+    val bubbleAsked: Flow<Boolean> = store.data.map { it[Keys.BUBBLE_ASKED] ?: false }
 
     /**
      * The nightly window, as one value (CONTEXT.md: **schedule**).
@@ -478,6 +489,14 @@ class AppPreferences(
 
     suspend fun setLauncherCompact(enabled: Boolean) {
         store.edit { it[Keys.LAUNCHER_COMPACT] = enabled }
+    }
+
+    suspend fun setControlsBubble(enabled: Boolean) {
+        store.edit { it[Keys.CONTROLS_BUBBLE] = enabled }
+    }
+
+    suspend fun setBubbleAsked() {
+        store.edit { it[Keys.BUBBLE_ASKED] = true }
     }
 
     suspend fun setScheduleEnabled(enabled: Boolean) {

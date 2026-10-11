@@ -75,7 +75,9 @@ let us do otherwise".
   a control — so what stands in for the flag is the window's *size*, which is computed rather than
   constant and therefore has a test in front of it. Never reason about the panel from the shade's
   rule: [ADR-0011](docs/adr/0011-the-panel-is-touchable-and-what-keeps-it-from-trapping-the-user.md),
-  and a `MATCH_PARENT` in its `LayoutParams` is a bug rather than a simplification.
+  and a `MATCH_PARENT` in its `LayoutParams` is a bug rather than a simplification. The **bubble**
+  the controls shrink to is a third touchable window, bounded the same way, by its size and a clamp
+  on every drag ([ADR-0016](docs/adr/0016-closing-the-controls-leaves-a-bubble-bounded-by-its-size.md)).
   **The cap belongs to the composite, not to a `View`.** From Phase 1 the shade is a `FrameLayout`
   with two children, black at the dim level and a tint at the warmth, and bounding each child alone
   does not bound the result: black at `MAX_SHADE_ALPHA` still leaves content visible, and a heavy

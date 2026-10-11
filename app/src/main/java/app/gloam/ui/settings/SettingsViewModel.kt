@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 data class SettingsUiState(
     val themeMode: ThemeMode = ThemeMode.DARK,
     val launcherCompact: Boolean = true,
+    val controlsBubble: Boolean = true,
 )
 
 class SettingsViewModel(
@@ -28,8 +29,9 @@ class SettingsViewModel(
         combine(
             preferences.themeMode,
             preferences.launcherCompact,
-        ) { theme, launcherCompact ->
-            SettingsUiState(theme, launcherCompact)
+            preferences.controlsBubble,
+        ) { theme, launcherCompact, controlsBubble ->
+            SettingsUiState(theme, launcherCompact, controlsBubble)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     /**
@@ -53,6 +55,10 @@ class SettingsViewModel(
      */
     fun setLauncherCompact(enabled: Boolean) {
         viewModelScope.launch { preferences.setLauncherCompact(enabled) }
+    }
+
+    fun setControlsBubble(enabled: Boolean) {
+        viewModelScope.launch { preferences.setControlsBubble(enabled) }
     }
 
     companion object {

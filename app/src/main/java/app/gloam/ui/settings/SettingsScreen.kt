@@ -81,6 +81,12 @@ fun SettingsScreen(
                 checked = state.launcherCompact,
                 onChange = viewModel::setLauncherCompact,
             )
+            SwitchRow(
+                title = stringResource(R.string.settings_controls_bubble),
+                subtitle = stringResource(R.string.settings_controls_bubble_hint),
+                checked = state.controlsBubble,
+                onChange = viewModel::setControlsBubble,
+            )
 
             QuickTileRow()
 

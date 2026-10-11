@@ -77,6 +77,13 @@
     <string name="settings_controls">Commandes</string>
     <string name="settings_launcher_compact">Ouvrir les petites commandes depuis l\'icône</string>
     <string name="settings_launcher_compact_hint">Toucher Gloam ouvre seulement les curseurs au lieu de toute l\'application. La notification ouvre toujours les petites commandes.</string>
+    <string name="settings_controls_bubble">Laisser une bulle à la fermeture des commandes</string>
+    <string name="settings_controls_bubble_hint">Pendant l\'assombrissement, toucher en dehors des commandes les réduit à une petite bulle. Touchez-la pour les rouvrir, ou faites-la glisser sur le ✕ pour la retirer.</string>
+    <string name="bubble_open">Ouvrir les commandes</string>
+    <string name="bubble_prompt_title">Garder la bulle ?</string>
+    <string name="bubble_prompt_body">Si vous la désactivez, les commandes se ferment simplement. Vous pouvez la réactiver dans les Paramètres.</string>
+    <string name="bubble_prompt_turn_off">Désactiver</string>
+    <string name="bubble_prompt_keep">La garder</string>
     <string name="settings_tile">Tuile des réglages rapides</string>
     <string name="settings_tile_body">Une tuile qui active et désactive le voile depuis n\'importe où, sans ouvrir Gloam. Elle n\'a pas besoin que les notifications soient autorisées : elle fonctionne donc même quand la notification ne fonctionne pas.</string>
     <string name="settings_tile_add">Ajouter la tuile</string>

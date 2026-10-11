@@ -20,6 +20,7 @@ user-facing word genuinely differ, both are written here with the difference sta
 | Shade | The **untouchable** overlay window Gloam draws above every other app. The mechanism that reaches below the floor. | Not "filter", "mask" or "layer" - and not the panel |
 | Panel | The **touchable** overlay window carrying the controls, sized to fit them and never to the display. A second window with the opposite safety rule. | Not "the overlay" - there are two |
 | Compact controls | The same controls in an Activity, which is what puts them **below the shade**: a small, dialog-shaped host reached from the icon or the Quick Settings tile. On screen it is called *the controls* - and so is the panel, because a user meets them as one thing. | Not the panel, which is the same controls in an overlay window *above* the shade. Not "the smaller one" - the panel is small too, and the difference that decides whether either can be read is which side of the shade each sits on. Not "compact mode" - there is no mode |
+| Bubble | The small circle the controls shrink to when they are put away over a running shade: dragged anywhere, resting docked to a side edge as a half-round tab, tapped to bring the controls back, dropped on the ✕ to remove. A **touchable** window above the shade, bounded by its size (ADR-0016). | Not "chat head" or "floating button". Not the panel - it carries no controls |
 | Floor | The dimmest the Android backlight goes on this device. What Gloam exists to get past. | Not "minimum brightness" in code - too easily read as our own minimum |
 | Backlight | The system screen brightness. Android's value, which Gloam lowers to the floor as the first half of the dim level's ramp before the shade does the rest. | Never our own value |
 | Backlight top | The backlight Gloam takes over from. Captured the moment the override is applied and held until it is released. **Not a device constant** - it is where the user left their own brightness, so it decides how much of the slider the backlight half is worth. | Not "maximum brightness" - it is the user's starting point, not the panel's ceiling |
@@ -47,7 +48,7 @@ user-facing word genuinely differ, both are written here with the difference sta
   service is alive, the shade is transparent - and the two states behave differently on a reboot.
   It follows that **auto-off cannot itself be switched "off"**: the choice that disables it is
   **Never**, because "auto-off: off" is a sentence meaning the shade stays on.
-- "Overlay" on its own is avoided now that there are two of them. The shade passes every touch
+- "Overlay" on its own is avoided now that there are several of them. The shade passes every touch
   through; the panel catches them. A name that covers both hides the one property that keeps the
   user from being trapped, so say **shade** or **panel** and never "the overlay window".
 - "Screen dimmer" is fine in the listing and the README, where it is what people search for. It is

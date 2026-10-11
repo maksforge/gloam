@@ -165,6 +165,8 @@ fun panelWidthPx(
  * closer to a `Promise` than to an event emitter: it moves one way, and past the end there is no
  * going back.
  *
+ * @param root the view handed to the window manager. The bubble passes its own, which drags the
+ *   window rather than reporting touches; the panel's is built by the secondary constructor.
  * @param onTouch called for **every** touch the panel receives, including the ones a child consumes.
  *   `dispatchTouchEvent` is the only place that sees all of them — a Compose `pointerInput` would
  *   see a consumed touch only on `PointerEventPass.Initial`. It is what re-arms the idle timeout.
@@ -174,10 +176,15 @@ fun panelWidthPx(
  */
 internal class PanelHost(
     context: Context,
-    onTouch: () -> Unit,
-    onOutside: () -> Unit,
+    root: FrameLayout,
 ) : LifecycleOwner,
     SavedStateRegistryOwner {
+    constructor(
+        context: Context,
+        onTouch: () -> Unit,
+        onOutside: () -> Unit,
+    ) : this(context, TouchReportingLayout(context, onTouch, onOutside))
+
     private val lifecycleRegistry = LifecycleRegistry(this)
     private val savedStateController = SavedStateRegistryController.create(this)
 
@@ -195,7 +202,7 @@ internal class PanelHost(
      * touch on its way down to the children regardless of who consumes it.
      */
     val view: View =
-        TouchReportingLayout(context, onTouch, onOutside).apply {
+        root.apply {
             addView(
                 composeView,
                 FrameLayout.LayoutParams(
@@ -361,7 +368,7 @@ internal fun PanelContent(
  * short of both.
  *
  * So the service reports the panel here and `ControlsActivity` finishes when one *appears*; the
- * Activity, on being opened, takes the panel down through [dismissPanel]. One process holds both,
+ * Activity, on being opened, takes the panel down through [dismissPanelAndBubble]. One process holds both,
  * so a value in memory is exact, for [shadeOnScreen]'s reason.
  */
 val panelOnScreen: StateFlow<Boolean>
@@ -375,7 +382,8 @@ internal fun reportPanelOnScreen(up: Boolean) {
 }
 
 /**
- * Take the panel down if there is one; do nothing if there is not.
+ * Take the panel and the bubble down if they are up; do nothing if they are not. The compact
+ * controls opening is the one caller, and either window would be a second copy of them.
  *
  * **A signal in memory rather than an `Intent` to the service, and not for brevity.** A start command
  * to a service that is not running *creates* it, and `onStartCommand`'s default branch raises the
@@ -385,9 +393,9 @@ internal fun reportPanelOnScreen(up: Boolean) {
  * `DROP_OLDEST` over a buffer of one, for `panelTouches`' reason: this is a signal rather than a
  * queue, and it is sent from the main thread, where `tryEmit` must never suspend.
  */
-fun dismissPanel() {
-    panelDismissals.tryEmit(Unit)
+fun dismissPanelAndBubble() {
+    floatingDismissals.tryEmit(Unit)
 }
 
-internal val panelDismissals =
+internal val floatingDismissals =
     MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
