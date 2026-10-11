@@ -75,6 +75,14 @@ const val DISMISS_TARGET_WINDOW_FLAGS =
         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or
         WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
 
+/**
+ * The ✕ window's `LayoutParams.alpha`. **Untouchable is not enough on its own:** the input
+ * dispatcher adds up one uid's untouchable windows over a point, and the ✕ (clamped to 0.8) over the
+ * shade (0.8) reads as 0.96, past the 0.8 an app below accepts touches through. It skips windows at
+ * alpha 0, so the ✕ is at 0 for as long as nobody is dragging — what draws it is the content.
+ */
+fun dismissTargetWindowAlpha(dragging: Boolean): Float = if (dragging) 1f else 0f
+
 /** The bubble's square window. The circle is drawn [BUBBLE_SHADOW_DP] inside it, so its shadow fits. */
 internal const val BUBBLE_SIZE_DP = 56
 internal const val BUBBLE_SHADOW_DP = 5
@@ -139,6 +147,12 @@ fun clampBubble(
 
 enum class BubbleSide { Left, Right }
 
+/** A resting bubble is a side and a height; its `x` follows from the side and the display. */
+data class BubbleRest(
+    val side: BubbleSide,
+    val y: Int,
+)
+
 /**
  * Where a drag may take the bubble: the app's area, widened sideways so it can be pulled out of — or
  * pushed back into — a tuck without jumping. At least [peekPx] of it is on screen at every point.
@@ -163,9 +177,23 @@ fun tuckToEdge(
     peekPx: Int,
 ): Pair<BubblePosition, BubbleSide> {
     val side = if (projected.x + sizePx / 2 < (area.left + area.right) / 2) BubbleSide.Left else BubbleSide.Right
-    val x = if (side == BubbleSide.Left) area.left - (sizePx - peekPx) else area.right - peekPx
-    val y = clampBubble(projected, sizePx, sizePx, area).y
-    return BubblePosition(x, y) to side
+    return tuckInto(BubbleRest(side, projected.y), sizePx, area, peekPx) to side
+}
+
+/**
+ * Where a bubble resting at [rest] sits in [area]: the same side, its height clamped. The side is
+ * kept rather than re-chosen because a rotation moves the midpoint — a right-docked bubble's `x` in
+ * portrait is left of the middle in landscape.
+ */
+fun tuckInto(
+    rest: BubbleRest,
+    sizePx: Int,
+    area: BubbleArea,
+    peekPx: Int,
+): BubblePosition {
+    val x = if (rest.side == BubbleSide.Left) area.left - (sizePx - peekPx) else area.right - peekPx
+    val y = clampBubble(BubblePosition(x, rest.y), sizePx, sizePx, area).y
+    return BubblePosition(x, y)
 }
 
 fun overDismissTarget(
@@ -190,7 +218,7 @@ fun promptWidthPx(
  * DataStore: a position is only meaningful on this display, and Auto Backup would carry a key to the
  * next phone (CLAUDE.md, *Storage*).
  */
-internal var lastBubblePosition: BubblePosition? = null
+internal var lastBubbleRest: BubbleRest? = null
 
 /**
  * Ask the service for the bubble, from the compact controls closing by Back or a tap outside.

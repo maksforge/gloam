@@ -77,6 +77,7 @@
     <string name="settings_controls_bubble">Lascia una bolla quando chiudi i comandi</string>
     <string name="settings_controls_bubble_hint">Durante l\'oscuramento, toccare fuori dai comandi li riduce a una piccola bolla. Toccala per riaprirli o trascinala sulla ✕ per rimuoverla.</string>
     <string name="bubble_open">Apri i comandi</string>
+    <string name="bubble_remove">Rimuovi la bolla</string>
     <string name="bubble_prompt_title">Tenere la bolla?</string>
     <string name="bubble_prompt_body">Se la disattivi, i comandi si chiudono e basta. Puoi riattivarla nelle Impostazioni.</string>
     <string name="bubble_prompt_turn_off">Disattiva</string>

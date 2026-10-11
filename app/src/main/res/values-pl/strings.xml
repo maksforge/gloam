@@ -67,6 +67,7 @@
     <string name="settings_controls_bubble">Zostawiaj bańkę po zamknięciu sterowania</string>
     <string name="settings_controls_bubble_hint">Podczas przyciemniania dotknięcie poza sterowaniem zmniejsza je do małej bańki. Dotknij jej, aby przywrócić sterowanie, albo przeciągnij ją na ✕, aby ją usunąć.</string>
     <string name="bubble_open">Otwórz sterowanie</string>
+    <string name="bubble_remove">Usuń bańkę</string>
     <string name="bubble_prompt_title">Zostawić bańkę?</string>
     <string name="bubble_prompt_body">Po wyłączeniu sterowanie po prostu się zamyka. Możesz ją włączyć ponownie w Ustawieniach.</string>
     <string name="bubble_prompt_turn_off">Wyłącz</string>

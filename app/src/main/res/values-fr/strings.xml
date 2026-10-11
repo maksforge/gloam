@@ -80,6 +80,7 @@
     <string name="settings_controls_bubble">Laisser une bulle à la fermeture des commandes</string>
     <string name="settings_controls_bubble_hint">Pendant l\'assombrissement, toucher en dehors des commandes les réduit à une petite bulle. Touchez-la pour les rouvrir, ou faites-la glisser sur le ✕ pour la retirer.</string>
     <string name="bubble_open">Ouvrir les commandes</string>
+    <string name="bubble_remove">Retirer la bulle</string>
     <string name="bubble_prompt_title">Garder la bulle ?</string>
     <string name="bubble_prompt_body">Si vous la désactivez, les commandes se ferment simplement. Vous pouvez la réactiver dans les Paramètres.</string>
     <string name="bubble_prompt_turn_off">Désactiver</string>

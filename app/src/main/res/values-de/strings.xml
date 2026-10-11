@@ -80,6 +80,7 @@
     <string name="settings_controls_bubble">Beim Schließen der Steuerung eine Blase zurücklassen</string>
     <string name="settings_controls_bubble_hint">Beim Abdunkeln verkleinert ein Tippen außerhalb der Steuerung sie zu einer kleinen Blase. Tippe darauf, um sie zurückzuholen, oder zieh sie auf das ✕, um sie zu entfernen.</string>
     <string name="bubble_open">Steuerung öffnen</string>
+    <string name="bubble_remove">Blase entfernen</string>
     <string name="bubble_prompt_title">Blase behalten?</string>
     <string name="bubble_prompt_body">Schaltest du sie aus, schließt sich die Steuerung einfach. In den Einstellungen kannst du sie wieder einschalten.</string>
     <string name="bubble_prompt_turn_off">Ausschalten</string>

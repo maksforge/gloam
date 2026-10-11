@@ -87,6 +87,41 @@ class BubbleBoundsTest {
     }
 
     @Test
+    fun `a rotation keeps the bubble on the side it rested on`() {
+        val portrait = BubbleArea(left = 0, top = 130, right = 1220, bottom = 2664)
+        val landscape = BubbleArea(left = 130, top = 0, right = 2712, bottom = 1220)
+        val size = 168
+        val peek = 117
+        val (docked, side) = tuckToEdge(BubblePosition(portrait.right, 1200), size, portrait, peek)
+        assertEquals(BubbleSide.Right, side)
+        val rotated = tuckInto(BubbleRest(side, docked.y), size, landscape, peek)
+        assertEquals(landscape.right - peek, rotated.x)
+        assertEquals(landscape.bottom - size, rotated.y)
+    }
+
+    @Test
+    fun `a re-tuck keeps its side and the peek, and only clamps the height`() {
+        val area = BubbleArea(left = 130, top = 0, right = 2712, bottom = 1220)
+        val size = 168
+        val peek = 117
+        for (side in BubbleSide.entries) {
+            for (y in -3000..5000 step 53) {
+                val p = tuckInto(BubbleRest(side, y), size, area, peek)
+                assertEquals("on-screen width for $side at $y", peek, onScreenWidth(p.x, size, area))
+                val touchesEdge = if (side == BubbleSide.Left) p.x < area.left else p.x + size > area.right
+                assertTrue("$side for x=${p.x}", touchesEdge)
+                assertEquals(y.coerceIn(area.top, area.bottom - size), p.y)
+            }
+        }
+    }
+
+    @Test
+    fun `the dismiss target is invisible to input unless a drag is on`() {
+        assertEquals(0f, dismissTargetWindowAlpha(dragging = false))
+        assertEquals(1f, dismissTargetWindowAlpha(dragging = true))
+    }
+
+    @Test
     fun `no drag leaves less than the peek on screen`() {
         val area = BubbleArea(left = 0, top = 130, right = 1220, bottom = 2664)
         val size = 168

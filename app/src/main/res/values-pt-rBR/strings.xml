@@ -80,6 +80,7 @@
     <string name="settings_controls_bubble">Deixar uma bolha ao fechar os controles</string>
     <string name="settings_controls_bubble_hint">Enquanto escurece, tocar fora dos controles os reduz a uma bolha pequena. Toque nela para trazê-los de volta ou arraste-a até o ✕ para removê-la.</string>
     <string name="bubble_open">Abrir os controles</string>
+    <string name="bubble_remove">Remover a bolha</string>
     <string name="bubble_prompt_title">Manter a bolha?</string>
     <string name="bubble_prompt_body">Se você desativá-la, os controles simplesmente fecham. Você pode reativá-la em Configurações.</string>
     <string name="bubble_prompt_turn_off">Desativar</string>

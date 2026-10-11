@@ -79,6 +79,7 @@
     <string name="settings_controls_bubble">Dejar una burbuja al cerrar los controles</string>
     <string name="settings_controls_bubble_hint">Mientras se atenúa, tocar fuera de los controles los reduce a una pequeña burbuja. Tócala para recuperarlos o arrástrala a la ✕ para quitarla.</string>
     <string name="bubble_open">Abrir los controles</string>
+    <string name="bubble_remove">Quitar la burbuja</string>
     <string name="bubble_prompt_title">¿Mantener la burbuja?</string>
     <string name="bubble_prompt_body">Si la desactivas, los controles simplemente se cierran. Puedes volver a activarla en Ajustes.</string>
     <string name="bubble_prompt_turn_off">Desactivar</string>
