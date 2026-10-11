@@ -130,6 +130,7 @@
     <string name="settings_controls_bubble">Leave a bubble when the controls close</string>
     <string name="settings_controls_bubble_hint">While dimming, tapping outside the controls shrinks them to a small bubble. Tap it to bring them back, or drag it onto the ✕ to remove it.</string>
     <string name="bubble_open">Open the controls</string>
+    <string name="bubble_remove">Remove the bubble</string>
     <string name="bubble_prompt_title">Keep the bubble?</string>
     <string name="bubble_prompt_body">Turn it off and the controls simply close. You can turn it back on in Settings.</string>
     <string name="bubble_prompt_turn_off">Turn off</string>

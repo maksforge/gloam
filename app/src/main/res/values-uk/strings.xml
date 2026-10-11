@@ -82,6 +82,7 @@
     <string name="settings_controls_bubble">Залишати бульбашку після закриття керування</string>
     <string name="settings_controls_bubble_hint">Під час затемнення дотик поза керуванням згортає його в маленьку бульбашку. Торкнися її, щоб повернути керування, або перетягни на ✕, щоб прибрати.</string>
     <string name="bubble_open">Відкрити керування</string>
+    <string name="bubble_remove">Прибрати бульбашку</string>
     <string name="bubble_prompt_title">Залишити бульбашку?</string>
     <string name="bubble_prompt_body">Якщо її вимкнути, керування просто закривається. Знову ввімкнути її можна в Налаштуваннях.</string>
     <string name="bubble_prompt_turn_off">Вимкнути</string>
