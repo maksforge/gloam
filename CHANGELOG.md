@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.3.0](https://github.com/srednimax/gloam/compare/v1.2.1...v1.3.0) (2026-10-11)
+
+
+### Features
+
+* let users leave a tip through Google Play ([aed8f24](https://github.com/srednimax/gloam/commit/aed8f2478ce02e80f9d851e12416d1e7a5c81db7))
+* offer four tips, up to 50 zł, on a wrapping row ([1117994](https://github.com/srednimax/gloam/commit/11179941ce82f15677eaeed216514497756ddcb4))
+
+
+### Bug Fixes
+
+* drop gendered and ungrammatical forms from the tip's translations ([fd35f3f](https://github.com/srednimax/gloam/commit/fd35f3f9ede22b70cd90bbe1edaf6e017b5a67ba))
+* keep the tip's thank-you when the foreground settle consumes first ([5f4c27a](https://github.com/srednimax/gloam/commit/5f4c27a3da338e4386956478649bc82b7ecb80aa))
+* settle unconsumed tips every time the app comes to the foreground ([e2c6023](https://github.com/srednimax/gloam/commit/e2c60236deacc3c5c317bd98bbabd0cf477c7cb3))
+
 ## [1.2.1](https://github.com/srednimax/gloam/compare/v1.2.0...v1.2.1) (2026-10-11)
 
 
