@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/srednimax/gloam/compare/v1.1.0...v1.2.0) (2026-10-11)
+
+
+### Features
+
+* leave a bubble when the controls close ([32dc25e](https://github.com/srednimax/gloam/commit/32dc25e967479488aa4b93510c245ac1cf5864b9))
+
+
+### Bug Fixes
+
+* stop the bubble's ✕ from blocking touches, and keep its side on rotation ([509797d](https://github.com/srednimax/gloam/commit/509797de02980114ea7f8266f4a2ca51618d557c))
+
 ## [1.1.0](https://github.com/srednimax/gloam/compare/v1.0.0...v1.1.0) (2026-10-10)
 
 
