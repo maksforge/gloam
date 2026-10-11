@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/srednimax/gloam/compare/v1.2.0...v1.2.1) (2026-10-11)
+
+
+### Bug Fixes
+
+* widen the docked bubble past HyperOS's back-gesture strip ([b2b4a3a](https://github.com/srednimax/gloam/commit/b2b4a3abf224299cd1a808c0732da5de0931b12a))
+
 ## [1.2.0](https://github.com/srednimax/gloam/compare/v1.1.0...v1.2.0) (2026-10-11)
 
 
