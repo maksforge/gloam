@@ -111,7 +111,10 @@ fun MainNavigation(modifier: Modifier = Modifier) {
             entryProvider =
                 entryProvider {
                     entry<Dim> {
-                        DimScreen(onOpenSchedule = { backStack.add(Schedule) })
+                        DimScreen(
+                            onOpenSchedule = { backStack.add(Schedule) },
+                            onOpenSupport = { backStack.add(Support) },
+                        )
                     }
                     entry<Settings> {
                         SettingsScreen(

@@ -28,6 +28,9 @@
     <string name="dim_notification_warning_channel_body">Powiadomienie Gloam jest wyłączone, więc jedynym sposobem na zatrzymanie przyciemniania jest ten ekran.</string>
     <string name="dim_notification_warning_ask">Zezwól na powiadomienia</string>
     <string name="dim_notification_warning_settings">Otwórz ustawienia powiadomień</string>
+    <string name="dim_tip_ask_title">Gloam jest darmowy i taki zostanie</string>
+    <string name="dim_tip_ask_body">Jeśli pomaga ci czytać w nocy, możesz zostawić twórcy napiwek. Niczego nie odblokowuje, a Gloam więcej o to nie zapyta.</string>
+    <string name="dim_tip_ask_decline">Nie, dziękuję</string>
 
     <string name="dim_backlight_label">Obniżaj też jasność ekranu</string>
     <string name="dim_backlight_hint">Suwak jasności jest wstrzymany, gdy Gloam przyciemnia.</string>
@@ -106,6 +109,10 @@
     <string name="support_rate">Oceń Gloam w Google Play</string>
     <string name="support_rate_hint">Otwiera stronę Gloam w Google Play. Ocena jest dobrowolna i niczego nie odblokowuje, bo w Gloam nic nie jest zablokowane.</string>
     <string name="support_no_play">Na tym telefonie nie ma Google Play ani przeglądarki do otwarcia.</string>
+    <string name="support_tip">Zostaw napiwek</string>
+    <string name="support_tip_hint">Jednorazowy napiwek dla twórcy, płatny przez Google Play. Niczego nie odblokowuje, bo w Gloam nic nie jest zablokowane.</string>
+    <string name="support_tip_thanks">Dziękuję. To wiele znaczy.</string>
+    <string name="support_tip_pending">Płatność jeszcze się rozlicza. Google Play ją dokończy.</string>
 
     <string name="licence_text_missing">Treść tej licencji nie jest dołączona do aplikacji.</string>
 

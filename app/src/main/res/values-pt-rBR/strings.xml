@@ -41,6 +41,9 @@
     <string name="dim_notification_warning_channel_body">A notificação do Gloam está desativada, então a única forma de parar o escurecimento é esta tela.</string>
     <string name="dim_notification_warning_ask">Permitir notificações</string>
     <string name="dim_notification_warning_settings">Abrir configurações de notificação</string>
+    <string name="dim_tip_ask_title">O Gloam é gratuito e continuará sendo</string>
+    <string name="dim_tip_ask_body">Se ele ajuda você a ler à noite, você pode deixar uma gorjeta para o desenvolvedor. Não desbloqueia nada, e o Gloam não vai perguntar de novo.</string>
+    <string name="dim_tip_ask_decline">Não, obrigado</string>
 
     <string name="dim_backlight_label">Também reduzir o brilho da tela</string>
     <string name="dim_backlight_hint">Seu controle de brilho fica pausado enquanto o Gloam escurece.</string>
@@ -119,6 +122,10 @@
     <string name="support_rate">Avaliar o Gloam no Google Play</string>
     <string name="support_rate_hint">Abre a página do Gloam no Google Play. Avaliar é opcional e não desbloqueia nada, porque nada no Gloam está bloqueado.</string>
     <string name="support_no_play">Não há Google Play nem navegador neste celular para abrir.</string>
+    <string name="support_tip">Deixar uma gorjeta</string>
+    <string name="support_tip_hint">Uma gorjeta única para o desenvolvedor, paga pelo Google Play. Não desbloqueia nada, porque nada no Gloam está bloqueado.</string>
+    <string name="support_tip_thanks">Obrigado. Significa muito.</string>
+    <string name="support_tip_pending">Seu pagamento ainda está sendo processado. O Google Play vai concluí-lo.</string>
 
     <string name="licence_text_missing">O texto desta licença não vem junto com o aplicativo.</string>
 

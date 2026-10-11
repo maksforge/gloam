@@ -115,6 +115,8 @@ class AppPreferences(
         val SCHEDULE_OFF_MINUTES = intPreferencesKey("schedule_off_minutes")
         val SCHEDULE_HONOURED_AT = longPreferencesKey("schedule_honoured_at")
         val SCHEDULE_KIND = stringPreferencesKey("schedule_kind")
+        val SHADE_STARTS = intPreferencesKey("shade_starts")
+        val TIP_ASKED = booleanPreferencesKey("tip_asked")
     }
 
     /**
@@ -264,6 +266,18 @@ class AppPreferences(
      * Asked once per install; a restore carrying it over is a user who has already answered.
      */
     val bubbleAsked: Flow<Boolean> = store.data.map { it[Keys.BUBBLE_ASKED] ?: false }
+
+    /**
+     * How many times the shade has been started, by anything. Read only by the tip's one-time ask
+     * (`tip/TipAsk.kt`); it is history rather than live state, so a restore carrying it is harmless.
+     */
+    val shadeStarts: Flow<Int> = store.data.map { it[Keys.SHADE_STARTS] ?: 0 }
+
+    /**
+     * Whether the home screen has mentioned the tip and been answered. Once per install, and a
+     * restore carrying it over is somebody who has already answered — like [bubbleAsked].
+     */
+    val tipAsked: Flow<Boolean> = store.data.map { it[Keys.TIP_ASKED] ?: false }
 
     /**
      * The nightly window, as one value (CONTEXT.md: **schedule**).
@@ -423,6 +437,8 @@ class AppPreferences(
         beganAtMillis: Long = System.currentTimeMillis(),
     ) {
         store.edit {
+            // Counted on the edge only: this is also how a running shade's deadline is rewritten.
+            if (it[Keys.SHADE_RUNNING] != true) it[Keys.SHADE_STARTS] = (it[Keys.SHADE_STARTS] ?: 0) + 1
             it[Keys.SHADE_RUNNING] = true
             it[Keys.OFF_AT_MILLIS] = offAtMillis ?: NO_DEADLINE
             it[Keys.SHADE_BEGAN_AT] = beganAtMillis
@@ -497,6 +513,10 @@ class AppPreferences(
 
     suspend fun setBubbleAsked() {
         store.edit { it[Keys.BUBBLE_ASKED] = true }
+    }
+
+    suspend fun setTipAsked() {
+        store.edit { it[Keys.TIP_ASKED] = true }
     }
 
     suspend fun setScheduleEnabled(enabled: Boolean) {

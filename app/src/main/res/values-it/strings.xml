@@ -38,6 +38,9 @@
     <string name="dim_notification_warning_channel_body">La notifica di Gloam è disattivata, quindi l\'unico modo di fermare l\'oscuramento è questa schermata.</string>
     <string name="dim_notification_warning_ask">Consenti le notifiche</string>
     <string name="dim_notification_warning_settings">Apri le impostazioni delle notifiche</string>
+    <string name="dim_tip_ask_title">Gloam è gratuito e lo resterà</string>
+    <string name="dim_tip_ask_body">Se ti aiuta a leggere di notte, puoi lasciare una mancia allo sviluppatore. Non sblocca nulla e Gloam non lo chiederà più.</string>
+    <string name="dim_tip_ask_decline">No, grazie</string>
 
     <string name="dim_backlight_label">Abbassa anche la luminosità dello schermo</string>
     <string name="dim_backlight_hint">Il tuo cursore della luminosità è in pausa mentre Gloam oscura.</string>
@@ -116,6 +119,10 @@
     <string name="support_rate">Valuta Gloam su Google Play</string>
     <string name="support_rate_hint">Apre la pagina di Gloam su Google Play. Valutare è facoltativo e non sblocca nulla, perché in Gloam non c\'è nulla di bloccato.</string>
     <string name="support_no_play">Su questo telefono non c\'è né Google Play né un browser da aprire.</string>
+    <string name="support_tip">Lascia una mancia</string>
+    <string name="support_tip_hint">Una mancia una tantum allo sviluppatore, pagata tramite Google Play. Non sblocca nulla, perché in Gloam non c\'è nulla di bloccato.</string>
+    <string name="support_tip_thanks">Grazie. Significa molto.</string>
+    <string name="support_tip_pending">Il pagamento è ancora in elaborazione. Google Play lo completerà.</string>
 
     <string name="licence_text_missing">Il testo di questa licenza non è incluso nell\'app.</string>
 

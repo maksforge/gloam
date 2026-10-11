@@ -130,6 +130,22 @@ rebuilt from those rather than read off the log. **And its closing guard counts 
 the package**, so the schedule re-arming itself for the next night reads as *"the run is not over"*
 the morning after a run that finished perfectly — read *which* alarm is pending before believing it.
 
+## The tip — open until a real purchase is consumed
+
+ADR-0009's 2026-10-11 amendment. The code is in; these are the parts only Play and a phone can prove.
+
+- [ ] **Internal testing build with billing uploaded.** Play Console refuses to create a one-time
+      product until an artifact carrying `com.android.vending.BILLING` is on a track.
+- [ ] **Products created and active**: `tip_small`, `tip_medium`, `tip_large` at 5 / 10 / 20 PLN.
+      An id that differs from `TIP_PRODUCT_IDS` is silently left out of the section.
+- [ ] **One real purchase from a licence tester** on the internal-testing install: Play's sheet opens,
+      the thank-you line appears, and buying the *same* tip again works — the second purchase is the
+      proof that the first was consumed.
+- [ ] **The debug build on the phone shows no tip section and no card.** Play has never heard of the
+      `.debug` package, so an empty section is the correct reading, not a failure.
+- [ ] **A line in the listing naming the tip**, once room is made in the German, Spanish, French and
+      Brazilian Portuguese full descriptions (`store-listing.md` says why it is not there yet).
+
 ## The standing schema gate — parked, because there is no database
 
 **Gloam has no database** (ADR-0007). It keeps a dim level and a shade-running flag in DataStore,

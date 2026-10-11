@@ -5,7 +5,7 @@ title: Privacy Policy
 
 # Privacy Policy
 
-_Last updated: 17 September 2026_
+_Last updated: 11 October 2026_
 
 Gloam is an Android app that dims your screen below the darkest setting Android offers. This policy
 describes what it does with information. It is short because the app does very little with any.
@@ -18,6 +18,8 @@ sending anything anywhere, and a check runs against every release build to confi
 has not appeared.
 
 There is no analytics, no crash reporting, no advertising, and no third-party SDK that phones home.
+The one Google library in the app, which handles tips through Google Play, carries usage logging of
+its own; without the `INTERNET` permission it has no way to send it.
 
 ## What the app stores
 
@@ -30,6 +32,8 @@ Settings, in the app's private storage on your own device, readable only by the 
 - your theme choice, and whether the app icon opens the small controls or the whole app
 - the nightly schedule: whether it is on, whether it follows two clock times or sunset and sunrise,
   the two times, and which night it last acted on
+- how many times the shade has been started, and whether you have answered the one-time mention
+  of the tip
 - **only if you allow it**, your phone's approximate location — see the next section
 
 Installs from before September 2026 may also hold one retired colour setting that nothing reads any
@@ -82,6 +86,8 @@ phone until you uninstall Gloam or clear its storage in Android's settings.
   puts it back when the phone starts again, and it sets up the schedule again, because Android
   forgets an app's timers when it restarts.
 - **Approximate location**, optional, as described above.
+- **Google Play billing.** Lets Gloam ask the Google Play app for the price of a tip and open its
+  payment sheet. It gives Gloam nothing about you.
 
 Of these, only location is information about you, and the app has no way to send anything anywhere.
 
@@ -122,6 +128,12 @@ be":
    rate it. The row opens Play, or your browser if the phone has no Play, and tells it nothing
    about you. A rating or review you leave there is handled by Google under Google's policy, and
    reaches the developer only through Google.
+
+   **A tip, if you leave one, is paid to Google Play.** Gloam asks the Play app on your phone for the
+   prices and opens Play's own payment sheet; your payment details go to Google and never to Gloam.
+   Tips unlock nothing, so Gloam keeps no record of one. The developer receives the payment and
+   Google's order report, which identifies the order but not your payment details, and uses it only
+   for accounting.
 
 ## Children
 

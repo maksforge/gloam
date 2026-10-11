@@ -39,6 +39,9 @@
     <string name="dim_notification_warning_channel_body">Oznámení Gloamu je vypnuté, takže ztmavení lze zastavit jedině z této obrazovky.</string>
     <string name="dim_notification_warning_ask">Povolit oznámení</string>
     <string name="dim_notification_warning_settings">Otevřít nastavení oznámení</string>
+    <string name="dim_tip_ask_title">Gloam je zdarma a zdarma zůstane</string>
+    <string name="dim_tip_ask_body">Pokud ti pomáhá číst v noci, můžeš vývojáři nechat spropitné. Nic neodemyká a Gloam se už nezeptá.</string>
+    <string name="dim_tip_ask_decline">Ne, děkuji</string>
 
     <string name="dim_backlight_label">Snižovat také jasnost obrazovky</string>
     <string name="dim_backlight_hint">Posuvník jasnosti je pozastavený, dokud Gloam ztmavuje.</string>
@@ -117,6 +120,10 @@
     <string name="support_rate">Ohodnotit Gloam na Google Play</string>
     <string name="support_rate_hint">Otevře stránku Gloamu na Google Play. Hodnocení je dobrovolné a nic neodemyká, protože v Gloamu nic zamčené není.</string>
     <string name="support_no_play">V tomto telefonu není Google Play ani prohlížeč, který by šlo otevřít.</string>
+    <string name="support_tip">Nechat spropitné</string>
+    <string name="support_tip_hint">Jednorázové spropitné pro vývojáře, placené přes Google Play. Nic neodemyká, protože v Gloamu nic zamčené není.</string>
+    <string name="support_tip_thanks">Děkuji. Hodně to pro mě znamená.</string>
+    <string name="support_tip_pending">Platba se ještě zpracovává. Google Play ji dokončí.</string>
 
     <string name="licence_text_missing">Text této licence není součástí aplikace.</string>
 

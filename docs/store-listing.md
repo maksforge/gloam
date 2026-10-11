@@ -159,12 +159,11 @@ and since C, a listing upload refuses to run with either of them blank.
 > on the listing path. **Deleting these headings is not a way round it** — a shipped language with no
 > section is the same gap, spelled differently.
 
-**No tip is mentioned anywhere in this listing, and that is deliberate.** ADR-0009's 2026-08-30
-amendment: enforcement has rejected apps for an in-app donation route even where the policy text
-permits it, and that rejection reached a link to a *project page* because the page carried donation
-information. v1's Support screen carries no tip link, `docs/index.md` carries none either, and this
-copy names none. The promise in `CLAUDE.md` still stands — it just is not collected until the app is
-live and there is something to appeal from.
+**No tip is mentioned in this listing's copy.** Since ADR-0009's 2026-10-11 amendment the tip is
+a Play Billing consumable inside the app, and Play's own *Contains in-app purchases* label says that
+purchases exist. A line saying what they are is wanted, but four locales' full descriptions sit
+within five characters of the 4000 limit, so it is a listing change of its own rather than a
+sentence squeezed into this one.
 
 ### App name — 5/30
 
@@ -1374,4 +1373,65 @@ Novidade: uma bolha. Enquanto escurece, toque fora dos controles e eles se reduz
 
 ```
 Нове: бульбашка. Під час затемнення торкнися поза керуванням, і воно згорнеться в маленьку бульбашку біля краю екрана. Торкнися її, щоб повернути керування, перетягни будь-куди або відпусти на ✕, щоб прибрати. Якщо хочеш, щоб керування просто закривалося, вимкни бульбашку в Налаштування → Керування.
+```
+
+
+### 1.3.0 — a tip
+
+**One owner-visible change.** A tip, through Google Play, that unlocks nothing (ADR-0009's
+2026-10-11 amendment). The note says where it is, that it is optional and buys nothing, and that the
+home screen mentions it exactly once, so nobody reads the card as the start of a nag.
+
+**English** — 287/500:
+
+```
+New: you can leave the developer a tip, from Settings → Help and feedback. It goes through Google Play and unlocks nothing, because every feature in Gloam is free and stays free. After a week of use, Gloam mentions it once on the home screen; answer either way and it will not ask again.
+```
+
+**Polish** — 285/500:
+
+```
+Nowość: możesz zostawić twórcy napiwek, w Ustawienia → Pomoc i opinie. Płacisz przez Google Play i niczego nie odblokowujesz, bo każda funkcja w Gloam jest darmowa i taka zostanie. Po tygodniu używania Gloam wspomni o tym raz na ekranie głównym; po każdej odpowiedzi więcej nie zapyta.
+```
+
+**Czech** — 275/500:
+
+```
+Novinka: vývojáři můžeš nechat spropitné, v Nastavení → Pomoc a zpětná vazba. Platí se přes Google Play a nic neodemyká, protože každá funkce v Gloamu je zdarma a zdarma zůstane. Po týdnu používání to Gloam jednou zmíní na hlavní obrazovce; ať odpovíš jakkoli, už se nezeptá.
+```
+
+**German** — 330/500:
+
+```
+Neu: Du kannst dem Entwickler ein Trinkgeld geben, unter Einstellungen → Hilfe und Rückmeldung. Es läuft über Google Play und schaltet nichts frei, denn jede Funktion in Gloam ist kostenlos und bleibt es. Nach einer Woche Nutzung erwähnt Gloam es einmal auf dem Startbildschirm; egal wie du antwortest, es fragt nicht noch einmal.
+```
+
+**Spanish** — 330/500:
+
+```
+Novedad: puedes dejarle una propina al desarrollador, en Ajustes → Ayuda y comentarios. Se paga con Google Play y no desbloquea nada, porque todas las funciones de Gloam son gratis y lo seguirán siendo. Tras una semana de uso, Gloam lo menciona una vez en la pantalla principal; respondas lo que respondas, no volverá a preguntar.
+```
+
+**French** — 358/500:
+
+```
+Nouveau : vous pouvez laisser un pourboire au développeur, dans Paramètres → Aide et commentaires. Il passe par Google Play et ne débloque rien, car toutes les fonctionnalités de Gloam sont gratuites et le resteront. Après une semaine d'utilisation, Gloam le mentionne une fois sur l'écran d'accueil ; quelle que soit votre réponse, il ne le redemandera pas.
+```
+
+**Italian** — 318/500:
+
+```
+Novità: puoi lasciare una mancia allo sviluppatore, in Impostazioni → Aiuto e commenti. Passa da Google Play e non sblocca nulla, perché ogni funzione di Gloam è gratuita e lo resterà. Dopo una settimana di utilizzo, Gloam lo menziona una volta nella schermata principale; qualunque cosa rispondi, non lo chiederà più.
+```
+
+**Brazilian Portuguese** — 339/500:
+
+```
+Novo: você pode deixar uma gorjeta para o desenvolvedor, em Configurações → Ajuda e comentários. O pagamento é pelo Google Play e não desbloqueia nada, porque todo recurso do Gloam é gratuito e continuará sendo. Depois de uma semana de uso, o Gloam menciona isso uma vez na tela inicial; seja qual for a resposta, ele não pergunta de novo.
+```
+
+**Ukrainian** — 305/500:
+
+```
+Нове: ти можеш залишити розробнику чайові в Налаштування → Довідка та відгуки. Оплата йде через Google Play і нічого не відкриває, бо кожна функція в Gloam безкоштовна і такою залишиться. Через тиждень користування Gloam один раз згадає про це на головному екрані; що б ти не відповів, більше не питатиме.
 ```

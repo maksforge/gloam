@@ -3,7 +3,10 @@ package app.gloam.ui.dim
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -11,7 +14,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -38,6 +43,7 @@ import app.gloam.shade.shadePermissionIntent
 import app.gloam.shade.startShade
 import app.gloam.shade.stopShade
 import app.gloam.theme.Spacing
+import app.gloam.tip.tipAskDue
 import app.gloam.ui.appViewModelExtras
 import app.gloam.ui.common.WarningBanner
 import app.gloam.work.AppChannel
@@ -100,11 +106,13 @@ private enum class ShadeWarning {
 @Composable
 fun DimScreen(
     onOpenSchedule: () -> Unit,
+    onOpenSupport: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: DimViewModel =
         viewModel(factory = DimViewModel.Factory, extras = appViewModelExtras()),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val tipAsk by viewModel.tipAsk.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = LocalActivity.current
 
@@ -369,6 +377,53 @@ fun DimScreen(
                         bottom = Spacing.section,
                     ),
             )
+
+            val installedAt =
+                remember { context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime }
+            if (tipAsk.available &&
+                tipAskDue(tipAsk.asked, tipAsk.shadeStarts, installedAt, System.currentTimeMillis())
+            ) {
+                TipAskCard(
+                    onTip = {
+                        viewModel.answerTipAsk()
+                        onOpenSupport()
+                    },
+                    onDecline = viewModel::answerTipAsk,
+                )
+            }
+        }
+    }
+}
+
+/** The one time Gloam mentions the tip unasked. Either button answers it for good. */
+@Composable
+private fun TipAskCard(
+    onTip: () -> Unit,
+    onDecline: () -> Unit,
+) {
+    Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        shape = MaterialTheme.shapes.medium,
+        modifier =
+            Modifier
+                .fillMaxWidth()
+                .padding(start = Spacing.base, end = Spacing.base, bottom = Spacing.section),
+    ) {
+        Column(modifier = Modifier.padding(Spacing.base)) {
+            Text(stringResource(R.string.dim_tip_ask_title), style = MaterialTheme.typography.titleMedium)
+            Text(
+                text = stringResource(R.string.dim_tip_ask_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = Spacing.tight),
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(Spacing.tight),
+                modifier = Modifier.padding(top = Spacing.tight),
+            ) {
+                TextButton(onClick = onTip) { Text(stringResource(R.string.support_tip)) }
+                TextButton(onClick = onDecline) { Text(stringResource(R.string.dim_tip_ask_decline)) }
+            }
         }
     }
 }
