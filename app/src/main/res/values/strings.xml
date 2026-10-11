@@ -127,6 +127,13 @@
     <string name="settings_controls">Controls</string>
     <string name="settings_launcher_compact">Open the small controls from the icon</string>
     <string name="settings_launcher_compact_hint">Tapping Gloam opens just the sliders instead of the whole app. The notification always opens the small controls.</string>
+    <string name="settings_controls_bubble">Leave a bubble when the controls close</string>
+    <string name="settings_controls_bubble_hint">While dimming, tapping outside the controls shrinks them to a small bubble. Tap it to bring them back, or drag it onto the ✕ to remove it.</string>
+    <string name="bubble_open">Open the controls</string>
+    <string name="bubble_prompt_title">Keep the bubble?</string>
+    <string name="bubble_prompt_body">Turn it off and the controls simply close. You can turn it back on in Settings.</string>
+    <string name="bubble_prompt_turn_off">Turn off</string>
+    <string name="bubble_prompt_keep">Keep it</string>
 
     <!--
       The Quick Settings tile. The body says what the tile is and what it does not depend on, and

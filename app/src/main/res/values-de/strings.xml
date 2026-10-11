@@ -77,6 +77,13 @@
     <string name="settings_controls">Steuerung</string>
     <string name="settings_launcher_compact">Über das Symbol die kleine Steuerung öffnen</string>
     <string name="settings_launcher_compact_hint">Ein Tippen auf Gloam öffnet nur die Regler statt der ganzen App. Die Benachrichtigung öffnet immer die kleine Steuerung.</string>
+    <string name="settings_controls_bubble">Beim Schließen der Steuerung eine Blase zurücklassen</string>
+    <string name="settings_controls_bubble_hint">Beim Abdunkeln verkleinert ein Tippen außerhalb der Steuerung sie zu einer kleinen Blase. Tippe darauf, um sie zurückzuholen, oder zieh sie auf das ✕, um sie zu entfernen.</string>
+    <string name="bubble_open">Steuerung öffnen</string>
+    <string name="bubble_prompt_title">Blase behalten?</string>
+    <string name="bubble_prompt_body">Schaltest du sie aus, schließt sich die Steuerung einfach. In den Einstellungen kannst du sie wieder einschalten.</string>
+    <string name="bubble_prompt_turn_off">Ausschalten</string>
+    <string name="bubble_prompt_keep">Behalten</string>
     <string name="settings_tile">Schnelleinstellungen-Kachel</string>
     <string name="settings_tile_body">Eine Kachel, die die Schicht von überall ein- und ausschaltet, ohne Gloam zu öffnen. Sie braucht keine erlaubten Benachrichtigungen und funktioniert deshalb auch dann, wenn die Benachrichtigung es nicht tut.</string>
     <string name="settings_tile_add">Kachel hinzufügen</string>

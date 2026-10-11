@@ -75,6 +75,13 @@
     <string name="settings_controls">Ovládání</string>
     <string name="settings_launcher_compact">Otevírat z ikony malé ovládání</string>
     <string name="settings_launcher_compact_hint">Klepnutí na Gloam otevře jen posuvníky místo celé aplikace. Oznámení otevírá malé ovládání vždy.</string>
+    <string name="settings_controls_bubble">Po zavření ovládání nechat bublinu</string>
+    <string name="settings_controls_bubble_hint">Během ztmavování klepnutí mimo ovládání zmenší ovládání na malou bublinu. Klepnutím na ni ho vrátíš, přetažením na ✕ ji odstraníš.</string>
+    <string name="bubble_open">Otevřít ovládání</string>
+    <string name="bubble_prompt_title">Ponechat bublinu?</string>
+    <string name="bubble_prompt_body">Když ji vypneš, ovládání se prostě zavře. Znovu ji můžeš zapnout v Nastavení.</string>
+    <string name="bubble_prompt_turn_off">Vypnout</string>
+    <string name="bubble_prompt_keep">Ponechat</string>
     <string name="settings_tile">Dlaždice v Rychlém nastavení</string>
     <string name="settings_tile_body">Dlaždice, která zapíná a vypíná závoj odkudkoli, bez otevírání Gloamu. Nepotřebuje povolená oznámení, takže funguje i tehdy, když oznámení nefunguje.</string>
     <string name="settings_tile_add">Přidat dlaždici</string>

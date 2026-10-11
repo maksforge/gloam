@@ -64,6 +64,13 @@
     <string name="settings_controls">Sterowanie</string>
     <string name="settings_launcher_compact">Otwieraj małe sterowanie z ikony</string>
     <string name="settings_launcher_compact_hint">Dotknięcie ikony Gloam otwiera same suwaki zamiast całej aplikacji. Powiadomienie zawsze otwiera małe sterowanie.</string>
+    <string name="settings_controls_bubble">Zostawiaj bańkę po zamknięciu sterowania</string>
+    <string name="settings_controls_bubble_hint">Podczas przyciemniania dotknięcie poza sterowaniem zmniejsza je do małej bańki. Dotknij jej, aby przywrócić sterowanie, albo przeciągnij ją na ✕, aby ją usunąć.</string>
+    <string name="bubble_open">Otwórz sterowanie</string>
+    <string name="bubble_prompt_title">Zostawić bańkę?</string>
+    <string name="bubble_prompt_body">Po wyłączeniu sterowanie po prostu się zamyka. Możesz ją włączyć ponownie w Ustawieniach.</string>
+    <string name="bubble_prompt_turn_off">Wyłącz</string>
+    <string name="bubble_prompt_keep">Zostaw</string>
     <string name="settings_tile">Kafelek szybkich ustawień</string>
     <string name="settings_tile_body">Kafelek, który włącza i wyłącza zasłonę z dowolnego miejsca, bez otwierania Gloam. Nie potrzebuje włączonych powiadomień, więc działa także wtedy, gdy powiadomienie nie działa.</string>
     <string name="settings_tile_add">Dodaj kafelek</string>

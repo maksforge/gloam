@@ -79,6 +79,13 @@
     <string name="settings_controls">Керування</string>
     <string name="settings_launcher_compact">Відкривати з піктограми мале керування</string>
     <string name="settings_launcher_compact_hint">Дотик до Gloam відкриває лише повзунки замість усього застосунку. Повідомлення завжди відкриває мале керування.</string>
+    <string name="settings_controls_bubble">Залишати бульбашку після закриття керування</string>
+    <string name="settings_controls_bubble_hint">Під час затемнення дотик поза керуванням згортає його в маленьку бульбашку. Торкнися її, щоб повернути керування, або перетягни на ✕, щоб прибрати.</string>
+    <string name="bubble_open">Відкрити керування</string>
+    <string name="bubble_prompt_title">Залишити бульбашку?</string>
+    <string name="bubble_prompt_body">Якщо її вимкнути, керування просто закривається. Знову ввімкнути її можна в Налаштуваннях.</string>
+    <string name="bubble_prompt_turn_off">Вимкнути</string>
+    <string name="bubble_prompt_keep">Залишити</string>
     <string name="settings_tile">Плитка швидких налаштувань</string>
     <string name="settings_tile_body">Плитка, яка вмикає та вимикає запону звідусіль, без відкривання Gloam. Їй не потрібні дозволені повідомлення, тож вона працює й тоді, коли повідомлення не працює.</string>
     <string name="settings_tile_add">Додати плитку</string>
