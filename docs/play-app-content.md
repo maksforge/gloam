@@ -20,10 +20,11 @@ Two rules keep this file honest:
 
 ## What the artifact carries
 
-Read at **versionCode 189, versionName 0.7.1**, by `publish-play.yml`'s verify step on 2026-09-16 (run
-35108345068), before the upload it guards:
+Read on 2026-10-11 by `scripts/aab-permissions.py`, off the debug bundle of the branch that added the
+tip (versionCode 242, versionName 1.2.1 before release-please bumped it); `publish-play.yml`'s verify
+step reads the release bundle again before every upload:
 
-> 8 permissions, all accounted for; none of the 7 forbidden ones present; 0 `<uses-feature>` declared
+> 8 permissions, all accounted for; none of the 7 forbidden ones present; 0 <uses-feature> declared; 2 of the 8 activities lock their orientation, every one of them expected
 
 | Permission | Whose | What it is for | Console consequence |
 | --- | --- | --- | --- |
