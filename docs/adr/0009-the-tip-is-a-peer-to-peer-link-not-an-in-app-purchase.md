@@ -147,9 +147,11 @@ policy risk at all over the one with no cost. A link the listing never names rea
 and the reports above show what an external payment link risks on an app that now has something to
 lose.
 
-- **Three consumable one-time products**, `tip_small`, `tip_medium` and `tip_large`, at 5, 10 and 20
-  PLN with Play's own conversions everywhere else. Every purchase is consumed at once, which also
-  satisfies Play's three-day acknowledgement; nothing is stored, because nothing is unlocked.
+- **Four consumable one-time products**, `tip_small`, `tip_medium`, `tip_large` and `tip_xlarge`, at
+  5, 10, 20 and 50 PLN with Play's own conversions everywhere else, each with Play's multi-quantity on
+  — the nearest Play comes to an amount the user picks. Every purchase is consumed at once, which also
+  satisfies Play's three-day acknowledgement; nothing is stored, because nothing is unlocked. The same
+  four ids and prices are the owner's standard for every free app, Binky included.
 - **Two surfaces.** A section on *Help and feedback*, present only where Play will sell a tip, and a
   card on the home screen shown **once per install** to somebody who has had Gloam a week and started
   the shade ten times. Either button on the card answers it for good, and the answer is backed up.

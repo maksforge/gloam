@@ -35,7 +35,7 @@ private const val TAG = "GloamTip"
  * The product ids, which must match the one-time products in Play Console exactly. A product
  * missing from the Console is left out of [TipJar.offers] rather than failing the others.
  */
-val TIP_PRODUCT_IDS = listOf("tip_small", "tip_medium", "tip_large")
+val TIP_PRODUCT_IDS = listOf("tip_small", "tip_medium", "tip_large", "tip_xlarge")
 
 /**
  * One tip as Play prices it for this user.
