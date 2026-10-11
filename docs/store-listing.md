@@ -1418,10 +1418,10 @@ Novedad: puedes dejarle una propina al desarrollador, en Ajustes → Ayuda y com
 Nouveau : vous pouvez laisser un pourboire au développeur, dans Paramètres → Aide et commentaires. Il passe par Google Play et ne débloque rien, car toutes les fonctionnalités de Gloam sont gratuites et le resteront. Après une semaine d'utilisation, Gloam le mentionne une fois sur l'écran d'accueil ; quelle que soit votre réponse, il ne le redemandera pas.
 ```
 
-**Italian** — 318/500:
+**Italian** — 321/500:
 
 ```
-Novità: puoi lasciare una mancia allo sviluppatore, in Impostazioni → Aiuto e commenti. Passa da Google Play e non sblocca nulla, perché ogni funzione di Gloam è gratuita e lo resterà. Dopo una settimana di utilizzo, Gloam lo menziona una volta nella schermata principale; qualunque cosa rispondi, non lo chiederà più.
+Novità: puoi lasciare una mancia allo sviluppatore, in Impostazioni → Aiuto e commenti. Passa da Google Play e non sblocca nulla, perché ogni funzione di Gloam è gratuita e lo resterà. Dopo una settimana di utilizzo, Gloam lo menziona una volta nella schermata principale; qualunque cosa tu risponda, non lo chiederà più.
 ```
 
 **Brazilian Portuguese** — 339/500:
@@ -1430,8 +1430,8 @@ Novità: puoi lasciare una mancia allo sviluppatore, in Impostazioni → Aiuto e
 Novo: você pode deixar uma gorjeta para o desenvolvedor, em Configurações → Ajuda e comentários. O pagamento é pelo Google Play e não desbloqueia nada, porque todo recurso do Gloam é gratuito e continuará sendo. Depois de uma semana de uso, o Gloam menciona isso uma vez na tela inicial; seja qual for a resposta, ele não pergunta de novo.
 ```
 
-**Ukrainian** — 305/500:
+**Ukrainian** — 314/500:
 
 ```
-Нове: ти можеш залишити розробнику чайові в Налаштування → Довідка та відгуки. Оплата йде через Google Play і нічого не відкриває, бо кожна функція в Gloam безкоштовна і такою залишиться. Через тиждень користування Gloam один раз згадає про це на головному екрані; що б ти не відповів, більше не питатиме.
+Нове: ти можеш залишити розробнику чайові в Налаштування → Довідка та відгуки. Оплата йде через Google Play і нічого не відкриває, бо кожна функція в Gloam безкоштовна і такою залишиться. Через тиждень користування Gloam один раз згадає про це на головному екрані; хай якою б не була відповідь, більше не питатиме.
 ```
