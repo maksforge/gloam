@@ -104,7 +104,7 @@ class DimViewModel(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TipAskInputs())
 
     init {
-        // Play is only asked for prices once the ask could be due; most launches never bind to it.
+        // Play is only asked for prices once the ask could be due.
         viewModelScope.launch {
             if (!preferences.tipAsked.first() && preferences.shadeStarts.first() >= TIP_ASK_AFTER_STARTS) {
                 tipJar.refresh()
