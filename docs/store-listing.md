@@ -1309,3 +1309,64 @@ Novidade: predefinições. Abaixo de Calidez agora há três: Leitura, Noite e N
 ```
 Нове: готові налаштування. Під теплотою тепер є три: Читання, Вечір і У ліжку. Один дотик разом задає рівень затемнення, теплоту та її відтінок і вмикає затемнення, а рядок під ними каже, для чого кожне з них. Якщо потім посунеш будь-який елемент керування, просто повернешся до власних налаштувань.
 ```
+
+### 1.2.0 — the bubble
+
+**One owner-visible change, so one paragraph.** Putting the controls away while dimming now leaves a
+bubble on the screen's edge. The note says what it does and where its switch is, in each language's
+own words for the controls and Settings, because a user who would rather not have it needs to find
+the way to turn it off.
+
+**English** — 288/500:
+
+```
+New: a bubble. While dimming, tap outside the controls and they shrink to a small bubble on the edge of the screen. Tap it to bring the controls back, drag it anywhere, or drop it on the ✕ to remove it. If you would rather the controls simply close, turn it off under Settings → Controls.
+```
+
+**Polish** — 316/500:
+
+```
+Nowość: bańka. Podczas przyciemniania dotknij poza sterowaniem, a zmniejszy się ono do małej bańki przy krawędzi ekranu. Dotknij jej, aby przywrócić sterowanie, przeciągnij ją w dowolne miejsce albo upuść na ✕, aby ją usunąć. Jeśli wolisz, żeby sterowanie po prostu się zamykało, wyłącz ją w Ustawienia → Sterowanie.
+```
+
+**Czech** — 281/500:
+
+```
+Novinka: bublina. Když během ztmavování klepneš mimo ovládání, zmenší se na malou bublinu u okraje obrazovky. Klepnutím na ni ovládání vrátíš, můžeš ji přetáhnout kamkoli nebo ji pustit na ✕ a odstranit. Pokud chceš, aby se ovládání prostě zavřelo, vypni ji v Nastavení → Ovládání.
+```
+
+**German** — 357/500:
+
+```
+Neu: eine Blase. Tippst du beim Abdunkeln außerhalb der Steuerung, schrumpft sie zu einer kleinen Blase am Bildschirmrand. Tippe darauf, um die Steuerung zurückzuholen, zieh sie an eine beliebige Stelle oder lass sie auf dem ✕ los, um sie zu entfernen. Soll sich die Steuerung lieber einfach schließen, schalte die Blase unter Einstellungen → Steuerung aus.
+```
+
+**Spanish** — 321/500:
+
+```
+Novedad: una burbuja. Mientras atenúas, toca fuera de los controles y se reducen a una pequeña burbuja en el borde de la pantalla. Tócala para recuperar los controles, arrástrala adonde quieras o suéltala sobre la ✕ para quitarla. Si prefieres que los controles simplemente se cierren, desactívala en Ajustes → Controles.
+```
+
+**French** — 352/500:
+
+```
+Nouveau : une bulle. Pendant l'assombrissement, touchez en dehors des commandes et elles se réduisent à une petite bulle au bord de l'écran. Touchez-la pour rouvrir les commandes, faites-la glisser où vous voulez ou lâchez-la sur le ✕ pour la retirer. Si vous préférez que les commandes se ferment simplement, désactivez-la dans Paramètres → Commandes.
+```
+
+**Italian** — 292/500:
+
+```
+Novità: una bolla. Mentre oscuri, tocca fuori dai comandi e si riducono a una piccola bolla sul bordo dello schermo. Toccala per riaprire i comandi, trascinala dove vuoi o lasciala sulla ✕ per rimuoverla. Se preferisci che i comandi si chiudano e basta, disattivala in Impostazioni → Comandi.
+```
+
+**Brazilian Portuguese** — 316/500:
+
+```
+Novidade: uma bolha. Enquanto escurece, toque fora dos controles e eles se reduzem a uma bolha pequena na borda da tela. Toque nela para trazer os controles de volta, arraste-a para onde quiser ou solte-a no ✕ para removê-la. Se preferir que os controles simplesmente fechem, desative-a em Configurações → Controles.
+```
+
+**Ukrainian** — 300/500:
+
+```
+Нове: бульбашка. Під час затемнення торкнися поза керуванням, і воно згорнеться в маленьку бульбашку біля краю екрана. Торкнися її, щоб повернути керування, перетягни будь-куди або відпусти на ✕, щоб прибрати. Якщо хочеш, щоб керування просто закривалося, вимкни бульбашку в Налаштування → Керування.
+```
