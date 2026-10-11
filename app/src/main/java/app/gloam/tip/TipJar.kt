@@ -92,8 +92,11 @@ class TipJar(
         BillingClient
             .newBuilder(context.applicationContext)
             .setListener { result, purchases ->
-                if (result.responseCode == BillingClient.BillingResponseCode.OK) {
-                    scope.launch { settle(purchases.orEmpty(), announce = true) }
+                when (result.responseCode) {
+                    BillingClient.BillingResponseCode.OK ->
+                        scope.launch { settle(purchases.orEmpty(), announce = true) }
+                    BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED ->
+                        scope.launch { settlePending(announce = true) }
                 }
             }.enablePendingPurchases(PendingPurchasesParams.newBuilder().enableOneTimeProducts().build())
             .enableAutoServiceReconnection()
@@ -101,10 +104,7 @@ class TipJar(
 
     private val connecting = Mutex()
 
-    /**
-     * Ask Play for prices, and finish any tip an earlier run left unconsumed — a pending payment
-     * that has since cleared, or a process killed between paying and consuming.
-     */
+    /** Ask Play for prices. */
     suspend fun refresh() {
         if (!connect()) return
         val (result, details) =
@@ -126,12 +126,24 @@ class TipJar(
             return
         }
         _offers.value = details.orEmpty().mapNotNull(::offerOf).sortedBy { it.priceMicros }
+    }
 
+    /**
+     * Finish any tip an earlier run left unconsumed — a pending payment that has since cleared, or a
+     * process killed between paying and consuming. Run on every foreground, because nothing else
+     * comes back for it and Play refunds what is not consumed within three days.
+     */
+    suspend fun settlePending(announce: Boolean = false) {
+        if (!connect()) return
         val owned =
             client.queryPurchasesAsync(
                 QueryPurchasesParams.newBuilder().setProductType(BillingClient.ProductType.INAPP).build(),
             )
-        settle(owned.purchasesList, announce = false)
+        if (owned.billingResult.responseCode != BillingClient.BillingResponseCode.OK) {
+            Log.i(TAG, "no purchases: ${owned.billingResult.debugMessage}")
+            return
+        }
+        settle(owned.purchasesList, announce)
     }
 
     /**

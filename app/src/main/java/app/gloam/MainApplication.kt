@@ -2,6 +2,9 @@ package app.gloam
 
 import android.app.Application
 import android.util.Log
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
 import app.gloam.data.AppPreferences
 import app.gloam.data.ThemeMode
 import app.gloam.shade.Schedule
@@ -20,6 +23,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.time.ZoneId
 
@@ -143,6 +147,17 @@ class MainApplication : Application() {
                 preferences.tightenToWindow(schedule) // the deadline, forward only
                 reconcileWindow(schedule) // the night, if one is open and unspent
             }.launchIn(applicationScope)
+
+        // On the app coming to the foreground, not on process start: an alarm or a boot broadcast
+        // starts the process too, and binding Play for those would wake it for nobody. The scope is
+        // the application's so a consume already under way survives the user leaving again.
+        ProcessLifecycleOwner.get().lifecycle.addObserver(
+            object : DefaultLifecycleObserver {
+                override fun onStart(owner: LifecycleOwner) {
+                    applicationScope.launch { container.tipJar.settlePending() }
+                }
+            },
+        )
     }
 }
 

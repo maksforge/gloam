@@ -290,6 +290,7 @@ dependencies {
 
     // The tip (ADR-0009). Its transitive telemetry merges INTERNET, which the manifest removes again.
     implementation(libs.billing.ktx)
+    implementation(libs.androidx.lifecycle.process)
 
     // Nav3 serialises the whole back stack across process death, and every NavKey is
     // @Serializable — that is what this is for now that there is no backup manifest.
