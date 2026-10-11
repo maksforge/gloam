@@ -112,7 +112,6 @@ fun DimScreen(
         viewModel(factory = DimViewModel.Factory, extras = appViewModelExtras()),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val tipAsk by viewModel.tipAsk.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val activity = LocalActivity.current
 
@@ -380,6 +379,7 @@ fun DimScreen(
 
             val installedAt =
                 remember { context.packageManager.getPackageInfo(context.packageName, 0).firstInstallTime }
+            val tipAsk = state.tipAsk
             if (tipAsk.available &&
                 tipAskDue(tipAsk.asked, tipAsk.shadeStarts, installedAt, System.currentTimeMillis())
             ) {

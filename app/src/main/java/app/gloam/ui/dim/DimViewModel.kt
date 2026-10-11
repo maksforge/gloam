@@ -52,6 +52,7 @@ import java.time.LocalTime
  *   therefore the host's, not this one's.
  * @param onScreen whether the shade's window is up in this process — [shadeOnScreen], the live half
  *   that [running] deliberately is not.
+ * @param tipAsk what the tip's one-time card is decided from; see [TipAskInputs].
  */
 data class DimUiState(
     val dimLevel: Int = 0,
@@ -63,6 +64,7 @@ data class DimUiState(
     val offAtMillis: Long? = null,
     val schedule: Schedule = Schedule(enabled = false, onAt = LocalTime.MIDNIGHT, offAt = LocalTime.MIDNIGHT),
     val onScreen: Boolean = false,
+    val tipAsk: TipAskInputs = TipAskInputs(),
 ) {
     /**
      * **What the Start/Stop button and the deadline line show**: asked for *and* on screen.
@@ -96,12 +98,10 @@ class DimViewModel(
     private val tipJar: TipJar,
     onScreen: Flow<Boolean> = shadeOnScreen,
 ) : ViewModel() {
-    // Its own flow rather than three more fields in `DimUiState`: that combine, below, is at its arity
-    // limit, and this answers a question about the app rather than about the shade.
-    val tipAsk: StateFlow<TipAskInputs> =
+    private val tipAsk: Flow<TipAskInputs> =
         combine(preferences.tipAsked, preferences.shadeStarts, tipJar.offers) { asked, starts, offers ->
             TipAskInputs(asked, starts, offers.isNotEmpty())
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TipAskInputs())
+        }
 
     init {
         // Play is only asked for prices once the ask could be due.
@@ -125,13 +125,14 @@ class DimViewModel(
             // The intent and the live window paired, because they are the two halves of one
             // question — what the button says — and the arity limit below leaves no sixth slot.
             combine(preferences.shadeIntent, onScreen, ::Pair),
-            preferences.lowerBacklight,
+            // Paired with the tip's inputs only for the arity limit; they share no section.
+            combine(preferences.lowerBacklight, tipAsk, ::Pair),
             // Kotlin note: `combine` is typed for two to five flows and the schedule is the sixth,
             // so the two that already belong to one section of the screen are paired first. Nesting
             // rather than the vararg overload, which hands back an `Array<Any?>` and a cast per
             // field — the type checker is doing real work here and is worth keeping.
             combine(preferences.autoOff, preferences.schedule, ::Pair),
-        ) { level, (warmth, warmthColor), (intent, up), lowerBacklight, (autoOff, schedule) ->
+        ) { level, (warmth, warmthColor), (intent, up), (lowerBacklight, tipAsk), (autoOff, schedule) ->
             DimUiState(
                 dimLevel = level,
                 warmth = warmth,
@@ -142,6 +143,7 @@ class DimViewModel(
                 offAtMillis = intent.offAtMillis,
                 schedule = schedule,
                 onScreen = up,
+                tipAsk = tipAsk,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DimUiState())
 

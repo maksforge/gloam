@@ -171,24 +171,44 @@ class TipJar(
         }
     }
 
+    /**
+     * Consume what Play reports, and announce **one** outcome for the whole batch: thanked if any tip
+     * in it went through, pending if one is still clearing.
+     *
+     * `ITEM_NOT_OWNED` counts as consumed. The foreground settle can reach a tip before the listener
+     * does — a bank app's 3-D Secure or BLIK hop backgrounds Gloam mid-purchase — and the tip is then
+     * already consumed, which is the money being safe, not the purchase failing.
+     */
     private suspend fun settle(
         purchases: List<Purchase>,
         announce: Boolean,
     ) {
+        var thanked = false
+        var pending = false
         for (purchase in purchases) {
             when (purchase.purchaseState) {
                 Purchase.PurchaseState.PURCHASED -> {
-                    val consumed =
-                        client.consumePurchase(
-                            ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build(),
-                        )
-                    val ok = consumed.billingResult.responseCode == BillingClient.BillingResponseCode.OK
-                    if (!ok) Log.w(TAG, "consume failed: ${consumed.billingResult.debugMessage}")
-                    if (ok && announce) _outcomes.tryEmit(TipOutcome.Thanked)
+                    val code =
+                        client
+                            .consumePurchase(
+                                ConsumeParams.newBuilder().setPurchaseToken(purchase.purchaseToken).build(),
+                            ).billingResult
+                            .responseCode
+                    when (code) {
+                        BillingClient.BillingResponseCode.OK,
+                        BillingClient.BillingResponseCode.ITEM_NOT_OWNED,
+                        -> thanked = true
+                        else -> Log.w(TAG, "consume failed: $code")
+                    }
                 }
-                Purchase.PurchaseState.PENDING -> if (announce) _outcomes.tryEmit(TipOutcome.Pending)
+                Purchase.PurchaseState.PENDING -> pending = true
                 else -> Unit
             }
+        }
+        if (!announce) return
+        when {
+            thanked -> _outcomes.tryEmit(TipOutcome.Thanked)
+            pending -> _outcomes.tryEmit(TipOutcome.Pending)
         }
     }
 
