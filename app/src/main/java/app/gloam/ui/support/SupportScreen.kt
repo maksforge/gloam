@@ -5,7 +5,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -152,7 +152,8 @@ private fun TipSection(
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        Row(
+        // Wraps rather than scrolls: four prices in a long currency format do not fit one row.
+        FlowRow(
             horizontalArrangement = Arrangement.spacedBy(Spacing.tight),
             modifier = Modifier.padding(top = Spacing.tight),
         ) {

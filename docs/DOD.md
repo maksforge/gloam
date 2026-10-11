@@ -136,7 +136,8 @@ ADR-0009's 2026-10-11 amendment. The code is in; these are the parts only Play a
 
 - [ ] **Internal testing build with billing uploaded.** Play Console refuses to create a one-time
       product until an artifact carrying `com.android.vending.BILLING` is on a track.
-- [ ] **Products created and active**: `tip_small`, `tip_medium`, `tip_large` at 5 / 10 / 20 PLN.
+- [ ] **Products created and active**: `tip_small`, `tip_medium`, `tip_large`, `tip_xlarge` at
+      5 / 10 / 20 / 50 PLN, each with multi-quantity on.
       An id that differs from `TIP_PRODUCT_IDS` is silently left out of the section.
 - [ ] **One real purchase from a licence tester** on the internal-testing install: Play's sheet opens,
       the thank-you line appears, and buying the *same* tip again works — the second purchase is the
