@@ -1310,7 +1310,12 @@ Novidade: predefinições. Abaixo de Calidez agora há três: Leitura, Noite e N
 Нове: готові налаштування. Під теплотою тепер є три: Читання, Вечір і У ліжку. Один дотик разом задає рівень затемнення, теплоту та її відтінок і вмикає затемнення, а рядок під ними каже, для чого кожне з них. Якщо потім посунеш будь-який елемент керування, просто повернешся до власних налаштувань.
 ```
 
-### 1.2.0 — the bubble
+### 1.2.1 — the bubble
+
+**Moved from 1.2.0, bodies unchanged.** 1.2.0 reached the internal track only, so production goes
+from 1.1.0 straight to 1.2.1 and its readers meet the bubble here. 1.2.1's own change — the docked
+tab is wider, so it can be grabbed past HyperOS's back-gesture strip — is a fix to the same feature,
+and nothing in these notes described the old width.
 
 **One owner-visible change, so one paragraph.** Putting the controls away while dimming now leaves a
 bubble on the screen's edge. The note says what it does and where its switch is, in each language's
