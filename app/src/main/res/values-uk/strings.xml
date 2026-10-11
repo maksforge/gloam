@@ -43,6 +43,9 @@
     <string name="dim_notification_warning_channel_body">Повідомлення Gloam вимкнене, тому єдиний спосіб зупинити затемнення — цей екран.</string>
     <string name="dim_notification_warning_ask">Дозволити повідомлення</string>
     <string name="dim_notification_warning_settings">Відкрити налаштування повідомлень</string>
+    <string name="dim_tip_ask_title">Gloam безкоштовний і таким залишиться</string>
+    <string name="dim_tip_ask_body">Якщо він допомагає тобі читати вночі, можеш залишити розробнику чайові. Вони нічого не відкривають, і Gloam більше не питатиме.</string>
+    <string name="dim_tip_ask_decline">Ні, дякую</string>
 
     <string name="dim_backlight_label">Знижувати також яскравість екрана</string>
     <string name="dim_backlight_hint">Твій повзунок яскравості призупинений, поки Gloam затемнює.</string>
@@ -121,6 +124,10 @@
     <string name="support_rate">Оцінити Gloam у Google Play</string>
     <string name="support_rate_hint">Відкриває сторінку Gloam у Google Play. Оцінювання добровільне і нічого не відкриває, бо в Gloam ніщо не закрите.</string>
     <string name="support_no_play">У цьому телефоні немає ні Google Play, ні браузера, які можна відкрити.</string>
+    <string name="support_tip">Залишити чайові</string>
+    <string name="support_tip_hint">Одноразові чайові розробнику через Google Play. Вони нічого не відкривають, бо в Gloam ніщо не закрите.</string>
+    <string name="support_tip_thanks">Дякую. Це багато для мене значить.</string>
+    <string name="support_tip_pending">Платіж ще обробляється. Google Play його завершить.</string>
 
     <string name="licence_text_missing">Текст цієї ліцензії не входить до складу застосунку.</string>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <!--
         SYSTEM_ALERT_WINDOW is the whole app. It is a **special** permission, not a runtime one:
@@ -49,6 +50,16 @@
         background location on the built artifact, where a merged declaration would show up.
     -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!--
+        The Play Billing Library (the tip, ADR-0009) depends on Google's `datatransport`, whose
+        manifests merge INTERNET and ACCESS_NETWORK_STATE for the library's own usage logging. Both
+        are removed here. Billing itself never needs them: a purchase is an IPC call to the Play
+        Store app, which does the networking in its own process. Without them the logging has no
+        route off the phone, which is what keeps `docs/privacy-policy.md` true.
+    -->
+    <uses-permission android:name="android.permission.INTERNET" tools:node="remove" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" tools:node="remove" />
 
     <!--
         Package visibility (API 30+) for the one OEM screen the app offers to open: Xiaomi's

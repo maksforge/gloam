@@ -139,3 +139,30 @@ to re-take it with an audience:
 
 **What the app's freeness never depended on:** none of this changes what ships. Every feature is
 free either way, which is the whole reason the tip can wait.
+
+Amendment, 2026-10-11: **the tip ships, and it ships as the first alternative above — a Play Billing
+consumable — rather than as a link.** The app is in production, which was the second amendment's
+trigger to revisit, and re-taking the question with an audience the owner chose the route with no
+policy risk at all over the one with no cost. A link the listing never names reaches almost nobody,
+and the reports above show what an external payment link risks on an app that now has something to
+lose.
+
+- **Three consumable one-time products**, `tip_small`, `tip_medium` and `tip_large`, at 5, 10 and 20
+  PLN with Play's own conversions everywhere else. Every purchase is consumed at once, which also
+  satisfies Play's three-day acknowledgement; nothing is stored, because nothing is unlocked.
+- **Two surfaces.** A section on *Help and feedback*, present only where Play will sell a tip, and a
+  card on the home screen shown **once per install** to somebody who has had Gloam a week and started
+  the shade ten times. Either button on the card answers it for good, and the answer is backed up.
+- **What it cost, as the alternative said it would.** A billing dependency; Google's 15% (the account
+  is enrolled in the reduced tier); a *Contains in-app purchases* label on a listing whose pitch is
+  that nothing is for sale, which the tip's own wording — it unlocks nothing — has to answer. And one
+  cost the alternative did not foresee: the Play Billing Library depends on Google's `datatransport`,
+  which merges `INTERNET`. The manifest removes it again and `aab-permissions.py` asserts it absent,
+  so the privacy policy's *no network of any kind* still holds; billing is IPC to the Play app and
+  never needed it.
+- **The three conditions still describe the tip** — one person, nothing unlocked, worded as a tip —
+  but they are no longer load-bearing for policy. They stay because they are the promise in
+  `CLAUDE.md`, not because a reviewer reads them.
+- **The listing still names no tip**, for a reason that is now about space rather than risk: four
+  locales' full descriptions sit within five characters of Play's limit. The label Play adds says
+  that purchases exist; a line saying what they are is a listing change of its own.

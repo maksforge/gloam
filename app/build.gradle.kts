@@ -207,6 +207,9 @@ licensee {
     // Exactly one artifact: androidx's repackaging of protobuf-javalite, pulled in behind DataStore.
     // Nobody knows this is in the build until the plugin is run — which is the argument for it.
     allow("BSD-3-Clause")
+    // Google Play services, behind the Play Billing Library. Vendor terms rather than an open
+    // licence, so the Licences screen links them instead of shipping their text.
+    allowUrl("https://developer.android.com/studio/terms.html")
 }
 
 /**
@@ -284,6 +287,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.androidx.datastore.preferences)
+
+    // The tip (ADR-0009). Its transitive telemetry merges INTERNET, which the manifest removes again.
+    implementation(libs.billing.ktx)
 
     // Nav3 serialises the whole back stack across process death, and every NavKey is
     // @Serializable — that is what this is for now that there is no backup manifest.

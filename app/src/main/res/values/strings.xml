@@ -56,6 +56,11 @@
     <string name="dim_notification_warning_ask">Allow notifications</string>
     <string name="dim_notification_warning_settings">Open notification settings</string>
 
+    <!-- The tip's one-time ask on the home screen. Shown once per install, then never again. -->
+    <string name="dim_tip_ask_title">Gloam is free, and stays free</string>
+    <string name="dim_tip_ask_body">If it helps you read at night, you can leave the developer a tip. It unlocks nothing, and Gloam will not ask again.</string>
+    <string name="dim_tip_ask_decline">No thanks</string>
+
     <!-- The backlight toggle. The hint says the inert brightness slider out loud, because the
          symptom recurs and a user who meets it with no explanation reports that Gloam broke their
          phone. The unavailable line replaces the promise on a device that cannot keep it. -->
@@ -232,6 +237,11 @@
     <string name="support_rate">Rate Gloam on Google Play</string>
     <string name="support_rate_hint">Opens Gloam\'s page on Google Play. Rating is optional and unlocks nothing, because nothing in Gloam is locked.</string>
     <string name="support_no_play">No Google Play or web browser on this phone to open.</string>
+    <!-- The tip (ADR-0009). A payment to a person that unlocks nothing; never "donate" or "support the project". -->
+    <string name="support_tip">Leave a tip</string>
+    <string name="support_tip_hint">A one-off tip to the developer, paid through Google Play. It unlocks nothing, because nothing in Gloam is locked.</string>
+    <string name="support_tip_thanks">Thank you. It means a lot.</string>
+    <string name="support_tip_pending">Your payment is still clearing. Google Play will finish it.</string>
 
     <!-- Licences -->
     <string name="licence_text_missing">The text of this licence is not bundled with the app.</string>

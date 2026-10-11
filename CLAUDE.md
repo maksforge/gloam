@@ -146,6 +146,9 @@ app/src/main/java/<namespace>/
                it needs because there is no Activity under it;
                OverlayPermission.kt, the SYSTEM_ALERT_WINDOW read and the settings hand-off
   theme/       generated palette, type scale, spacing, the night-mode window half
+  tip/         TipJar.kt, the Play Billing client for the tip (ADR-0009) — held by AppContainer
+               so a purchase finishes after its screen is gone; TipAsk.kt, when the home screen
+               mentions it, once per install
   ui/          Compose screens + ViewModels, one package per area — dim/ is the app's home screen,
                with settings/, support/ and the shared pieces in common/. dim/DimControls.kt is the
                controls themselves, hosted three times: the full screen, the compact activity and

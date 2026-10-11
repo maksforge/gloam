@@ -23,7 +23,7 @@ Two rules keep this file honest:
 Read at **versionCode 189, versionName 0.7.1**, by `publish-play.yml`'s verify step on 2026-09-16 (run
 35108345068), before the upload it guards:
 
-> 7 permissions, all accounted for; none of the 7 forbidden ones present; 0 `<uses-feature>` declared
+> 8 permissions, all accounted for; none of the 7 forbidden ones present; 0 `<uses-feature>` declared
 
 | Permission | Whose | What it is for | Console consequence |
 | --- | --- | --- | --- |
@@ -33,7 +33,11 @@ Read at **versionCode 189, versionName 0.7.1**, by `publish-play.yml`'s verify s
 | `FOREGROUND_SERVICE_SPECIAL_USE` | ours | `ShadeService`'s type | **the foreground service declaration**, below |
 | `RECEIVE_BOOT_COMPLETED` | ours | `BootReceiver` puts a shade back and re-arms the schedule | none: normal, install-time |
 | `ACCESS_COARSE_LOCATION` | ours | the lent location, for sunset to sunrise (ADR-0013) | **Data safety** has to be re-reasoned for it, below. No declaration form: that is for background location, which is forbidden here |
+| `com.android.vending.BILLING` | Play Billing Library | the tip (ADR-0009): IPC to the Play app's billing service | none: not on Play's declaration list. The listing shows *Contains in-app purchases* because products exist |
 | `…DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` | AndroidX | its own non-exported receivers, signature-level | none: not user-visible |
+
+The billing library's `datatransport` dependency merges `INTERNET` and `ACCESS_NETWORK_STATE`; the
+manifest removes both with `tools:node="remove"`, and the gate below is what proves they stayed out.
 
 **Forbidden, and asserted absent**: `INTERNET`, `AD_ID`, `QUERY_ALL_PACKAGES`,
 `REQUEST_IGNORE_BATTERY_OPTIMIZATIONS`, `CAMERA`, `ACCESS_FINE_LOCATION`, `ACCESS_BACKGROUND_LOCATION`.
@@ -131,6 +135,10 @@ The answer rests on four facts, one per route data could take:
    request.
    The **rate row** (0.8.0) is the same argument with less in it: it hands Play, or a browser, a URL
    holding the app's own package name and nothing about the user.
+5. **A tip is still "no data collected".** The app reads a purchase token from the Play app on the
+   device and hands it back to consume it; nothing is stored and nothing leaves the device from
+   Gloam. The payment itself is between the user and Google Play, under Google's policy, and the
+   developer's order report comes from Google, not from the app.
 
 Would change any of it:
 

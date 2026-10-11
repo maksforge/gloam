@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStore
 import app.gloam.data.AppPreferences
 import app.gloam.data.LENT_LOCATION_STORE
+import app.gloam.tip.TipJar
 import kotlinx.coroutines.CoroutineScope
 
 /**
@@ -43,15 +44,16 @@ internal val Context.lentLocationStore: DataStore<Preferences> by preferencesDat
  *
  * **It is nearly empty on purpose.** Gloam stores settings rather than records — a dim level and a
  * warmth, which DataStore holds — so there is no database, no repository and no media pipeline for
- * this to assemble. It stays because it is the seam the shade controller and anything else with a
- * lifetime longer than a screen will hang off, and an empty seam is cheaper to fill than one that
- * has to be introduced later.
+ * this to assemble. What it does hold has a lifetime longer than a screen: the [TipJar], whose
+ * purchase listener has to outlive the screen that opened Play's sheet.
  *
  * Lives at the package root with the app shell: like `Navigation.kt`, it describes how the app hangs
  * together rather than belonging to any one screen.
  */
 class AppContainer(
-    @Suppress("unused") private val context: Context,
+    context: Context,
     val preferences: AppPreferences,
-    @Suppress("unused") private val applicationScope: CoroutineScope,
-)
+    applicationScope: CoroutineScope,
+) {
+    val tipJar = TipJar(context, applicationScope)
+}

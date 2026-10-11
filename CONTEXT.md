@@ -33,6 +33,7 @@ user-facing word genuinely differ, both are written here with the difference sta
 | Schedule | The nightly window. Either **fixed times**, on at one clock time and off at another, or **sunset to sunrise** at the schedule's location, which falls back to the fixed times on any night the sun gives no answer. One window a night, not two independent switches. | Not "alarm" - nothing rings, and Gloam claims no exact-alarm permission. Not "twilight" or "dusk" - sunset is the moment weather apps print, not the darker one after it |
 | Location | Where sunset and sunrise are worked out for. The **estimated location** is the reference city of the phone's time zone and needs no permission. A **lent location** is the phone's approximate position, read only if the user allows it and kept on the phone. | Not "GPS" or "precise location" - Gloam never asks for the precise one. Not "position" in the UI |
 | Escape hatch | A surface that stops the shade and can be reached without seeing Gloam's own UI, which the shade may be covering. Not every control that stops the shade is one. | Not the app's own *Stop dimming* button, which sits under the shade at high dim levels |
+| Tip | An optional one-off payment to the developer through Google Play. It **unlocks nothing** - every feature is free either way. Asked about unprompted exactly once per install, on the home screen (ADR-0009). | Not "donation" or "support the project" - it is paid to a person. Not "purchase", "premium" or "pro" - nothing is bought |
 
 ## Words we deliberately avoid
 

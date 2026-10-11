@@ -41,6 +41,9 @@
     <string name="dim_notification_warning_channel_body">Die Benachrichtigung von Gloam ist ausgeschaltet. Das Abdunkeln lässt sich deshalb nur auf diesem Bildschirm beenden.</string>
     <string name="dim_notification_warning_ask">Benachrichtigungen erlauben</string>
     <string name="dim_notification_warning_settings">Benachrichtigungseinstellungen öffnen</string>
+    <string name="dim_tip_ask_title">Gloam ist kostenlos und bleibt es</string>
+    <string name="dim_tip_ask_body">Wenn es dir beim Lesen in der Nacht hilft, kannst du dem Entwickler ein Trinkgeld geben. Es schaltet nichts frei, und Gloam fragt nicht noch einmal.</string>
+    <string name="dim_tip_ask_decline">Nein, danke</string>
 
     <string name="dim_backlight_label">Auch die Bildschirmhelligkeit senken</string>
     <string name="dim_backlight_hint">Dein Helligkeitsregler ist angehalten, während Gloam abdunkelt.</string>
@@ -119,6 +122,10 @@
     <string name="support_rate">Gloam bei Google Play bewerten</string>
     <string name="support_rate_hint">Öffnet die Seite von Gloam bei Google Play. Eine Bewertung ist freiwillig und schaltet nichts frei, weil in Gloam nichts gesperrt ist.</string>
     <string name="support_no_play">Auf diesem Telefon gibt es weder Google Play noch einen Browser zum Öffnen.</string>
+    <string name="support_tip">Trinkgeld geben</string>
+    <string name="support_tip_hint">Ein einmaliges Trinkgeld für den Entwickler, bezahlt über Google Play. Es schaltet nichts frei, weil in Gloam nichts gesperrt ist.</string>
+    <string name="support_tip_thanks">Danke. Das bedeutet mir viel.</string>
+    <string name="support_tip_pending">Deine Zahlung wird noch verarbeitet. Google Play schließt sie ab.</string>
 
     <string name="licence_text_missing">Der Text dieser Lizenz ist nicht in der App enthalten.</string>
 

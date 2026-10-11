@@ -41,6 +41,9 @@
     <string name="dim_notification_warning_channel_body">La notification de Gloam est désactivée : le seul moyen d\'arrêter l\'assombrissement est donc cet écran.</string>
     <string name="dim_notification_warning_ask">Autoriser les notifications</string>
     <string name="dim_notification_warning_settings">Ouvrir les paramètres de notification</string>
+    <string name="dim_tip_ask_title">Gloam est gratuit et le restera</string>
+    <string name="dim_tip_ask_body">Si Gloam vous aide à lire la nuit, vous pouvez laisser un pourboire au développeur. Il ne débloque rien, et Gloam ne vous le redemandera pas.</string>
+    <string name="dim_tip_ask_decline">Non merci</string>
 
     <string name="dim_backlight_label">Baisser aussi la luminosité de l\'écran</string>
     <string name="dim_backlight_hint">Votre curseur de luminosité est suspendu pendant que Gloam assombrit.</string>
@@ -119,6 +122,10 @@
     <string name="support_rate">Noter Gloam sur Google Play</string>
     <string name="support_rate_hint">Ouvre la page de Gloam sur Google Play. Noter est facultatif et ne débloque rien, puisque rien n\'est verrouillé dans Gloam.</string>
     <string name="support_no_play">Ni Google Play ni navigateur à ouvrir sur ce téléphone.</string>
+    <string name="support_tip">Laisser un pourboire</string>
+    <string name="support_tip_hint">Un pourboire ponctuel au développeur, payé via Google Play. Il ne débloque rien, puisque rien n\'est verrouillé dans Gloam.</string>
+    <string name="support_tip_thanks">Merci. Ça compte beaucoup.</string>
+    <string name="support_tip_pending">Votre paiement est encore en cours. Google Play le finalisera.</string>
 
     <string name="licence_text_missing">Le texte de cette licence n\'est pas fourni avec l\'application.</string>
 

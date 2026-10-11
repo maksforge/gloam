@@ -40,6 +40,9 @@
     <string name="dim_notification_warning_channel_body">La notificación de Gloam está desactivada, así que la única forma de detener la atenuación es esta pantalla.</string>
     <string name="dim_notification_warning_ask">Permitir notificaciones</string>
     <string name="dim_notification_warning_settings">Abrir ajustes de notificaciones</string>
+    <string name="dim_tip_ask_title">Gloam es gratis y lo seguirá siendo</string>
+    <string name="dim_tip_ask_body">Si te ayuda a leer de noche, puedes dejarle una propina al desarrollador. No desbloquea nada y Gloam no volverá a preguntar.</string>
+    <string name="dim_tip_ask_decline">No, gracias</string>
 
     <string name="dim_backlight_label">Bajar también el brillo de la pantalla</string>
     <string name="dim_backlight_hint">Tu control de brillo está en pausa mientras Gloam atenúa.</string>
@@ -118,6 +121,10 @@
     <string name="support_rate">Valorar Gloam en Google Play</string>
     <string name="support_rate_hint">Abre la página de Gloam en Google Play. Valorar es opcional y no desbloquea nada, porque en Gloam no hay nada bloqueado.</string>
     <string name="support_no_play">En este teléfono no hay Google Play ni navegador que abrir.</string>
+    <string name="support_tip">Dejar una propina</string>
+    <string name="support_tip_hint">Una propina única para el desarrollador, pagada con Google Play. No desbloquea nada, porque en Gloam no hay nada bloqueado.</string>
+    <string name="support_tip_thanks">Gracias. Significa mucho.</string>
+    <string name="support_tip_pending">Tu pago aún se está procesando. Google Play lo completará.</string>
 
     <string name="licence_text_missing">El texto de esta licencia no se incluye con la aplicación.</string>
 

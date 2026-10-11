@@ -16,6 +16,9 @@ import app.gloam.shade.ShadeStart
 import app.gloam.shade.beginShadeAt
 import app.gloam.shade.endShadeAt
 import app.gloam.shade.shadeOnScreen
+import app.gloam.tip.TIP_ASK_AFTER_STARTS
+import app.gloam.tip.TipJar
+import app.gloam.tip.tipAskDue
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -76,10 +79,43 @@ data class DimUiState(
         get() = running && onScreen
 }
 
+/**
+ * What the tip's one-time ask is decided from, less the install time — that needs a `Context`, so
+ * the screen supplies it to [tipAskDue].
+ *
+ * @param available whether Play will sell a tip here. Nothing is asked where nothing can be bought.
+ */
+data class TipAskInputs(
+    val asked: Boolean = true,
+    val shadeStarts: Int = 0,
+    val available: Boolean = false,
+)
+
 class DimViewModel(
     private val preferences: AppPreferences,
+    private val tipJar: TipJar,
     onScreen: Flow<Boolean> = shadeOnScreen,
 ) : ViewModel() {
+    // Its own flow rather than three more fields in `DimUiState`: that combine, below, is at its arity
+    // limit, and this answers a question about the app rather than about the shade.
+    val tipAsk: StateFlow<TipAskInputs> =
+        combine(preferences.tipAsked, preferences.shadeStarts, tipJar.offers) { asked, starts, offers ->
+            TipAskInputs(asked, starts, offers.isNotEmpty())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), TipAskInputs())
+
+    init {
+        // Play is only asked for prices once the ask could be due; most launches never bind to it.
+        viewModelScope.launch {
+            if (!preferences.tipAsked.first() && preferences.shadeStarts.first() >= TIP_ASK_AFTER_STARTS) {
+                tipJar.refresh()
+            }
+        }
+    }
+
+    fun answerTipAsk() {
+        viewModelScope.launch { preferences.setTipAsked() }
+    }
+
     val state: StateFlow<DimUiState> =
         combine(
             preferences.dimLevel,
@@ -207,7 +243,7 @@ class DimViewModel(
             viewModelFactory {
                 initializer {
                     val app = this[APPLICATION_KEY] as MainApplication
-                    DimViewModel(app.preferences)
+                    DimViewModel(app.preferences, app.container.tipJar)
                 }
             }
     }

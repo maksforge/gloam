@@ -108,6 +108,10 @@ EXPECTED = {
     # screen, read only while Gloam is in front, kept on the phone and out of backup.
     # Its arrival is a listing and privacy-policy change as well as a build one.
     "android.permission.ACCESS_COARSE_LOCATION": "ours — work/LentLocation.kt, the schedule's sunset",
+    # The tip (ADR-0009), merged from the Play Billing Library. It lets the app talk to the Play
+    # Store app's billing service; no dialog, and no data of the user's. Its datatransport
+    # dependency also merges INTERNET and ACCESS_NETWORK_STATE, which the manifest removes.
+    "com.android.vending.BILLING": "the Play Billing Library — the tip",
     # AndroidX defines and uses this itself, signature-level. The prefix is the
     # applicationId, which differs between the debug and release builds, so it is
     # matched by suffix rather than spelled out.
