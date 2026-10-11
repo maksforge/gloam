@@ -75,6 +75,10 @@ has either. The Support screen's mail hand-off is not user-to-user communication
 own mail app, addressed to the developer. Its rate row (0.8.0) opens the app's own Play listing, whose
 reviews are Play's surface rather than the app's: nothing in Gloam shows, sends or relays them.
 
+⚠ **The tip changes one answer.** IARC asks whether the app lets users buy digital goods, and from
+1.3.0 it does: re-submit the questionnaire with that one answer Yes before the build reaches
+production. Everything else stays No.
+
 ⚠ **Which IARC category was picked is in the Console but not here.** Copy it into this section at
 the next re-declaration.
 

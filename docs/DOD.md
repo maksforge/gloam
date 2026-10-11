@@ -142,6 +142,8 @@ ADR-0009's 2026-10-11 amendment. The code is in; these are the parts only Play a
 - [ ] **One real purchase from a licence tester** on the internal-testing install: Play's sheet opens,
       the thank-you line appears, and buying the *same* tip again works — the second purchase is the
       proof that the first was consumed.
+- [ ] **Content rating re-submitted** with *digital purchases* answered Yes (`play-app-content.md`),
+      before 1.3.0 is promoted to production.
 - [ ] **The debug build on the phone shows no tip section and no card.** Play has never heard of the
       `.debug` package, so an empty section is the correct reading, not a failure.
 - [ ] **A line in the listing naming the tip**, once room is made in the German, Spanish, French and
