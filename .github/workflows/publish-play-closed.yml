@@ -13,8 +13,9 @@ name: Publish to Play (closed testing)
 # Nothing is signed here, so no keystore is materialised and none of the four key secrets are read.
 #
 # Why this exists when publish-play-production.yml already offers `alpha` as a destination: the two
-# runs want opposite defaults. Production defaults to a fraction of installs, a dry run and a human
-# approval — every one of which is wrong for a closed test, where a staged rollout means some of the
+# runs want different defaults. Production defaults to a dry run and a human approval, both wrong for
+# a closed test, and to a full rollout only until Gloam has the owners for a fraction to mean
+# something — a dial a closed test must never inherit, because a staged rollout means some of the
 # twelve testers do not get the build, and the 14-day window is measured on testers rather than on the
 # release. So this one always promotes to *everyone* on the destination track, and it cannot reach
 # production even with the wrong value typed into the dialog (see the track guard below).
