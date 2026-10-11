@@ -43,7 +43,7 @@
     <string name="dim_notification_warning_settings">Abrir configurações de notificação</string>
     <string name="dim_tip_ask_title">O Gloam é gratuito e continuará sendo</string>
     <string name="dim_tip_ask_body">Se ele ajuda você a ler à noite, você pode deixar uma gorjeta para o desenvolvedor. Não desbloqueia nada, e o Gloam não vai perguntar de novo.</string>
-    <string name="dim_tip_ask_decline">Não, obrigado</string>
+    <string name="dim_tip_ask_decline">Não, valeu</string>
 
     <string name="dim_backlight_label">Também reduzir o brilho da tela</string>
     <string name="dim_backlight_hint">Seu controle de brilho fica pausado enquanto o Gloam escurece.</string>
