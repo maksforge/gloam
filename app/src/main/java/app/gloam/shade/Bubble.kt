@@ -88,10 +88,15 @@ internal const val BUBBLE_SIZE_DP = 56
 internal const val BUBBLE_SHADOW_DP = 5
 
 /**
- * How much of the window stays on screen while the bubble rests tucked into an edge. Wider than the
- * ~21dp strip HyperOS keeps at each edge for the back gesture, so part of it is always grabbable.
+ * How much of the window stays on screen while the bubble rests tucked into an edge.
+ *
+ * **Sized against a window that is not ours.** Over an ordinary app, HyperOS lays a ~21dp strip
+ * along each edge for its back gesture (`GestureStubLeft`/`Right`), and that strip sits *above*
+ * every app overlay: a tap there never reaches the bubble. So the tucked tab has to reach well past
+ * it — this leaves about 24dp of it touchable. The home screen has no strip, which is why a peek of
+ * 39dp looked fine there and lost half its width over Chrome (ADR-0016's amendment).
  */
-internal const val BUBBLE_PEEK_DP = 39
+internal const val BUBBLE_PEEK_DP = 50
 
 /** How far ahead a release's velocity is projected to choose the edge — a flick crosses the screen. */
 internal const val BUBBLE_FLING_PROJECTION_S = 0.12f

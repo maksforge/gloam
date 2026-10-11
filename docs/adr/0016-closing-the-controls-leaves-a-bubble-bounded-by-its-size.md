@@ -68,3 +68,12 @@ notification alive only to hold the bubble. Asked and declined on 2026-10-11.
   patch until the shade comes down. Its size and the clamp are what keep that patch small and on
   screen.
 - The ✕'s drop radius is the target's width, generous on purpose; nothing measured it yet.
+
+Amendment, 2026-10-11. **The claim about HyperOS's edge strip above was read over the home screen
+only, and it does not hold over apps.** On the 1.2.0 build from the internal track, with Chrome in
+front, a tap 40px from the right edge went to `GestureStubRight` and never reached the bubble: the
+strip (62px, ~21dp, on this phone) is a system window above every `TYPE_APPLICATION_OVERLAY`, and
+the launcher simply does not raise it. A 39dp peek therefore left about 13dp of the docked tab
+touchable in any app. `BUBBLE_PEEK_DP` is now 50dp, which leaves about 24dp clear of the strip; the
+tab still docks flush to the border, it is only wider. The strip's width follows the phone's gesture
+settings, so this is a margin for the default, not a guarantee.
