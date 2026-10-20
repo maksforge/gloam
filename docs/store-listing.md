@@ -1448,60 +1448,62 @@ Novo: você pode deixar uma gorjeta para o desenvolvedor, em Configurações →
 
 ### 1.3.1 — a new support address
 
-**One owner-visible change.** Help and feedback's mail now goes to `gloam.support@maksforge.com`,
-on the developer's own domain. The note names the new address so a reader who wrote before knows
-where replies will come from, and says nothing else moved.
+**One owner-visible change.** The rows that open mail now address `gloam.support@maksforge.com`, on
+the developer's own domain. The note names the two in Help and feedback by their own labels, because
+that is where a reader goes to write; *Something read wrong?* under Language writes to the same
+address and is left out to keep the note to one sentence. It names the new address so a reader who
+wrote before knows where replies will come from, and says nothing else moved.
 
-**English** — 142/500:
-
-```
-New support address: Settings → Help and feedback now opens your email app addressed to gloam.support@maksforge.com. Nothing else has changed.
-```
-
-**Polish** — 151/500:
+**English** — 165/500:
 
 ```
-Nowy adres pomocy: Ustawienia → Pomoc i opinie otwierają teraz aplikację pocztową z adresem gloam.support@maksforge.com. Nic poza tym się nie zmieniło.
+New support address: "Report a problem" and "Suggest a feature", in Settings → Help and feedback, now write to gloam.support@maksforge.com. Nothing else has changed.
 ```
 
-**Czech** — 148/500:
+**Polish** — 177/500:
 
 ```
-Nová adresa podpory: Nastavení → Pomoc a zpětná vazba teď otevře e-mailovou aplikaci s adresou gloam.support@maksforge.com. Nic jiného se nezměnilo.
+Nowy adres pomocy: „Zgłoś problem” i „Zaproponuj funkcję”, w Ustawienia → Pomoc i opinie, kierują teraz wiadomości na gloam.support@maksforge.com. Nic poza tym się nie zmieniło.
 ```
 
-**German** — 166/500:
+**Czech** — 174/500:
 
 ```
-Neue Support-Adresse: Einstellungen → Hilfe und Rückmeldung öffnet deine E-Mail-App jetzt mit der Adresse gloam.support@maksforge.com. Sonst hat sich nichts geändert.
+Nová adresa podpory: „Nahlásit problém“ a „Navrhnout funkci“, v Nastavení → Pomoc a zpětná vazba, teď posílají zprávy na gloam.support@maksforge.com. Nic jiného se nezměnilo.
 ```
 
-**Spanish** — 163/500:
+**German** — 191/500:
 
 ```
-Nueva dirección de soporte: Ajustes → Ayuda y comentarios ahora abre tu aplicación de correo con la dirección gloam.support@maksforge.com. No ha cambiado nada más.
+Neue Support-Adresse: „Problem melden“ und „Funktion vorschlagen“, unter Einstellungen → Hilfe und Rückmeldung, schreiben jetzt an gloam.support@maksforge.com. Sonst hat sich nichts geändert.
 ```
 
-**French** — 182/500:
+**Spanish** — 183/500:
 
 ```
-Nouvelle adresse d'assistance : Paramètres → Aide et commentaires ouvre désormais votre application de messagerie avec l'adresse gloam.support@maksforge.com. Rien d'autre n'a changé.
+Nueva dirección de soporte: «Informar de un problema» y «Sugerir una función», en Ajustes → Ayuda y comentarios, ahora escriben a gloam.support@maksforge.com. No ha cambiado nada más.
 ```
 
-**Italian** — 164/500:
+**French** — 207/500:
 
 ```
-Nuovo indirizzo di assistenza: Impostazioni → Aiuto e commenti ora apre la tua app di posta con l'indirizzo gloam.support@maksforge.com. Non è cambiato nient'altro.
+Nouvelle adresse d'assistance : « Signaler un problème » et « Proposer une fonctionnalité », dans Paramètres → Aide et commentaires, écrivent désormais à gloam.support@maksforge.com. Rien d'autre n'a changé.
 ```
 
-**Brazilian Portuguese** — 158/500:
+**Italian** — 186/500:
 
 ```
-Novo endereço de suporte: Configurações → Ajuda e comentários agora abre seu aplicativo de e-mail com o endereço gloam.support@maksforge.com. Nada mais mudou.
+Nuovo indirizzo di assistenza: «Segnala un problema» e «Proponi una funzione», in Impostazioni → Aiuto e commenti, ora scrivono a gloam.support@maksforge.com. Non è cambiato nient'altro.
 ```
 
-**Ukrainian** — 156/500:
+**Brazilian Portuguese** — 177/500:
 
 ```
-Нова адреса підтримки: Налаштування → Довідка та відгуки тепер відкриває застосунок пошти з адресою gloam.support@maksforge.com. Більше нічого не змінилося.
+Novo endereço de suporte: “Relatar um problema” e “Sugerir um recurso”, em Configurações → Ajuda e comentários, agora escrevem para gloam.support@maksforge.com. Nada mais mudou.
+```
+
+**Ukrainian** — 195/500:
+
+```
+Нова адреса підтримки: «Повідомити про проблему» і «Запропонувати функцію», в Налаштування → Довідка та відгуки, тепер надсилають листи на gloam.support@maksforge.com. Більше нічого не змінилося.
 ```
