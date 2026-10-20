@@ -93,7 +93,7 @@ details are in the
 
 ## Support
 
-**gloam.dimmer@gmail.com** — an ordinary mailbox that a person reads.
+**gloam.support@maksforge.com** — an ordinary mailbox that a person reads.
 
 ## The source
 

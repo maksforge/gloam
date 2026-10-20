@@ -68,7 +68,7 @@ this app has no server to offer.
 ## Content rating
 
 **The IARC questionnaire, every question answered No.** Answered 2026-08-30. The rating contact is
-`gloam.dimmer@gmail.com`, the same address as the listing's.
+`gloam.support@maksforge.com`, the same address as the listing's.
 
 Would change: user-generated content, communication between users, or a link out to anything that
 has either. The Support screen's mail hand-off is not user-to-user communication: it opens the user's
@@ -191,7 +191,7 @@ Would change: a second foreground service, or a different type on this one.
 
 - **Category: Tools.** Not Personalisation, which is launchers, wallpapers and themes.
 - **Tags:** none health-flavoured, for the reason under *Health*.
-- **Contact email:** `gloam.dimmer@gmail.com`, public on the listing.
+- **Contact email:** `gloam.support@maksforge.com`, public on the listing.
 - **Privacy policy:** `https://srednimax.github.io/gloam/privacy-policy.html`, served from `docs/` by
   Pages. It updates on a merge to `main`, with no release, which is why it has to be right before the
   app it describes ships rather than after.

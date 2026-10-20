@@ -5,7 +5,7 @@ title: Privacy Policy
 
 # Privacy Policy
 
-_Last updated: 11 October 2026_
+_Last updated: 20 October 2026_
 
 Gloam is an Android app that dims your screen below the darkest setting Android offers. This policy
 describes what it does with information. It is short because the app does very little with any.
@@ -144,7 +144,7 @@ The app is not directed at children, and collects nothing from anyone.
 Uninstalling Gloam, or clearing its storage in Android's settings, removes everything it stored on
 the phone, the approximate location included. There is nowhere else to delete it from, because it
 went nowhere else. The one exception is an email you chose to send, which you can ask the developer
-to delete.
+to delete, including one sent to the earlier support address, gloam.dimmer@gmail.com.
 
 ## Changes
 
@@ -153,5 +153,6 @@ public in the app's repository.
 
 ## Contact
 
-Questions about this policy can be sent to the developer email address listed on the app's Google
-Play listing and on the [app's website](index.md).
+Questions about this policy, and requests to delete an email you sent, can be sent to
+**gloam.support@maksforge.com**, the address also listed on the app's Google Play listing and on the
+[app's website](index.md).

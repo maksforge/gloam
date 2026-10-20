@@ -13,14 +13,14 @@ import app.gloam.work.startActivitySafely
 /**
  * Where a report goes, and it is **frozen the day a build leaves this machine**.
  *
- * A dedicated account rather than a `…+gloam@` alias on a personal one, because a sideloaded APK is
- * never forced to update: whatever string is compiled in here keeps being mailed for as long as any
- * build survives. An alias is welded to one mailbox forever; a real address can be forwarded
- * anywhere, and handed to another maintainer without handing over your own mail.
+ * An address on the developer's own domain rather than a mailbox at a provider, because a sideloaded
+ * APK is never forced to update: whatever string is compiled in here keeps being mailed for as long
+ * as any build survives. The domain's routing can point anywhere, and be handed to another
+ * maintainer without handing over anyone's mail.
  *
  * The Play listing's contact field is the same address — two routes is one more than anybody needs.
  */
-private const val SUPPORT_ADDRESS = "gloam.dimmer@gmail.com"
+private const val SUPPORT_ADDRESS = "gloam.support@maksforge.com"
 
 /**
  * The id Play knows this app by — **a fact about the listing rather than about this build.**
