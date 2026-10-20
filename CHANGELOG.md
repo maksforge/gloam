@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.1](https://github.com/srednimax/gloam/compare/v1.3.0...v1.3.1) (2026-10-20)
+
+
+### Bug Fixes
+
+* send support mail to gloam.support@maksforge.com ([65fb01b](https://github.com/srednimax/gloam/commit/65fb01be94463702caf20998ff0a301ddcb6e40b))
+
 ## [1.3.0](https://github.com/srednimax/gloam/compare/v1.2.1...v1.3.0) (2026-10-11)
 
 
