@@ -37,12 +37,13 @@ Three scripts read this file, so its headings are load-bearing:
 | Contact email | `gloam.support@maksforge.com` — chosen 2026-10-20; the Console still holds `gloam.dimmer@gmail.com` until the day this address merges ([`DOD.md`](DOD.md)). The **per-app** support address, set in Store settings and **public on the listing**. Not the account-level developer email, which is public on every app you own. On the developer's own domain: Cloudflare Email Routing forwards it to the developer's Gmail, which sends as it, so replies come from the same address. The privacy policy names it in its Contact section — an address on a domain we own has no reason to change. IARC's content-rating contact is still `gloam.dimmer@gmail.com`, as submitted on 2026-08-30, and moves at the next resubmission ([`play-app-content.md`](play-app-content.md#content-rating)). It replaced `gloam.dimmer@gmail.com` (2026-08-30), which every build up to 1.3.0 still has compiled in; why that account stays alive is below the table |
 | Website | `https://srednimax.github.io/gloam/` — written 2026-08-30, so the field is no longer blank. It describes the app as shipped through 0.7 — rewritten 2026-09-17 by Phase 5 B after three phases shipped features it never mentioned — and a release that adds something a user can see moves `docs/index.md` in the same PR, together with the full description below. Health claims stay off it as well as off this file — Play's enforcement has treated a linked page as part of the listing |
 
-**`gloam.dimmer@gmail.com` stays alive and forwarding for good.** It is its own Gmail account, and
-its job is to forward to the developer inbox. Every build up to 1.3.0 compiles it in as the support
-address, so their reports keep arriving there for as long as any of those installs survives, and the
-privacy policy promises to delete mail sent to it. Never delete the account or leave the forwarding
-off, and **sign in to it at least once every two years**: Google deletes a personal account inactive
-that long, and forwarding alone is unlikely to count as activity.
+**`gloam.dimmer@gmail.com` stays alive for good, and its inbox is checked by hand.** It is its own
+Gmail account, and every build up to 1.3.0 compiles it in as the support address, so their reports
+keep arriving there for as long as any of those installs survives, and the privacy policy promises to
+delete mail sent to it. It no longer forwards: it did (`phase-2.md`, R9), then was switched off, so
+nothing reaches the developer inbox unless someone reads it there. Never delete the account, and
+**sign in to it at least once every two years**: Google deletes a personal account inactive that
+long.
 
 **`maksforge.com` stays registered for good.** Every build from 1.3.1 mails `gloam.support@` on it.
 If the domain lapses, whoever registers it next receives the support mail of every one of those
