@@ -144,8 +144,6 @@ good is in [`store-listing.md`](store-listing.md); these are the one-off steps.
 - [ ] **The route has carried a real report.** Only Gmail's send-as confirmation has come through
       Cloudflare. Send *Report a problem* from a non-Gmail account to the new address and confirm it
       lands in the inbox, not Spam, with the `#bug` and `#feature` filters still applying.
-- [ ] **Turn forwarding on `gloam.dimmer@gmail.com` back on to the developer inbox.** It worked on
-      2026-09-01 (`phase-2.md`, R9) and has since been switched off.
 
 ## The tip — open until a real purchase is consumed
 
