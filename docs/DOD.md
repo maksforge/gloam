@@ -144,8 +144,6 @@ good is in [`store-listing.md`](store-listing.md); these are the one-off steps.
 - [ ] **The route has carried a real report.** Only Gmail's send-as confirmation has come through
       Cloudflare. Send *Report a problem* from a non-Gmail account to the new address and confirm it
       lands in the inbox, not Spam, with the `#bug` and `#feature` filters still applying.
-- [ ] **`gloam.dimmer@gmail.com` forwards to the developer inbox.** It is its own account and is not
-      forwarded yet, so until then it is read by signing in to it.
 
 ## The tip — open until a real purchase is consumed
 
