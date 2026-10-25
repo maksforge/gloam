@@ -8,7 +8,7 @@ earns it there is a one-off tip — it unlocks nothing, it just says thanks.
 
 ## Status
 
-Bootstrapped from [android-starter](https://github.com/srednimax/android-starter), and now a working
+Bootstrapped from [android-starter](https://github.com/maksforge/android-starter), and now a working
 proof of concept: it dims the screen. A slider sets a dim level, a foreground service draws the shade
 over every other app, and it survives you leaving Gloam — which is the whole point, since the apps
 being dimmed are the ones you are reading.
