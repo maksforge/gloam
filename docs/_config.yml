@@ -11,6 +11,12 @@
 # documents were safe to leave in a published directory. That reason was untrue. They are safe, but only
 # because this repo is public and they hold nothing that is not already on GitHub; anything that must not
 # be published must not be in docs/ at all.
-theme: jekyll-theme-minimal
+remote_theme: maksforge/pages-theme
+plugins:
+  - jekyll-remote-theme
 title: Gloam
 description: A screen dimmer that goes below your phone's minimum brightness.
+maksforge:
+  icon: /assets/icons/gloam.webp
+  status: live
+  play: https://play.google.com/store/apps/details?id=io.github.srednimax.gloam
