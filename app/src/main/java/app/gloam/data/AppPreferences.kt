@@ -38,10 +38,11 @@ import kotlin.math.roundToInt
  * @param offAtMillis the instant the shade next comes down, or `null` for no deadline. Storage's `0`
  *   is collapsed to `null` here, at the one boundary that knows the sentinel.
  * @param beganAtMillis when the shade was last started, or `null` if no write of ours has said.
- *   **It exists to tell this install's intent from another phone's.** Auto Backup restores this
- *   file onto a new device, so `running = true` can arrive from a phone the user has moved off —
- *   and `BootReceiver` compares this against the install's own `firstInstallTime`, which is never
- *   backed up (Phase 5, R4).
+ *   It has two readers. `BootReceiver` compares it against the install's own `firstInstallTime`,
+ *   which is never backed up, to tell this install's intent from another phone's that Auto Backup
+ *   restored (Phase 5, R4). The bubble's ring drains the deadline from it, which holds because
+ *   [AppPreferences.beginShade] is the one writer of a deadline and writes both keys together, so
+ *   every deadline write re-stamps it.
  */
 data class ShadeIntent(
     val running: Boolean,
