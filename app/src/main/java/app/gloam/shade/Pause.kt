@@ -66,6 +66,26 @@ data class PauseSpan(
 )
 
 /**
+ * The span the time-left ring drains over, as `from to end`, or `null` for no ring: a pause while
+ * one runs, drawn to [pauseEnd] so a deadline that cuts it short drains it to the deadline, and
+ * otherwise the deadline, from [deadlineFrom]. A pause never outlasts the deadline, so the pause is
+ * always the nearer end.
+ *
+ * Kotlin note: `a to b` builds a `Pair`, a two-element tuple — `[a, b]` — that the caller
+ * destructures like an array.
+ */
+fun timeLeftSpan(
+    pause: PauseSpan?,
+    offAt: Long?,
+    deadlineFrom: Long?,
+): Pair<Long, Long>? =
+    when {
+        pause != null -> pause.from to pauseEnd(pause.until, offAt).atMillis
+        offAt != null && deadlineFrom != null -> deadlineFrom to offAt
+        else -> null
+    }
+
+/**
  * How much of a span is left, from 1 at [from] to 0 at [end] — what the time-left ring draws, for a
  * pause or for the deadline.
  *
