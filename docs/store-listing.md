@@ -1578,23 +1578,29 @@ by necessity.** Presets you name come first: the ＋ they are saved from, and to
 preset, the built-in ones included, since those became editable too. Then the behaviour change,
 because 1.1.0's note promised a preset tap starts dimming. The pause follows: the section label, the
 three lengths with the shade stepping aside tied to tapping one, and the ring. *Other…* gets one
-sentence for both places it appears, adding a pause length and setting an auto-off of up to 12
-hours. The note closes on *Restore to default*, named by its button inside Settings.
+sentence for both places it appears, with two verbs because it does two things (brief §5): it *adds*
+a pause length, and for auto-off it *sets* a length of up to 12 hours. The note closes on *Restore to
+default*, named by its button inside Settings.
 
-The room-name example and "stays on your phone" are dropped to fit 500. So are the auto-off and
-Settings section names in sentence form: they are named as places ("In Settings:") so that no label
-sits where its language would have to inflect it (brief §6.3).
+The room-name example and "stays on your phone" are dropped to fit 500. Section labels are quoted
+only where they need no inflection (brief §6.3): *Pause* in every language, *Turn off on its own* in
+English alone. Elsewhere the auto-off section is named by what it does (*przy wyłączaniu*, *beim
+Beenden*, *pour l'arrêt*), since a whole-phrase label would have to bend to its sentence. Settings is
+named as a place, "In Settings:" and its counterparts (*V Nastavení*, *Unter Einstellungen*, *En
+Ajustes*, *Dans Paramètres*, *In Impostazioni*, *Em Configurações*); Polish and Ukrainian, where a
+preposition would inflect it, write it as a path in the uninflected form earlier notes kept,
+*Ustawienia →* and *Налаштування →*.
 
-**English** — 439/500:
+**English** — 455/500:
 
 ```
-New: presets you name. Set the dim level, warmth and colour, tap ＋ and name it. Touch and hold any preset, built-in ones too, to rename or delete it. Tapping a preset no longer starts dimming. Also new: a pause. Under Pause, tap 1, 5 or 15 min and the shade steps aside, then returns; a ring on the bubble shows the time left. Other… adds your own length, and under Turn off on its own sets up to 12 hours. In Settings: Restore to default.
+New: presets you name. Set the dim level, warmth and colour, tap ＋ and name it. Touch and hold any preset, built-in ones too, to rename or delete it. Tapping a preset no longer starts dimming. Also new: a pause. Under Pause, tap 1, 5 or 15 min and the shade steps aside, then returns; a ring on the bubble shows the time left. Other… adds a length of your own; under Turn off on its own, it sets any length up to 12 hours. In Settings: Restore to default.
 ```
 
-**Polish** — 476/500:
+**Polish** — 473/500:
 
 ```
-Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień, dotknij ＋ i nadaj nazwę. Przytrzymaj dowolny zestaw, także wbudowany, aby zmienić nazwę albo go usunąć. Dotknięcie zestawu nie włącza już przyciemniania. Nowe jest też wstrzymanie: w sekcji Wstrzymanie dotknij 1, 5 albo 15 min, a zasłona zniknie i sama wróci; pierścień na bańce pokazuje, ile zostało. Inne… dodaje własny czas, a przy wyłączaniu ustawia do 12 godz. W Ustawieniach: Przywróć domyślne.
+Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień, dotknij ＋ i nadaj nazwę. Przytrzymaj dowolny zestaw, także wbudowany, aby zmienić nazwę albo go usunąć. Dotknięcie zestawu nie włącza już przyciemniania. Nowe jest też wstrzymanie: w sekcji Wstrzymanie dotknij 1, 5 albo 15 min, a zasłona zniknie i sama wróci; pierścień na bańce pokazuje, ile zostało. Inne… dodaje własny czas, a przy wyłączaniu ustawia do 12 godz. Ustawienia → Przywróć domyślne.
 ```
 
 **Czech** — 448/500:
@@ -1603,38 +1609,38 @@ Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień,
 Novinka: vlastní předvolby. Nastav úroveň ztmavení, teplo barvy a odstín, klepni na ＋ a pojmenuj ji. Podržením kterékoli předvolby, i vestavěné, ji přejmenuješ nebo smažeš. Klepnutí na předvolbu už nezapne ztmavení. Nově také pozastavení: v části Pozastavení klepni na 1, 5 nebo 15 min a závoj ustoupí, pak se sám vrátí; kroužek na bublině ukazuje, kolik zbývá. Jiné… přidá vlastní délku a u vypnutí nastaví až 12 hod. V Nastavení: Obnovit výchozí.
 ```
 
-**German** — 476/500:
+**German** — 497/500:
 
 ```
-Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe ein, tippe auf ＋ und benenne sie. Jede Vorgabe, auch eingebaute, zum Umbenennen oder Löschen gedrückt halten. Eine Vorgabe startet das Abdunkeln nicht mehr. Neu ist auch eine Pause: Tippe unter Pause auf 1, 5 oder 15 Min., dann weicht die Schicht und kommt zurück; ein Ring an der Blase zeigt die Restzeit. Andere… fügt eine eigene Dauer hinzu, beim Beenden bis 12 Std. In Einstellungen: Auf Standard zurücksetzen.
+Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe ein, tippe auf ＋ und benenne sie. Jede Vorgabe, auch eingebaute, zum Umbenennen oder Löschen gedrückt halten. Eine Vorgabe startet das Abdunkeln nicht mehr. Neu ist auch eine Pause: Tippe unter Pause auf 1, 5 oder 15 Min., dann weicht die Schicht und kommt zurück; ein Ring an der Blase zeigt die Restzeit. Andere… fügt eine eigene Dauer hinzu und stellt beim Beenden bis zu 12 Std. ein. Unter Einstellungen: Auf Standard zurücksetzen.
 ```
 
-**Spanish** — 487/500:
+**Spanish** — 500/500:
 
 ```
-Novedad: preajustes propios. Pon el nivel de atenuación, la calidez y el color, toca ＋ y ponle un nombre. Mantén pulsado cualquier preajuste, también los incluidos, para renombrarlo o eliminarlo. Tocar un preajuste ya no empieza a atenuar. También hay una pausa: en Pausa, toca 1, 5 o 15 min y la capa se aparta, luego vuelve sola; un anillo en la burbuja muestra cuánto queda. Otro… añade tu duración y, al apagarse solo, hasta 12 horas. En Ajustes: Restablecer valores predeterminados.
+Novedad: preajustes propios. Pon el nivel de atenuación, la calidez y el color, toca ＋ y ponle un nombre. Mantén pulsado cualquier preajuste, también los incluidos, para renombrarlo o eliminarlo. Tocar un preajuste ya no empieza a atenuar. También hay una pausa: en Pausa, toca 1, 5 o 15 min y la capa se aparta, luego vuelve sola; un anillo en la burbuja muestra cuánto queda. Otro… añade una duración propia y, al apagarse solo, fija hasta 12 horas. En Ajustes: Restablecer valores predeterminados.
 ```
 
-**French** — 499/500:
+**French** — 500/500:
 
 ```
-Nouveau : vos préréglages. Réglez l'assombrissement, la chaleur et la couleur, touchez ＋ et nommez-le. Appuyez longuement sur tout préréglage, même intégré, pour le renommer ou le supprimer. Un préréglage ne lance plus l'assombrissement. Autre nouveauté : une pause. Sous Pause, touchez 1, 5 ou 15 min et le voile s'efface puis revient seul ; un anneau sur la bulle indique le temps restant. Autre… ajoute une durée, jusqu'à 12 heures pour l'arrêt. Dans Paramètres : Rétablir les valeurs par défaut.
+Nouveau : vos préréglages. Réglez l'assombrissement, la chaleur et la couleur, touchez ＋ et nommez-le. Appuyez longuement sur un préréglage, même intégré, pour le renommer ou le supprimer. Un préréglage ne lance plus l'assombrissement. Autre nouveauté : une pause. Sous Pause, touchez 1, 5 ou 15 min et le voile s'efface puis revient seul ; un anneau sur la bulle montre le temps restant. Autre… ajoute une durée et, pour l'arrêt, fixe jusqu'à 12 h. Dans Paramètres : Rétablir les valeurs par défaut.
 ```
 
-**Italian** — 499/500:
+**Italian** — 498/500:
 
 ```
-Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e il colore, tocca ＋ e dalle un nome. Tieni premuta qualsiasi preimpostazione, anche predefinita, per rinominarla o eliminarla. Una preimpostazione non avvia più l'oscuramento. Nuova anche la pausa: sotto Pausa tocca 1, 5 o 15 min e il velo si scosta, poi torna da solo; un anello sulla bolla mostra quanto manca. Altro… aggiunge una durata tua e, per lo spegnimento, fino a 12 ore. In Impostazioni: Ripristina predefiniti.
+Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e il colore, tocca ＋ e dalle un nome. Tieni premuta ogni preimpostazione, anche predefinita, per rinominarla o eliminarla. Una preimpostazione non avvia più l'oscuramento. Nuova anche la pausa: sotto Pausa tocca 1, 5 o 15 min e il velo si scosta, poi torna da solo; un anello sulla bolla mostra quanto manca. Altro… aggiunge una durata tua e per lo spegnimento fissa fino a 12 ore. In Impostazioni: Ripristina predefiniti.
 ```
 
-**Brazilian Portuguese** — 485/500:
+**Brazilian Portuguese** — 492/500:
 
 ```
-Novidade: suas predefinições. Ajuste o nível de escurecimento, a calidez e a cor, toque em ＋ e dê um nome. Toque e segure qualquer predefinição, mesmo as de fábrica, para renomear ou excluir. Tocar numa predefinição não começa mais a escurecer. Também há uma pausa: em Pausa, toque em 1, 5 ou 15 min e a camada sai da frente, depois volta sozinha; um anel na bolha mostra quanto falta. Outro… adiciona uma duração sua e, para desligar, até 12 horas. Em Configurações: Restaurar padrão.
+Novidade: suas predefinições. Ajuste o nível de escurecimento, a calidez e a cor, toque em ＋ e dê um nome. Toque e segure qualquer predefinição, mesmo as de fábrica, para renomear ou excluir. Tocar numa predefinição não começa mais a escurecer. Também há uma pausa: em Pausa, toque em 1, 5 ou 15 min e a camada sai da frente, depois volta sozinha; um anel na bolha mostra quanto falta. Outro… adiciona uma duração sua e, para desligar, define até 12 horas. Em Configurações: Restaurar padrão.
 ```
 
-**Ukrainian** — 460/500:
+**Ukrainian** — 462/500:
 
 ```
-Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок, торкнися ＋ і дай назву. Утримуй будь-який набір, навіть вбудований, щоб перейменувати чи видалити його. Дотик до набору більше не вмикає затемнення. А ще пауза: у розділі Пауза торкнися 1, 5 або 15 хв, і запона відступить, а потім повернеться сама; кільце на бульбашці показує, скільки лишилося. Інше… додає власну тривалість, а для вимкнення — до 12 год. У Налаштуваннях: Відновити типові.
+Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок, торкнися ＋ і дай назву. Утримуй будь-який набір, навіть вбудований, щоб перейменувати чи видалити його. Дотик до набору більше не вмикає затемнення. А ще пауза: у розділі Пауза торкнися 1, 5 або 15 хв, і запона відступить, а потім повернеться сама; кільце на бульбашці показує, скільки лишилося. Інше… додає власну тривалість, а для вимкнення задає до 12 год. Налаштування → Відновити типові.
 ```
