@@ -165,8 +165,8 @@ class ColumnGeometryTest {
     fun `the bar and its buttons fit the height they are given`() {
         var available = 200f
         while (available <= 1400f) {
-            // Three buttons is the panel, which carries a close button the Activity host does not.
-            val buttons = if (available.toInt() % 2 == 0) 2 else 3
+            // Four buttons is the panel, which carries a close button the Activity host does not.
+            val buttons = if (available.toInt() % 2 == 0) 3 else 4
             val bar = barHeightDp(available, buttons)
             assertTrue("A ${bar}dp bar on ${available}dp is taller than the design's maximum", bar <= BAR_HEIGHT_DP)
             assertTrue("A ${bar}dp bar is below the usable floor", bar >= BAR_MIN_HEIGHT_DP)
