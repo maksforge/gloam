@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.relocation.BringIntoViewRequester
+import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -29,10 +31,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -507,6 +511,13 @@ private fun TimerSection(
     // it closes — a `useRef` initial value, not a `useMemo` that recomputes.
     val openedWith = remember { autoOff }
     val choices = (AutoOff.choicesWith(openedWith) + AutoOff.choicesWith(autoOff)).distinct()
+    // A bar at its floor scrolls this stack, which opens at the top; the lit chip may be below it.
+    // `withFrameNanos` waits one frame so the chip has been laid out before it is asked to show.
+    val lit = remember { BringIntoViewRequester() }
+    LaunchedEffect(Unit) {
+        withFrameNanos {}
+        lit.bringIntoView()
+    }
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(Spacing.tight),
@@ -519,6 +530,7 @@ private fun TimerSection(
         for (choice in choices) {
             FilterChip(
                 selected = autoOff == choice,
+                modifier = if (choice == openedWith) Modifier.bringIntoViewRequester(lit) else Modifier,
                 onClick = { onAutoOff(choice) },
                 label = { Text(autoOffLabel(choice)) },
                 shape = RoundedCornerShape(percent = 50),
