@@ -62,21 +62,17 @@ private val json = Json { ignoreUnknownKeys = true }
 fun encodePresets(presets: List<StoredPreset>): String = json.encodeToString(presets)
 
 /**
- * The stored list, or [DEFAULT_PRESETS] when there is none — plus, until the new key is first
- * written, whatever an earlier 1.5.0 build saved under [legacy] (`saved_presets`, names only).
+ * The stored list, or [DEFAULT_PRESETS] when there is none.
  *
  * Decoded row by row, so one unreadable row loses only itself: the writes read this list back and
  * store it whole, and an all-or-nothing read would turn one bad row into deleting every preset. A
  * file that does not parse at all reads as absent rather than empty, so it cannot delete them either.
  *
- * Duplicates are not removed here. Lists written before uniqueness was a rule may hold two presets
- * with the same values; both light, and the next write simply refuses to add a third.
+ * Duplicates are not removed here: a file holding two presets with the same values still reads, both
+ * light, and the next write simply refuses to add a third.
  */
-fun decodePresets(
-    text: String?,
-    legacy: String?,
-): List<StoredPreset> {
-    val rows = text?.let(::parseRows) ?: return DEFAULT_PRESETS + decodeLegacy(legacy)
+fun decodePresets(text: String?): List<StoredPreset> {
+    val rows = text?.let(::parseRows) ?: return DEFAULT_PRESETS
     return rows
         .mapNotNull { decodeRow<StoredPreset>(it) }
         .mapNotNull { it.tidied() }
@@ -93,24 +89,6 @@ private fun StoredPreset.tidied(): StoredPreset? {
         warmthColor = warmthColor.coerceIn(0, 100),
     )
 }
-
-/** The pre-release `saved_presets` shape: named rows with no id, after the built-ins. */
-@Serializable
-private data class LegacyPreset(
-    val name: String,
-    val dimLevel: Int,
-    val warmth: Int,
-    val warmthColor: Int,
-)
-
-// The ids are derived from the row's position so that every read of the same text agrees on them:
-// a rename issued from the screen has to find its preset again inside the write that migrates.
-private fun decodeLegacy(text: String?): List<StoredPreset> =
-    text?.let(::parseRows).orEmpty().mapIndexedNotNull { index, row ->
-        decodeRow<LegacyPreset>(row)?.let {
-            StoredPreset("legacy-$index", it.name, it.dimLevel, it.warmth, it.warmthColor).tidied()
-        }
-    }
 
 // SerializationException extends IllegalArgumentException, so each catch covers both.
 private fun parseRows(text: String): List<JsonElement>? =

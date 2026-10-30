@@ -1,6 +1,7 @@
 package app.gloam.data
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.Preferences
 import app.gloam.shade.AutoOff
 import app.gloam.shade.Coordinates
 import app.gloam.shade.PauseLength
@@ -38,6 +39,25 @@ class AppPreferencesTest {
     }
 
     @After fun tearDown() = scope.cancel()
+
+    @Test
+    fun `every key is either a setting that Restore removes or kept, never both or neither`() {
+        // Kotlin note: an `object`'s `val`s compile to static fields on its class, so plain Java
+        // reflection finds every key declared there without kotlin-reflect.
+        val declared =
+            AppPreferences.Keys::class.java.declaredFields
+                .filter { Preferences.Key::class.java.isAssignableFrom(it.type) }
+                .map { field ->
+                    field.isAccessible = true
+                    field.get(null) as Preferences.Key<*>
+                }
+        assertTrue(declared.isNotEmpty())
+        for (key in declared) {
+            val lists = listOf(AppPreferences.Keys.SETTINGS, AppPreferences.Keys.KEPT).count { key in it }
+            assertEquals(key.name, 1, lists)
+        }
+        assertEquals(declared.toSet(), (AppPreferences.Keys.SETTINGS + AppPreferences.Keys.KEPT).toSet())
+    }
 
     @Test
     fun `restoring resets every setting and keeps live state, counters, asks and the lent location`() =
