@@ -67,8 +67,8 @@
     <string name="settings_controls">Sterowanie</string>
     <string name="settings_launcher_compact">Otwieraj małe sterowanie z ikony</string>
     <string name="settings_launcher_compact_hint">Dotknięcie ikony Gloam otwiera same suwaki zamiast całej aplikacji. Powiadomienie zawsze otwiera małe sterowanie.</string>
-    <string name="settings_controls_bubble">Zostawiaj bańkę po zamknięciu sterowania</string>
-    <string name="settings_controls_bubble_hint">Podczas przyciemniania dotknięcie poza sterowaniem zmniejsza je do małej bańki. Dotknij jej, aby przywrócić sterowanie, albo przeciągnij ją na ✕, aby ją usunąć.</string>
+    <string name="settings_controls_bubble">Zostawiaj bańkę, która otwiera sterowanie</string>
+    <string name="settings_controls_bubble_hint">Podczas przyciemniania dotknięcie poza sterowaniem zmniejsza je do małej bańki, a włączenie zasłony kafelkiem szybkich ustawień również zostawia bańkę. Dotknij jej, aby otworzyć sterowanie, albo przeciągnij ją na ✕, aby ją usunąć.</string>
     <string name="bubble_open">Otwórz sterowanie</string>
     <string name="bubble_remove">Usuń bańkę</string>
     <string name="bubble_prompt_title">Zostawić bańkę?</string>

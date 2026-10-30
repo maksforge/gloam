@@ -79,8 +79,8 @@
     <string name="settings_controls">Controles</string>
     <string name="settings_launcher_compact">Abrir los controles pequeños desde el icono</string>
     <string name="settings_launcher_compact_hint">Tocar Gloam abre solo los controles en lugar de toda la aplicación. La notificación abre siempre los controles pequeños.</string>
-    <string name="settings_controls_bubble">Dejar una burbuja al cerrar los controles</string>
-    <string name="settings_controls_bubble_hint">Mientras se atenúa, tocar fuera de los controles los reduce a una pequeña burbuja. Tócala para recuperarlos o arrástrala a la ✕ para quitarla.</string>
+    <string name="settings_controls_bubble">Dejar una burbuja que abre los controles</string>
+    <string name="settings_controls_bubble_hint">Mientras se atenúa, tocar fuera de los controles los reduce a una pequeña burbuja, y activar la capa desde el mosaico de ajustes rápidos también deja una. Tócala para abrir los controles o arrástrala a la ✕ para quitarla.</string>
     <string name="bubble_open">Abrir los controles</string>
     <string name="bubble_remove">Quitar la burbuja</string>
     <string name="bubble_prompt_title">¿Mantener la burbuja?</string>

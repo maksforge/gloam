@@ -77,8 +77,8 @@
     <string name="settings_controls">Comandi</string>
     <string name="settings_launcher_compact">Apri i comandi piccoli dall\'icona</string>
     <string name="settings_launcher_compact_hint">Toccare Gloam apre solo i cursori invece dell\'app intera. La notifica apre sempre i comandi piccoli.</string>
-    <string name="settings_controls_bubble">Lascia una bolla quando chiudi i comandi</string>
-    <string name="settings_controls_bubble_hint">Durante l\'oscuramento, toccare fuori dai comandi li riduce a una piccola bolla. Toccala per riaprirli o trascinala sulla ✕ per rimuoverla.</string>
+    <string name="settings_controls_bubble">Lascia una bolla che apre i comandi</string>
+    <string name="settings_controls_bubble_hint">Durante l\'oscuramento, toccare fuori dai comandi li riduce a una piccola bolla, e anche accendere il velo dal riquadro delle impostazioni rapide ne lascia una. Toccala per aprire i comandi o trascinala sulla ✕ per rimuoverla.</string>
     <string name="bubble_open">Apri i comandi</string>
     <string name="bubble_remove">Rimuovi la bolla</string>
     <string name="bubble_prompt_title">Tenere la bolla?</string>
