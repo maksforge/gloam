@@ -101,6 +101,8 @@
     <string name="preset_edit">Modifica</string>
     <string name="preset_edit_title">Modifica preimpostazione</string>
     <string name="preset_delete">Elimina</string>
+    <string name="preset_delete_confirm_title">Eliminare la preimpostazione «%1$s»?</string>
+    <string name="preset_delete_builtin_body">«Ripristina predefiniti» in Impostazioni la riporta indietro, ma ripristina anche tutte le altre impostazioni.</string>
     <string name="preset_cancel">Annulla</string>
 
     <string name="controls_open_app">Apri Gloam</string>

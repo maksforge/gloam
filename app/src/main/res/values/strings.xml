@@ -167,6 +167,13 @@
     <string name="preset_edit">Edit</string>
     <string name="preset_edit_title">Edit preset</string>
     <string name="preset_delete">Delete</string>
+    <!-- Asked before any preset is deleted, built-in or the user's own. %1$s is the preset's name as
+         its chip shows it, possibly typed by the user, so it cannot be inflected (translator brief
+         §6.3) — keep it in quotes, attached to the preset noun if your language needs one, as in
+         preset_same_settings. The body shows only for a built-in; quote settings_restore_button
+         exactly. -->
+    <string name="preset_delete_confirm_title">Delete “%1$s”?</string>
+    <string name="preset_delete_builtin_body">“Restore to default” in Settings brings it back, but resets every other setting as well.</string>
     <string name="preset_cancel">Cancel</string>
 
     <!-- The compact controls (docs/phase-3.md §2, §10). The floating window shows the same sliders

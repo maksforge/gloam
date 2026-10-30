@@ -104,6 +104,8 @@
     <string name="preset_edit">Editar</string>
     <string name="preset_edit_title">Editar predefinição</string>
     <string name="preset_delete">Excluir</string>
+    <string name="preset_delete_confirm_title">Excluir a predefinição “%1$s”?</string>
+    <string name="preset_delete_builtin_body">“Restaurar padrão” em Configurações a traz de volta, mas também restaura todas as outras configurações.</string>
     <string name="preset_cancel">Cancelar</string>
 
     <string name="controls_open_app">Abrir o Gloam</string>

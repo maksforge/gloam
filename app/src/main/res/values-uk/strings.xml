@@ -107,6 +107,8 @@
     <string name="preset_edit">Редагувати</string>
     <string name="preset_edit_title">Редагувати набір</string>
     <string name="preset_delete">Видалити</string>
+    <string name="preset_delete_confirm_title">Видалити набір «%1$s»?</string>
+    <string name="preset_delete_builtin_body">Повернути його можна кнопкою «Відновити типові» в Налаштуваннях, але вона також відновить усі інші налаштування.</string>
     <string name="preset_cancel">Скасувати</string>
 
     <string name="controls_open_app">Відкрити Gloam</string>
