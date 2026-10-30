@@ -63,4 +63,22 @@ class PauseTest {
         assertEquals(1f, fractionLeft(now - minute, now, end), 0f)
         assertEquals(0f, fractionLeft(now, now, now), 0f)
     }
+
+    @Test
+    fun `the ring drains a running pause to its end, and otherwise the deadline from when it was set`() {
+        val pause = PauseSpan(from = now, until = now + 5 * minute)
+        val set = now - 30 * minute
+        val later = now + 60 * minute
+        val inside = now + 2 * minute
+
+        assertEquals(null, timeLeftSpan(pause = null, offAt = null, deadlineFrom = null))
+        assertEquals(null, timeLeftSpan(pause = null, offAt = null, deadlineFrom = set))
+        assertEquals(set to later, timeLeftSpan(pause = null, offAt = later, deadlineFrom = set))
+        assertEquals(null, timeLeftSpan(pause = null, offAt = later, deadlineFrom = null))
+
+        assertEquals(now to pause.until, timeLeftSpan(pause, offAt = null, deadlineFrom = null))
+        assertEquals(now to pause.until, timeLeftSpan(pause, offAt = later, deadlineFrom = set))
+        assertEquals(now to inside, timeLeftSpan(pause, offAt = inside, deadlineFrom = set))
+        assertEquals(now to inside, timeLeftSpan(pause, offAt = inside, deadlineFrom = null))
+    }
 }

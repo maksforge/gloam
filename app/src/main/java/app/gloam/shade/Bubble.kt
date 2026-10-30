@@ -353,10 +353,8 @@ internal class BubbleTouchLayout(
  * The morph is four animated numbers: the gap to each side of the window, and the corner radius on
  * each side. Tucked, the outer gap grows until the shape ends exactly at the display's edge (the
  * window runs on past it), and the outer corners go square. The mark is centred in whatever is left,
- * so it is always in the part that shows. A ring around the mark empties as the nearer end comes:
- * a pause while one runs, drawn to [pauseEnd] as the compact button's is, and otherwise the
- * deadline, from when it was set. A pause never outlasts the deadline, so the pause is always the
- * nearer of the two, and a closed set of controls still says the shade will come down on its own.
+ * so it is always in the part that shows. A ring around the mark empties towards [timeLeftSpan]'s
+ * end, so a closed set of controls still says the shade will come down on its own.
  *
  * Kotlin note: `animateDpAsState` is the Compose equivalent of a CSS transition on a value — the
  * composable states the target, and the framework tweens the number it reads on every frame.
@@ -376,11 +374,7 @@ internal fun BubbleContent(
     val pauseSpan by pause.collectAsStateWithLifecycle()
     val offAt by deadline.collectAsStateWithLifecycle()
     val offFrom by deadlineFrom.collectAsStateWithLifecycle()
-    // Kotlin note: `to` builds a Pair, and `?.let { (from, end) -> … }` below destructures it —
-    // `const [from, end] = ring ?? []` with the null case skipped.
-    val ring =
-        pauseSpan?.let { it.from to pauseEnd(it.until, offAt).atMillis }
-            ?: offAt?.let { end -> offFrom?.let { it to end } }
+    val ring = timeLeftSpan(pauseSpan, offAt, offFrom)
     val isLeaving by leaving.collectAsStateWithLifecycle()
     val tuckedSide by tucked.collectAsStateWithLifecycle()
     val resting = if (isPressed) null else tuckedSide
@@ -441,6 +435,8 @@ internal fun BubbleContent(
                     .background(colors.primaryContainer, shape),
             contentAlignment = Alignment.Center,
         ) {
+            // Kotlin note: `?.let` runs the block only when `ring` is not null, and `(from, end)`
+            // destructures the Pair — `if (ring) { const [from, end] = ring; … }`.
             ring?.let { (from, end) ->
                 TimeLeftRing(
                     from = from,
