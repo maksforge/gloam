@@ -46,6 +46,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -537,7 +538,11 @@ class ShadeService : Service() {
             .onEach { tint ->
                 appliedTint = tint
                 warmthLayer?.let { layer -> shadeThread.run { layer.setBackgroundColor(tint) } }
-            }.launchIn(scope)
+            }
+            // Past the stored colour, so only a colour the user picks ends a pause.
+            .drop(1)
+            .onEach { if (pausedUntil != null) endPause() }
+            .launchIn(scope)
 
         // Auto-off. `collectLatest` is `switchMap` rather than `forEach`: a new deadline cancels the
         // wait still running for the old one, which is what re-arms the loop when the user taps a
