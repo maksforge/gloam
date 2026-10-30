@@ -8,6 +8,7 @@ import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -293,34 +294,38 @@ fun WarmthColumn(
     warmthColor: Int,
     onWarmth: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    heightDp: Float = WARMTH_COLUMN_HEIGHT_DP,
 ) {
     val colors = columnColors()
-    val height = heightDp.dp
-    val trackPx = with(LocalDensity.current) { height.toPx() }
     val label = stringResource(R.string.dim_warmth_label)
 
-    Box(
-        modifier =
-            modifier
-                .size(WARMTH_COLUMN_WIDTH_DP.dp, height)
-                .clip(RoundedCornerShape(WARMTH_COLUMN_RADIUS_DP.dp))
-                .background(
-                    // From the colour the shade actually paints down to nothing, so the top of the
-                    // column is the tint the user chose rather than the app's accent.
-                    Brush.verticalGradient(listOf(Color(warmthTint(warmthColor)), colors.warmthCool)),
-                ).levelDrag(trackHeightPx = trackPx, onLevel = onWarmth, inverted = true)
-                .levelSemantics(label, warmth, onWarmth),
-    ) {
-        val handleTop = height * ((100 - warmth.coerceIn(0, 100)) / 100f)
+    // `maxHeight` is what the parent offers in this same measure pass, so the drag maths and the
+    // handle read the height the column is actually drawn at rather than an estimate of it.
+    BoxWithConstraints(modifier = modifier) {
+        val height = minOf(WARMTH_COLUMN_HEIGHT_DP.dp, maxHeight)
+        val trackPx = with(LocalDensity.current) { height.toPx() }
+
         Box(
             modifier =
                 Modifier
-                    .align(Alignment.TopCenter)
-                    .offset(y = handleTop - (COLUMN_HANDLE_HEIGHT_DP / 2).dp)
-                    .size(34.dp, 5.dp)
-                    .background(MaterialTheme.colorScheme.onSurface, RoundedCornerShape(percent = 50)),
-        )
+                    .size(WARMTH_COLUMN_WIDTH_DP.dp, height)
+                    .clip(RoundedCornerShape(WARMTH_COLUMN_RADIUS_DP.dp))
+                    .background(
+                        // From the colour the shade actually paints down to nothing, so the top of the
+                        // column is the tint the user chose rather than the app's accent.
+                        Brush.verticalGradient(listOf(Color(warmthTint(warmthColor)), colors.warmthCool)),
+                    ).levelDrag(trackHeightPx = trackPx, onLevel = onWarmth, inverted = true)
+                    .levelSemantics(label, warmth, onWarmth),
+        ) {
+            val handleTop = height * ((100 - warmth.coerceIn(0, 100)) / 100f)
+            Box(
+                modifier =
+                    Modifier
+                        .align(Alignment.TopCenter)
+                        .offset(y = handleTop - (COLUMN_HANDLE_HEIGHT_DP / 2).dp)
+                        .size(34.dp, 5.dp)
+                        .background(MaterialTheme.colorScheme.onSurface, RoundedCornerShape(percent = 50)),
+            )
+        }
     }
 }
 
