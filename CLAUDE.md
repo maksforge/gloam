@@ -53,17 +53,18 @@ let us do otherwise".
   shade should be running — settings, not records. A new preference is a key, a `Flow` that reads it
   with its default, and a `suspend` setter; keep the default *in the read* rather than writing it on
   first launch, and there is nothing to migrate, ever.
-  **The test is cardinality, not subject matter.** A *fixed set* is not a *list*, however many
-  members it has: four schedule values are settings, and seven per-day windows would be fourteen
-  settings. What needs a table is the user creating rows nobody knew about at build time.
+  **A fixed set is plain keys, however many members it has**: four schedule values are settings,
+  and seven per-day windows would be fourteen settings.
   **Every key you add is backed up, whether or not you meant it to be.** Auto Backup carries the
   whole store, exclusions are per *file*, and the store is one file — so a key lands on the user's
   next phone with no code of ours involved in the write. Ask what it means there: a setting is
   welcome, live state is not, and live state is judged **at the read** ([ADR-0005](docs/adr/0005-backup-is-automatic-for-the-database-and-manual-for-media.md)'s
   amendments, and `shade_began_at` is what that cost once).
-  **If a feature ever needs a list the user creates**, the whole Room apparatus comes back with it —
-  `scripts/schema-gate.py`, ADR-0001 and this rule's previous wording are all still in git history
-  for that. Adding a table is a deliberate act with a migration story attached, not a convenience.
+  **A list the user creates is still not a database.** Saved presets are JSON under one key
+  (`data/SavedPreset.kt`) — read whole, written whole, decoded tolerantly. Room comes back only for
+  something that needs querying or relations, and then ADR-0001 comes with it
+  ([ADR-0007](docs/adr/0007-gloam-stores-settings-not-records-so-it-has-no-database.md)'s amendment).
+  Nothing online, ever.
 - **The shade must never trap the user.** It is a window over every other app, so two things are
   load-bearing and neither is obvious: the window carries `FLAG_NOT_TOUCHABLE` and
   `FLAG_NOT_FOCUSABLE` so every touch passes through, and what reaches the eye through it is capped
