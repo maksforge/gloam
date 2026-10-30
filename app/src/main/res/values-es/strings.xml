@@ -33,7 +33,7 @@
     <string name="dim_stop">Dejar de atenuar</string>
     <string name="dim_pause">Pausar %1$s</string>
     <string name="dim_resume_now">Reanudar ya</string>
-    <string name="dim_paused_resumes_in">En pausa — se vuelve a atenuar en %1$s</string>
+    <string name="dim_paused_resumes_in">En pausa — la atenuación se reanuda en %1$s</string>
     <string name="dim_paused_ends_in">En pausa — se apaga en %1$s</string>
     <string name="pause_length_1m">1 min</string>
     <string name="pause_length_5m">5 min</string>

@@ -34,7 +34,7 @@
     <string name="dim_stop">Abdunkeln beenden</string>
     <string name="dim_pause">%1$s pausieren</string>
     <string name="dim_resume_now">Jetzt fortsetzen</string>
-    <string name="dim_paused_resumes_in">Pausiert — Abdunkeln geht in %1$s weiter</string>
+    <string name="dim_paused_resumes_in">Pausiert — Abdunkeln wird in %1$s fortgesetzt</string>
     <string name="dim_paused_ends_in">Pausiert — Abdunkeln endet in %1$s</string>
     <string name="pause_length_1m">1 Min.</string>
     <string name="pause_length_5m">5 Min.</string>
@@ -187,7 +187,7 @@
     <string name="shade_notification_stop">Stopp</string>
     <string name="shade_notification_until">Bis %1$s</string>
     <string name="shade_notification_title_paused">Abdunkeln pausiert</string>
-    <string name="shade_notification_resumes_at">Geht um %1$s weiter</string>
+    <string name="shade_notification_resumes_at">Wird um %1$s fortgesetzt</string>
     <string name="shade_notification_text_backlight">Dein Helligkeitsregler ist angehalten, während Gloam abdunkelt</string>
 
 </resources>

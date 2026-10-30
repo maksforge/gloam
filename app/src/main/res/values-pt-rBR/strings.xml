@@ -34,7 +34,7 @@
     <string name="dim_stop">Parar de escurecer</string>
     <string name="dim_pause">Pausar por %1$s</string>
     <string name="dim_resume_now">Retomar agora</string>
-    <string name="dim_paused_resumes_in">Pausado — volta a escurecer em %1$s</string>
+    <string name="dim_paused_resumes_in">Pausado — o escurecimento é retomado em %1$s</string>
     <string name="dim_paused_ends_in">Pausado — desliga em %1$s</string>
     <string name="pause_length_1m">1 min</string>
     <string name="pause_length_5m">5 min</string>
@@ -187,7 +187,7 @@
     <string name="shade_notification_stop">Parar</string>
     <string name="shade_notification_until">Até %1$s</string>
     <string name="shade_notification_title_paused">Escurecimento pausado</string>
-    <string name="shade_notification_resumes_at">Volta às %1$s</string>
+    <string name="shade_notification_resumes_at">Retomado às %1$s</string>
     <string name="shade_notification_text_backlight">Seu controle de brilho fica pausado enquanto o Gloam escurece</string>
 
 </resources>
