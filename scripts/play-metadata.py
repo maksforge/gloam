@@ -236,6 +236,7 @@ def main() -> int:
         gaps.append(f"{locale} is shipped in the app but has no listing")
 
     args.out.mkdir(parents=True, exist_ok=True)
+    # No trailing newline: supply uploads each file verbatim and Play counts it against the limit.
     for locale, fields in listings.items():
         directory = args.out / locale
         directory.mkdir(parents=True, exist_ok=True)
@@ -245,8 +246,6 @@ def main() -> int:
         if locale in notes:
             changelogs = directory / "changelogs"
             changelogs.mkdir(exist_ok=True)
-            # No trailing newline: supply sends the file as read, and Play counts the newline, so a
-            # 500-character note would go up as 501 and the whole release be refused (1.5.0, fr-FR).
             (changelogs / f"{code}.txt").write_text(notes[locale], encoding="utf-8")
 
     shots = copy_screenshots(args.out)
