@@ -241,11 +241,13 @@ def main() -> int:
         directory.mkdir(parents=True, exist_ok=True)
         for field, body in fields.items():
             if body:  # a blank is left out rather than written as "" - see the docstring
-                (directory / f"{field}.txt").write_text(body + "\n", encoding="utf-8")
+                (directory / f"{field}.txt").write_text(body, encoding="utf-8")
         if locale in notes:
             changelogs = directory / "changelogs"
             changelogs.mkdir(exist_ok=True)
-            (changelogs / f"{code}.txt").write_text(notes[locale] + "\n", encoding="utf-8")
+            # No trailing newline: supply sends the file as read, and Play counts the newline, so a
+            # 500-character note would go up as 501 and the whole release be refused (1.5.0, fr-FR).
+            (changelogs / f"{code}.txt").write_text(notes[locale], encoding="utf-8")
 
     shots = copy_screenshots(args.out)
     graphic = copy_feature_graphic(args.out)
