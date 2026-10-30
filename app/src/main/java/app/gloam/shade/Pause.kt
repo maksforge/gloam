@@ -55,20 +55,38 @@ fun pauseEnd(
         PauseEnd(atMillis = pausedUntil, resumes = true)
     }
 
+/** A pause under way: when it began and when it is due to end. */
+data class PauseSpan(
+    val from: Long,
+    val until: Long,
+)
+
 /**
- * The instant the current pause ends, or `null` when the shade is not paused.
+ * How much of a pause is left, from 1 at its start to 0 at [end] — what the pause ring draws.
+ *
+ * [end] is passed rather than read from the span, so a pause the deadline will cut short drains
+ * towards the deadline instead of towards a resume that will not come.
+ */
+fun pauseLeft(
+    now: Long,
+    from: Long,
+    end: Long,
+): Float = if (end <= from) 0f else ((end - now).toFloat() / (end - from)).coerceIn(0f, 1f)
+
+/**
+ * The current pause, or `null` when the shade is not paused.
  *
  * In memory rather than in DataStore, so a ROM kill mid-pause brings the shade back early rather
  * than never, and a backup can never carry a pause to another phone. Exact for [shadeOnScreen]'s
  * reason: the service and every screen share one process.
  */
-val shadePausedUntil: StateFlow<Long?>
+val shadePause: StateFlow<PauseSpan?>
     get() = paused.asStateFlow()
 
-private val paused = MutableStateFlow<Long?>(null)
+private val paused = MutableStateFlow<PauseSpan?>(null)
 
-internal fun reportPausedUntil(until: Long?) {
-    paused.value = until
+internal fun reportPause(span: PauseSpan?) {
+    paused.value = span
 }
 
 /**

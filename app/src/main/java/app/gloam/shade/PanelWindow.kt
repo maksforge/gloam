@@ -298,7 +298,7 @@ data class PanelState(
     val themeMode: ThemeMode,
     val offAtMillis: Long?,
     val pauseLength: PauseLength,
-    val pausedUntil: Long?,
+    val pause: PauseSpan?,
 )
 
 /**
@@ -352,7 +352,7 @@ internal fun PanelContent(
             warmthColor = current.warmthColor,
             running = current.running,
             autoOff = current.autoOff,
-            pause = pauseUi(current.pauseLength, current.pausedUntil, current.offAtMillis),
+            pause = pauseUi(current.pauseLength, current.pause, current.offAtMillis),
             onDimLevel = onDimLevel,
             onWarmth = onWarmth,
             onAutoOff = onAutoOff,
