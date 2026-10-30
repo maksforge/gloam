@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import app.gloam.MainApplication
 import app.gloam.data.AppPreferences
 import app.gloam.data.DEFAULT_WARMTH_COLOR
+import app.gloam.data.SavedPreset
 import app.gloam.shade.AutoOff
 import app.gloam.shade.Schedule
 import app.gloam.shade.ShadeEnd
@@ -53,6 +54,7 @@ import java.time.LocalTime
  * @param onScreen whether the shade's window is up in this process — [shadeOnScreen], the live half
  *   that [running] deliberately is not.
  * @param tipAsk what the tip's one-time card is decided from; see [TipAskInputs].
+ * @param savedPresets the presets the user named, after the built-in ones.
  */
 data class DimUiState(
     val dimLevel: Int = 0,
@@ -65,6 +67,7 @@ data class DimUiState(
     val schedule: Schedule = Schedule(enabled = false, onAt = LocalTime.MIDNIGHT, offAt = LocalTime.MIDNIGHT),
     val onScreen: Boolean = false,
     val tipAsk: TipAskInputs = TipAskInputs(),
+    val savedPresets: List<SavedPreset> = emptyList(),
 ) {
     /**
      * **What the Start/Stop button and the deadline line show**: asked for *and* on screen.
@@ -128,11 +131,11 @@ class DimViewModel(
             // Paired with the tip's inputs only for the arity limit; they share no section.
             combine(preferences.lowerBacklight, tipAsk, ::Pair),
             // Kotlin note: `combine` is typed for two to five flows and the schedule is the sixth,
-            // so the two that already belong to one section of the screen are paired first. Nesting
+            // so the ones that already belong to one section of the screen are grouped first. Nesting
             // rather than the vararg overload, which hands back an `Array<Any?>` and a cast per
             // field — the type checker is doing real work here and is worth keeping.
-            combine(preferences.autoOff, preferences.schedule, ::Pair),
-        ) { level, (warmth, warmthColor), (intent, up), (lowerBacklight, tipAsk), (autoOff, schedule) ->
+            combine(preferences.autoOff, preferences.schedule, preferences.savedPresets, ::Triple),
+        ) { level, (warmth, warmthColor), (intent, up), (lowerBacklight, tipAsk), (autoOff, schedule, savedPresets) ->
             DimUiState(
                 dimLevel = level,
                 warmth = warmth,
@@ -144,6 +147,7 @@ class DimViewModel(
                 schedule = schedule,
                 onScreen = up,
                 tipAsk = tipAsk,
+                savedPresets = savedPresets,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DimUiState())
 
@@ -180,6 +184,28 @@ class DimViewModel(
         viewModelScope.launch {
             preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
         }
+    }
+
+    /** [applyPreset] for one the user saved; the screen starts the shade the same way. */
+    fun applySavedPreset(preset: SavedPreset) {
+        viewModelScope.launch {
+            preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
+        }
+    }
+
+    fun saveCurrentAsPreset(name: String) {
+        viewModelScope.launch { preferences.saveCurrentAsPreset(name) }
+    }
+
+    fun renamePreset(
+        from: String,
+        to: String,
+    ) {
+        viewModelScope.launch { preferences.renamePreset(from, to) }
+    }
+
+    fun deletePreset(name: String) {
+        viewModelScope.launch { preferences.deletePreset(name) }
     }
 
     /**

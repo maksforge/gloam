@@ -349,6 +349,14 @@ fun DimScreen(
                     viewModel.applyPreset(preset)
                     if (!state.shadeUp) startOrAsk()
                 },
+                savedPresets = state.savedPresets,
+                onSavedPreset = { preset ->
+                    viewModel.applySavedPreset(preset)
+                    if (!state.shadeUp) startOrAsk()
+                },
+                onSavePreset = viewModel::saveCurrentAsPreset,
+                onRenamePreset = viewModel::renamePreset,
+                onDeletePreset = viewModel::deletePreset,
             )
 
             // **Everything that is not the dim level, in one card.** The redesign's column takes

@@ -70,6 +70,19 @@
     <string name="preset_in_bed_hint">Quase escuro e vermelho intenso, para um quarto com a luz apagada.</string>
     <string name="presets_hint">Toque em um para começar a escurecer a partir dele e depois ajuste o que quiser acima.</string>
 
+    <string name="preset_saved_hint">Sua própria predefinição. Toque nela quando quiser para voltar a esses valores.</string>
+    <string name="preset_save">Salvar como predefinição</string>
+    <string name="preset_save_body">Salva o nível de escurecimento, a calidez e a cor atuais com um nome escolhido por você.</string>
+    <string name="preset_name_label">Nome</string>
+    <string name="preset_save_confirm">Salvar</string>
+    <string name="preset_replace">Substituir</string>
+    <string name="preset_replace_note">Já existe uma predefinição com este nome. Os valores dela serão substituídos.</string>
+    <string name="preset_name_taken">Outra predefinição já tem este nome.</string>
+    <string name="preset_edit">Editar</string>
+    <string name="preset_edit_title">Editar predefinição</string>
+    <string name="preset_delete">Excluir</string>
+    <string name="preset_cancel">Cancelar</string>
+
     <string name="controls_open_app">Abrir o Gloam</string>
     <string name="panel_close">Fechar os controles</string>
 
