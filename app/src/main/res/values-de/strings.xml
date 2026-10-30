@@ -102,8 +102,7 @@
     <string name="settings_launcher_compact_hint">Ein Tippen auf Gloam öffnet nur die Regler statt der ganzen App. Die Benachrichtigung öffnet immer die kleine Steuerung.</string>
     <string name="settings_controls_bubble">Eine Blase zum Öffnen der Steuerung zurücklassen</string>
     <string name="settings_controls_bubble_hint">Beim Abdunkeln verkleinert ein Tippen außerhalb der Steuerung sie zu einer kleinen Blase, und auch das Einschalten der Schicht über die Schnelleinstellungen-Kachel lässt eine zurück. Tippe darauf, um die Steuerung zu öffnen, oder zieh sie auf das ✕, um sie zu entfernen.</string>
-    <string name="settings_pause">Pause</string>
-    <string name="settings_pause_body">Eine Pause nimmt die Schicht kurz weg und gibt dir deine eigene Helligkeit zurück, danach wird der Bildschirm von selbst wieder abgedunkelt. Wähle, wie lange.</string>
+    <string name="dim_pause_label">Pause</string>
     <string name="bubble_open">Steuerung öffnen</string>
     <string name="bubble_remove">Blase entfernen</string>
     <string name="bubble_prompt_title">Blase behalten?</string>

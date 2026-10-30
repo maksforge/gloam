@@ -71,9 +71,16 @@ internal fun reportPausedUntil(until: Long?) {
     paused.value = until
 }
 
-internal enum class PauseRequest {
-    Pause,
-    Resume,
+/**
+ * Kotlin note: a `sealed interface` is a discriminated union — `{ kind: 'pause', length } |
+ * { kind: 'resume' }` — and a `when` over it must cover both.
+ */
+internal sealed interface PauseRequest {
+    data class Pause(
+        val length: PauseLength,
+    ) : PauseRequest
+
+    data object Resume : PauseRequest
 }
 
 /**
@@ -83,8 +90,8 @@ internal enum class PauseRequest {
 internal val pauseRequests =
     MutableSharedFlow<PauseRequest>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
 
-fun pauseShade() {
-    pauseRequests.tryEmit(PauseRequest.Pause)
+fun pauseShade(length: PauseLength) {
+    pauseRequests.tryEmit(PauseRequest.Pause(length))
 }
 
 fun resumeShade() {

@@ -324,7 +324,7 @@ internal fun PanelContent(
     onWarmth: (Int) -> Unit,
     onAutoOff: (AutoOff) -> Unit,
     onToggleRunning: () -> Unit,
-    onPause: () -> Unit,
+    onPause: (PauseLength) -> Unit,
     onResume: () -> Unit,
     onOpenApp: () -> Unit,
     onSectionOpen: (Boolean) -> Unit,

@@ -62,6 +62,7 @@ import androidx.compose.ui.unit.sp
 import app.gloam.R
 import app.gloam.data.SavedPreset
 import app.gloam.shade.AutoOff
+import app.gloam.shade.PauseLength
 import app.gloam.shade.Schedule
 import app.gloam.shade.ScheduleKind
 import app.gloam.shade.warmthTint
@@ -108,7 +109,7 @@ fun DimControls(
     onWarmthColor: (Int) -> Unit,
     onToggleRunning: () -> Unit,
     savedPresets: List<SavedPreset>,
-    onPause: () -> Unit,
+    onPause: (PauseLength) -> Unit,
     onResume: () -> Unit,
     onPreset: (Preset) -> Unit,
     onSavedPreset: (SavedPreset) -> Unit,

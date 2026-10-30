@@ -99,8 +99,7 @@
     <string name="settings_launcher_compact_hint">Toccare Gloam apre solo i cursori invece dell\'app intera. La notifica apre sempre i comandi piccoli.</string>
     <string name="settings_controls_bubble">Lascia una bolla che apre i comandi</string>
     <string name="settings_controls_bubble_hint">Durante l\'oscuramento, toccare fuori dai comandi li riduce a una piccola bolla, e anche accendere il velo dal riquadro delle impostazioni rapide ne lascia una. Toccala per aprire i comandi o trascinala sulla ✕ per rimuoverla.</string>
-    <string name="settings_pause">Pausa</string>
-    <string name="settings_pause_body">La pausa toglie il velo per un po\' e ti restituisce la tua luminosità, poi lo schermo torna a oscurarsi da sé. Scegli quanto dura.</string>
+    <string name="dim_pause_label">Pausa</string>
     <string name="bubble_open">Apri i comandi</string>
     <string name="bubble_remove">Rimuovi la bolla</string>
     <string name="bubble_prompt_title">Tenere la bolla?</string>

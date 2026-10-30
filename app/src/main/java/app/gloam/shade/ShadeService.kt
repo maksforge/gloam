@@ -505,7 +505,7 @@ class ShadeService : Service() {
         pauseRequests
             .onEach { request ->
                 when (request) {
-                    PauseRequest.Pause -> pause()
+                    is PauseRequest.Pause -> pause(request.length)
                     PauseRequest.Resume -> endPause()
                 }
             }.launchIn(scope)
@@ -1599,16 +1599,14 @@ class ShadeService : Service() {
      * backlight the user's own*. It also drops [backlightTop], so the resume captures afresh from
      * wherever the user left their own brightness during the pause.
      */
-    private fun pause() {
+    private fun pause(length: PauseLength) {
         if (shadeView == null) return
-        scope.launch {
-            val until = pausedUntilFrom(System.currentTimeMillis(), preferences.pauseLength.first())
-            pauseJob?.cancel()
-            setPausedUntil(until)
-            lastSettings?.let { applyShadeValues(it) }
-            syncNotificationText()
-            pauseJob = scope.launch { awaitPauseEnd(until) }
-        }
+        val until = pausedUntilFrom(System.currentTimeMillis(), length)
+        pauseJob?.cancel()
+        setPausedUntil(until)
+        lastSettings?.let { applyShadeValues(it) }
+        syncNotificationText()
+        pauseJob = scope.launch { awaitPauseEnd(until) }
     }
 
     /**
