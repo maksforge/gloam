@@ -110,6 +110,7 @@ fun DimControls(
     onToggleRunning: () -> Unit,
     savedPresets: List<SavedPreset>,
     onPause: (PauseLength) -> Unit,
+    onPauseLength: (PauseLength) -> Unit,
     onResume: () -> Unit,
     onPreset: (Preset) -> Unit,
     onSavedPreset: (SavedPreset) -> Unit,
@@ -185,6 +186,7 @@ fun DimControls(
             running = running,
             pause = pause,
             onPause = onPause,
+            onPauseLength = onPauseLength,
             onResume = onResume,
             modifier = Modifier.padding(start = Spacing.base, end = Spacing.base, top = Spacing.tight),
         )

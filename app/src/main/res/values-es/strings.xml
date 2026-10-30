@@ -34,10 +34,10 @@
     <string name="dim_pause">Pausar %1$s</string>
     <string name="dim_resume_now">Reanudar ya</string>
     <string name="dim_pause_other">Otro…</string>
-    <string name="dim_pause_custom_title">¿Cuánto tiempo pausar?</string>
+    <string name="dim_pause_custom_title">Nueva duración de la pausa</string>
     <string name="dim_pause_minutes_label">Minutos</string>
     <string name="dim_pause_minutes_range">%1$d–%2$d</string>
-    <string name="dim_pause_custom_confirm">Pausar</string>
+    <string name="dim_pause_custom_confirm">Añadir</string>
     <string name="dim_pause_cancel">Cancelar</string>
     <string name="dim_paused_resumes_in">En pausa — la atenuación se reanuda en %1$s</string>
     <string name="dim_paused_ends_in">En pausa — se apaga en %1$s</string>
@@ -78,7 +78,7 @@
     <string name="preset_evening_hint">Atenuación ligera y mucha calidez, para las horas antes de apagar la luz.</string>
     <string name="preset_in_bed">En la cama</string>
     <string name="preset_in_bed_hint">Casi a oscuras y en rojo intenso, para una habitación con la luz apagada.</string>
-    <string name="presets_hint">Toca uno para empezar a atenuar con él y luego ajusta lo que quieras arriba.</string>
+    <string name="presets_hint">Toca uno para tomar de él el nivel de atenuación y la calidez, y luego ajusta lo que quieras arriba.</string>
 
     <string name="preset_saved_hint">Tu propio preajuste. Mantén pulsado cualquiera de los tuyos para cambiarle el nombre o eliminarlo.</string>
     <string name="preset_save">Guardar como preajuste</string>

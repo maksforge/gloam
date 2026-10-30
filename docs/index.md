@@ -41,8 +41,8 @@ in a properly dark room. Gloam is the range underneath it.
   amber to deep red. The tint eases off on its own as the dim level nears its darkest, so the
   controls together always leave something readable underneath.
 - **Starts from a preset.** *Reading*, *Evening* and *In bed* each set the dim level, the warmth
-  and its colour in one tap and start the shade, with a line saying what each is for. Move any
-  control afterwards and you are simply on your own settings.
+  and its colour in one tap, with a line saying what each is for. Move any control afterwards and
+  you are simply on your own settings.
 - **Brings the controls to where you are.** Tap the ongoing notification and a small panel opens
   over whatever you are reading. It sits above the shade, so it stays readable at full dim, and you
   adjust the dim against the page itself rather than against Gloam's own screen. The app icon opens

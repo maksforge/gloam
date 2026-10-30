@@ -193,18 +193,14 @@ class DimViewModel(
         viewModelScope.launch { preferences.setWarmthColor(warmthColor) }
     }
 
-    /**
-     * Writes a preset's three values. **Starting the shade is not this one's job** — the screen does
-     * that after calling this, through the same permission branch as its Start button, because
-     * starting a service needs a `Context`.
-     */
+    /** Writes a preset's three values, and nothing else: a preset never starts the shade. */
     fun applyPreset(preset: Preset) {
         viewModelScope.launch {
             preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
         }
     }
 
-    /** [applyPreset] for one the user saved; the screen starts the shade the same way. */
+    /** [applyPreset] for one the user saved. */
     fun applySavedPreset(preset: SavedPreset) {
         viewModelScope.launch {
             preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)

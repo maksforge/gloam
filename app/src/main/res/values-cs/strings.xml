@@ -33,10 +33,10 @@
     <string name="dim_pause">Pozastavit na %1$s</string>
     <string name="dim_resume_now">Pokračovat hned</string>
     <string name="dim_pause_other">Jiné…</string>
-    <string name="dim_pause_custom_title">Na jak dlouho pozastavit?</string>
+    <string name="dim_pause_custom_title">Nová délka pozastavení</string>
     <string name="dim_pause_minutes_label">Minuty</string>
     <string name="dim_pause_minutes_range">%1$d–%2$d</string>
-    <string name="dim_pause_custom_confirm">Pozastavit</string>
+    <string name="dim_pause_custom_confirm">Přidat</string>
     <string name="dim_pause_cancel">Zrušit</string>
     <string name="dim_paused_resumes_in">Pozastaveno — ztmavování pokračuje za %1$s</string>
     <string name="dim_paused_ends_in">Pozastaveno — ztmavování se vypne za %1$s</string>
@@ -77,7 +77,7 @@
     <string name="preset_evening_hint">Lehké ztmavení a silné teplo barvy na hodiny před zhasnutím.</string>
     <string name="preset_in_bed">V posteli</string>
     <string name="preset_in_bed_hint">Skoro tma a sytě červená, pro pokoj se zhasnutým světlem.</string>
-    <string name="presets_hint">Klepnutím na jednu začneš ztmavovat od ní, pak můžeš upravit cokoli nad tím.</string>
+    <string name="presets_hint">Klepnutím na jednu podle ní nastavíš úroveň ztmavení a teplo barvy, pak můžeš upravit cokoli nad tím.</string>
 
     <string name="preset_saved_hint">Tvoje vlastní předvolba. Podržením kterékoli své ji přejmenuješ nebo smažeš.</string>
     <string name="preset_save">Uložit jako předvolbu</string>

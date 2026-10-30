@@ -79,20 +79,22 @@ fun pauseUi(
  * nothing to pause.
  *
  * A tap both pauses and remembers the length, so the chip that is lit is the one the compact
- * controls' single button will use — lit the way the auto-off chips light their choice.
+ * controls' single button will use — lit the way the auto-off chips light their choice. *Other…*
+ * only adds a length, as a chip of its own; pausing for it is that chip's tap, like any other.
  */
 @Composable
 fun PauseRow(
     running: Boolean,
     pause: PauseUi,
     onPause: (PauseLength) -> Unit,
+    onPauseLength: (PauseLength) -> Unit,
     onResume: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (!running) return
     val end = pause.end
     if (end == null) {
-        PauseChips(remembered = pause.length, onPause = onPause, modifier = modifier)
+        PauseChips(remembered = pause.length, onPause = onPause, onPauseLength = onPauseLength, modifier = modifier)
         return
     }
     Row(
@@ -119,6 +121,7 @@ fun PauseRow(
 private fun PauseChips(
     remembered: PauseLength,
     onPause: (PauseLength) -> Unit,
+    onPauseLength: (PauseLength) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var choosing by rememberSaveable { mutableStateOf(false) }
@@ -169,7 +172,7 @@ private fun PauseChips(
             initial = remembered,
             onConfirm = { length ->
                 choosing = false
-                onPause(length)
+                onPauseLength(length)
             },
             onDismiss = { choosing = false },
         )

@@ -35,10 +35,10 @@
     <string name="dim_pause">Pause de %1$s</string>
     <string name="dim_resume_now">Reprendre maintenant</string>
     <string name="dim_pause_other">Autre…</string>
-    <string name="dim_pause_custom_title">Combien de temps de pause ?</string>
+    <string name="dim_pause_custom_title">Nouvelle durée de pause</string>
     <string name="dim_pause_minutes_label">Minutes</string>
     <string name="dim_pause_minutes_range">%1$d–%2$d</string>
-    <string name="dim_pause_custom_confirm">Mettre en pause</string>
+    <string name="dim_pause_custom_confirm">Ajouter</string>
     <string name="dim_pause_cancel">Annuler</string>
     <string name="dim_paused_resumes_in">En pause — l\'assombrissement reprend dans %1$s</string>
     <string name="dim_paused_ends_in">En pause — l\'assombrissement s\'arrête dans %1$s</string>
@@ -79,7 +79,7 @@
     <string name="preset_evening_hint">Légèrement assombri et très chaud, pour les heures avant d\'éteindre la lumière.</string>
     <string name="preset_in_bed">Au lit</string>
     <string name="preset_in_bed_hint">Presque noir et rouge profond, pour une pièce où la lumière est éteinte.</string>
-    <string name="presets_hint">Touchez-en un pour commencer à assombrir avec, puis ajustez ce que vous voulez au-dessus.</string>
+    <string name="presets_hint">Touchez-en un pour en reprendre le niveau d\'assombrissement et la chaleur, puis ajustez ce que vous voulez au-dessus.</string>
 
     <string name="preset_saved_hint">Votre propre préréglage. Appuyez de manière prolongée sur l\'un des vôtres pour le renommer ou le supprimer.</string>
     <string name="preset_save">Enregistrer comme préréglage</string>
