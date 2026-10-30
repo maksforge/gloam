@@ -844,7 +844,7 @@ class ShadeService : Service() {
             themeMode = preferences.themeMode.first(),
             offAtMillis = intent.offAtMillis,
             pauseLength = preferences.pauseLength.first(),
-            pausedUntil = pausedUntil,
+            pause = shadePause.value,
         )
     }
 
@@ -1106,7 +1106,7 @@ class ShadeService : Service() {
             preferences.warmthColor.onEach { v -> state.update { it.copy(warmthColor = v) } }.launchIn(this)
             preferences.autoOff.onEach { v -> state.update { it.copy(autoOff = v) } }.launchIn(this)
             preferences.pauseLength.onEach { v -> state.update { it.copy(pauseLength = v) } }.launchIn(this)
-            shadePausedUntil.onEach { v -> state.update { it.copy(pausedUntil = v) } }.launchIn(this)
+            shadePause.onEach { v -> state.update { it.copy(pause = v) } }.launchIn(this)
             // The deadline only for the pause's sake: a pause that the deadline will end says so.
             preferences
                 .shadeIntent
@@ -1216,6 +1216,7 @@ class ShadeService : Service() {
                 pressed = bubblePressed,
                 leaving = bubbleLeaving,
                 tucked = bubbleTucked,
+                pause = shadePause,
             )
         }
         val params =
@@ -1641,7 +1642,7 @@ class ShadeService : Service() {
 
     private fun setPausedUntil(until: Long?) {
         pausedUntil = until
-        reportPausedUntil(until)
+        reportPause(until?.let { PauseSpan(from = System.currentTimeMillis(), until = it) })
     }
 
     /**

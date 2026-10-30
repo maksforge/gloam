@@ -515,11 +515,13 @@ private fun TimerSection(
 }
 
 /**
- * Pause, or while paused the time left above a play glyph, which a tap resumes from.
+ * Pause, or while paused a play glyph inside a ring of the time left, which a tap resumes from.
  *
  * Disabled rather than hidden while the shade is down: the group is centred, and a button that came
  * and went with the shade would move the bar under the thumb at every start and stop.
  */
+private const val PAUSE_RING_DP = 40
+
 @Composable
 private fun PauseButton(
     running: Boolean,
@@ -538,13 +540,20 @@ private fun PauseButton(
         return
     }
     CompactIconButton(onClick = onResume, selected = true) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(contentAlignment = Alignment.Center) {
+            pause.from?.let { from ->
+                PauseRing(
+                    from = from,
+                    end = end.atMillis,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(PAUSE_RING_DP.dp),
+                )
+            }
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 contentDescription = stringResource(R.string.dim_resume_now),
-                modifier = Modifier.size(18.dp),
+                modifier = Modifier.size(20.dp),
             )
-            Text(text = rememberCountdown(end.atMillis), style = MaterialTheme.typography.labelSmall)
         }
     }
 }

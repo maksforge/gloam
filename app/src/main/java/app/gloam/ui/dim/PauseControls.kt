@@ -1,6 +1,10 @@
 package app.gloam.ui.dim
 
 import android.text.format.DateUtils
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -19,32 +23,41 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.gloam.R
 import app.gloam.shade.PauseEnd
 import app.gloam.shade.PauseLength
+import app.gloam.shade.PauseSpan
 import app.gloam.shade.pauseEnd
+import app.gloam.shade.pauseLeft
 import app.gloam.theme.Spacing
 import kotlinx.coroutines.delay
 
 /**
- * What every pause control draws from: the length a tap would pause for, and how the pause under
- * way ends, or `null` when there is none.
+ * What every pause control draws from: the length a tap would pause for, how the pause under way
+ * ends, or `null` when there is none, and when it began, for the ring.
  */
 data class PauseUi(
     val length: PauseLength = PauseLength.Default,
     val end: PauseEnd? = null,
+    val from: Long? = null,
 )
 
 fun pauseUi(
     length: PauseLength,
-    pausedUntil: Long?,
+    span: PauseSpan?,
     offAtMillis: Long?,
-): PauseUi = PauseUi(length, pausedUntil?.let { pauseEnd(it, offAtMillis) })
+): PauseUi = PauseUi(length, span?.let { pauseEnd(it.until, offAtMillis) }, span?.from)
 
 /**
  * The full screen's pause: a chip per length while the shade is up, and while paused a line saying
@@ -162,3 +175,44 @@ internal fun PauseLength.labelRes(): Int =
         PauseLength.Minutes5 -> R.string.pause_length_5m
         PauseLength.Minutes15 -> R.string.pause_length_15m
     }
+
+/**
+ * The share of a pause still left, as a ring that empties clockwise from the top — the bubble's and
+ * the compact button's way of saying "paused, and about this much to go" with no digits to read.
+ *
+ * A faint full circle under the arc, so a nearly empty ring still reads as a ring rather than as a
+ * stray mark. The arc is recomputed once a second and tweened across it, so a one-minute pause moves
+ * smoothly rather than in six-degree steps.
+ */
+@Composable
+internal fun PauseRing(
+    from: Long,
+    end: Long,
+    color: Color,
+    modifier: Modifier = Modifier,
+    strokeWidth: Dp = 3.dp,
+) {
+    val left by produceState(pauseLeft(System.currentTimeMillis(), from, end), from, end) {
+        while (value > 0f) {
+            delay(1_000L)
+            value = pauseLeft(System.currentTimeMillis(), from, end)
+        }
+    }
+    val shown by animateFloatAsState(left, tween(durationMillis = 1_000, easing = LinearEasing))
+    Canvas(modifier) {
+        val stroke = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
+        val inset = stroke.width / 2
+        val topLeft = Offset(inset, inset)
+        val arcSize = Size(size.width - stroke.width, size.height - stroke.width)
+        drawArc(
+            color.copy(alpha = 0.25f),
+            0f,
+            360f,
+            useCenter = false,
+            topLeft = topLeft,
+            size = arcSize,
+            style = stroke,
+        )
+        drawArc(color, -90f, 360f * shown, useCenter = false, topLeft = topLeft, size = arcSize, style = stroke)
+    }
+}

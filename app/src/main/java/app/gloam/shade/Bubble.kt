@@ -53,6 +53,7 @@ import app.gloam.R
 import app.gloam.data.ThemeMode
 import app.gloam.theme.AppTheme
 import app.gloam.theme.Spacing
+import app.gloam.ui.dim.PauseRing
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -352,7 +353,9 @@ internal class BubbleTouchLayout(
  * The morph is four animated numbers: the gap to each side of the window, and the corner radius on
  * each side. Tucked, the outer gap grows until the shape ends exactly at the display's edge (the
  * window runs on past it), and the outer corners go square. The mark is centred in whatever is left,
- * so it is always in the part that shows.
+ * so it is always in the part that shows. While a pause runs, a ring around the mark empties as it
+ * does — drawn to the pause's own end rather than to a deadline that may cut it short, which only
+ * the service knows and which takes the bubble down with the shade anyway.
  *
  * Kotlin note: `animateDpAsState` is the Compose equivalent of a CSS transition on a value — the
  * composable states the target, and the framework tweens the number it reads on every frame.
@@ -364,8 +367,10 @@ internal fun BubbleContent(
     pressed: StateFlow<Boolean>,
     leaving: StateFlow<Boolean>,
     tucked: StateFlow<BubbleSide?>,
+    pause: StateFlow<PauseSpan?>,
 ) {
     val isPressed by pressed.collectAsStateWithLifecycle()
+    val pauseSpan by pause.collectAsStateWithLifecycle()
     val isLeaving by leaving.collectAsStateWithLifecycle()
     val tuckedSide by tucked.collectAsStateWithLifecycle()
     val resting = if (isPressed) null else tuckedSide
@@ -426,6 +431,15 @@ internal fun BubbleContent(
                     .background(colors.primaryContainer, shape),
             contentAlignment = Alignment.Center,
         ) {
+            pauseSpan?.let {
+                PauseRing(
+                    from = it.from,
+                    end = it.until,
+                    color = colors.onPrimaryContainer,
+                    modifier = Modifier.size(34.dp),
+                    strokeWidth = 2.5.dp,
+                )
+            }
             Icon(
                 painter = painterResource(R.drawable.ic_notification),
                 contentDescription = null,

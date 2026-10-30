@@ -12,13 +12,14 @@ import app.gloam.data.DEFAULT_WARMTH_COLOR
 import app.gloam.data.SavedPreset
 import app.gloam.shade.AutoOff
 import app.gloam.shade.PauseLength
+import app.gloam.shade.PauseSpan
 import app.gloam.shade.Schedule
 import app.gloam.shade.ShadeEnd
 import app.gloam.shade.ShadeStart
 import app.gloam.shade.beginShadeAt
 import app.gloam.shade.endShadeAt
 import app.gloam.shade.shadeOnScreen
-import app.gloam.shade.shadePausedUntil
+import app.gloam.shade.shadePause
 import app.gloam.tip.TIP_ASK_AFTER_STARTS
 import app.gloam.tip.TipJar
 import app.gloam.tip.tipAskDue
@@ -57,7 +58,7 @@ import java.time.LocalTime
  *   that [running] deliberately is not.
  * @param tipAsk what the tip's one-time card is decided from; see [TipAskInputs].
  * @param savedPresets the presets the user named, after the built-in ones.
- * @param pausedUntil when the current pause ends, from [shadePausedUntil]: live state, like [onScreen].
+ * @param pauseSpan the pause under way, from [shadePause]: live state, like [onScreen].
  */
 data class DimUiState(
     val dimLevel: Int = 0,
@@ -72,10 +73,10 @@ data class DimUiState(
     val tipAsk: TipAskInputs = TipAskInputs(),
     val savedPresets: List<SavedPreset> = emptyList(),
     val pauseLength: PauseLength = PauseLength.Default,
-    val pausedUntil: Long? = null,
+    val pauseSpan: PauseSpan? = null,
 ) {
     val pause: PauseUi
-        get() = pauseUi(pauseLength, pausedUntil, offAtMillis)
+        get() = pauseUi(pauseLength, pauseSpan, offAtMillis)
 
     /**
      * **What the Start/Stop button and the deadline line show**: asked for *and* on screen.
@@ -108,7 +109,7 @@ class DimViewModel(
     private val preferences: AppPreferences,
     private val tipJar: TipJar,
     onScreen: Flow<Boolean> = shadeOnScreen,
-    pausedUntil: Flow<Long?> = shadePausedUntil,
+    pauseSpan: Flow<PauseSpan?> = shadePause,
 ) : ViewModel() {
     private val tipAsk: Flow<TipAskInputs> =
         combine(preferences.tipAsked, preferences.shadeStarts, tipJar.offers) { asked, starts, offers ->
@@ -136,7 +137,7 @@ class DimViewModel(
             combine(preferences.warmth, preferences.warmthColor, ::Pair),
             // The intent and the live window paired, because they are the two halves of one
             // question — what the button says — and the arity limit below leaves no sixth slot.
-            combine(preferences.shadeIntent, onScreen, pausedUntil, ::Triple),
+            combine(preferences.shadeIntent, onScreen, pauseSpan, ::Triple),
             // Paired with the tip's inputs only for the arity limit; they share no section.
             combine(preferences.lowerBacklight, tipAsk, preferences.pauseLength, ::Triple),
             // Kotlin note: `combine` is typed for two to five flows, so the rest ride together here
@@ -164,7 +165,7 @@ class DimViewModel(
                 tipAsk = tipAsk,
                 savedPresets = savedPresets,
                 pauseLength = pauseLength,
-                pausedUntil = paused,
+                pauseSpan = paused,
             )
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), DimUiState())
 
