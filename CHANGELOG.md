@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.4.0](https://github.com/maksforge/gloam/compare/v1.3.1...v1.4.0) (2026-10-30)
+
+
+### Features
+
+* leave the bubble when the tile turns the shade on ([879b4c7](https://github.com/maksforge/gloam/commit/879b4c755b12af844ae2372378edc05bd184e06b))
+* say the bubble setting also covers a start from the tile ([9861c32](https://github.com/maksforge/gloam/commit/9861c32482934bd240edf26d16c0fcefcfd94721))
+
+
+### Bug Fixes
+
+* leave no bubble when the tile starts the shade over Gloam ([388b36c](https://github.com/maksforge/gloam/commit/388b36c4f04bf4a61807e9c1e92feacec818f35a))
+
 ## [1.3.1](https://github.com/srednimax/gloam/compare/v1.3.0...v1.3.1) (2026-10-20)
 
 
