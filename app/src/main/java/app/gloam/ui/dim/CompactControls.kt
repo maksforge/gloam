@@ -536,15 +536,14 @@ private fun PauseButton(
         }
         return
     }
-    val remaining = rememberCountdown(end.atMillis)
-    val description = stringResource(R.string.dim_resume_now)
     CompactIconButton(onClick = onResume, selected = true) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.semantics(mergeDescendants = true) { contentDescription = description },
-        ) {
-            Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
-            Text(text = remaining, style = MaterialTheme.typography.labelSmall)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(
+                imageVector = Icons.Default.PlayArrow,
+                contentDescription = stringResource(R.string.dim_resume_now),
+                modifier = Modifier.size(18.dp),
+            )
+            Text(text = rememberCountdown(end.atMillis), style = MaterialTheme.typography.labelSmall)
         }
     }
 }
