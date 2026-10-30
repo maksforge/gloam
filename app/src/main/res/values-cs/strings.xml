@@ -35,7 +35,7 @@
     <string name="dim_pause_other">Jiné…</string>
     <string name="dim_pause_custom_title">Na jak dlouho pozastavit?</string>
     <string name="dim_pause_minutes_label">Minuty</string>
-    <string name="dim_pause_minutes_range">Od %1$d do %2$d minut</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Pozastavit</string>
     <string name="dim_pause_cancel">Zrušit</string>
     <string name="dim_paused_resumes_in">Pozastaveno — ztmavování pokračuje za %1$s</string>

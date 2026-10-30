@@ -34,7 +34,7 @@
     <string name="dim_pause_other">Altro…</string>
     <string name="dim_pause_custom_title">Per quanto mettere in pausa?</string>
     <string name="dim_pause_minutes_label">Minuti</string>
-    <string name="dim_pause_minutes_range">Da %1$d a %2$d minuti</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Metti in pausa</string>
     <string name="dim_pause_cancel">Annulla</string>
     <string name="dim_paused_resumes_in">In pausa — l\'oscuramento riprende tra %1$s</string>

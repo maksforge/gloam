@@ -48,13 +48,14 @@
     <string name="dim_pause">Pause for %1$s</string>
     <string name="dim_pause_label">Pause</string>
     <string name="dim_resume_now">Resume now</string>
-    <!-- The pause chips' last one, Other…, opens a dialog to type any number of minutes; the range
-         line under the field names the limits. dim_pause_custom_confirm starts the pause, so it uses
-         the same verb as dim_pause. -->
+    <!-- The pause chips' last one, Other…, opens a dialog to type any number of minutes. The range
+         line under the field is the limits alone, as 1–120: the field's label already says Minutes,
+         and a noun after %2$d would need a plural. dim_pause_custom_confirm starts the pause, so it
+         uses the same verb as dim_pause. -->
     <string name="dim_pause_other">Other…</string>
     <string name="dim_pause_custom_title">Pause for how long?</string>
     <string name="dim_pause_minutes_label">Minutes</string>
-    <string name="dim_pause_minutes_range">From %1$d to %2$d minutes</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Pause</string>
     <string name="dim_pause_cancel">Cancel</string>
     <!-- %1$s is the time left, formatted by the platform as 4:32. -->

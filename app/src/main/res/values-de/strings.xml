@@ -37,7 +37,7 @@
     <string name="dim_pause_other">Andere…</string>
     <string name="dim_pause_custom_title">Wie lange pausieren?</string>
     <string name="dim_pause_minutes_label">Minuten</string>
-    <string name="dim_pause_minutes_range">Von %1$d bis %2$d Minuten</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Pausieren</string>
     <string name="dim_pause_cancel">Abbrechen</string>
     <string name="dim_paused_resumes_in">Pausiert — Abdunkeln wird in %1$s fortgesetzt</string>

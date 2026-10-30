@@ -24,7 +24,7 @@
     <string name="dim_pause_other">Inne…</string>
     <string name="dim_pause_custom_title">Na jak długo wstrzymać?</string>
     <string name="dim_pause_minutes_label">Minuty</string>
-    <string name="dim_pause_minutes_range">Od %1$d do %2$d minut</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Wstrzymaj</string>
     <string name="dim_pause_cancel">Anuluj</string>
     <string name="dim_paused_resumes_in">Wstrzymane — przyciemnianie zostanie wznowione za %1$s</string>

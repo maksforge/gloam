@@ -37,7 +37,7 @@
     <string name="dim_pause_other">Autre…</string>
     <string name="dim_pause_custom_title">Combien de temps de pause ?</string>
     <string name="dim_pause_minutes_label">Minutes</string>
-    <string name="dim_pause_minutes_range">De %1$d à %2$d minutes</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Mettre en pause</string>
     <string name="dim_pause_cancel">Annuler</string>
     <string name="dim_paused_resumes_in">En pause — l\'assombrissement reprend dans %1$s</string>
