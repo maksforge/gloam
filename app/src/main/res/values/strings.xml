@@ -132,8 +132,8 @@
     <string name="presets_hint">Tap one to set the dim level, warmth and colour from it, then adjust anything above.</string>
 
     <!-- The user's own presets, saved under a name they type, as chips after the three above.
-         "Preset" here is the same thing as the three built-in ones, just named by the user. When none
-         is lit, preset_save sits beside presets_hint as a text button and is also the save dialog's
+         "Preset" here is the same thing as the three built-in ones, just named by the user. preset_save is
+         what screen readers say for the ＋ chip after them (it shows no text) and the save dialog's
          title; when one of the user's own is lit, preset_saved_hint replaces the hint and preset_edit
          opens a dialog to rename or delete it. preset_replace is the save button's label when the
          typed name already belongs to a saved preset. -->

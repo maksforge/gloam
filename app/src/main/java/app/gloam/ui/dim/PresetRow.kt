@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -35,9 +39,10 @@ import app.gloam.data.SavedPreset
 import app.gloam.theme.Spacing
 
 /**
- * The built-in presets, then the user's own, as chips — and **one line under them saying what the lit
- * one is for**, with the action that fits it: *Save as preset* when no chip is lit, *Edit* when one
- * of the user's own is. A long press on one of the user's own opens the same rename/delete dialog
+ * The built-in presets, then the user's own, as chips, and a **＋** chip after them that saves the
+ * current values as a new preset — always there, whatever is lit, so saving is never hidden behind
+ * moving a slider first. Under them, **one line saying what the lit one is for**, with *Edit* beside
+ * it when the lit one is the user's own. A long press on one of the user's own opens the same rename/delete dialog
  * without applying it, so deleting a preset doesn't change the sliders on the way.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
@@ -81,6 +86,10 @@ fun PresetRow(
                     modifier = Modifier.onLongPress(preset.name, editLabel) { editing = preset.name },
                 )
             }
+            AssistChip(
+                onClick = { saving = true },
+                label = { Icon(Icons.Default.Add, contentDescription = stringResource(R.string.preset_save)) },
+            )
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -94,13 +103,8 @@ fun PresetRow(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
             )
-            when {
-                builtIn != null -> Unit
-                saved != null ->
-                    TextButton(
-                        onClick = { editing = saved.name },
-                    ) { Text(stringResource(R.string.preset_edit)) }
-                else -> TextButton(onClick = { saving = true }) { Text(stringResource(R.string.preset_save)) }
+            if (saved != null) {
+                TextButton(onClick = { editing = saved.name }) { Text(stringResource(R.string.preset_edit)) }
             }
         }
     }
