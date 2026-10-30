@@ -534,7 +534,7 @@ private fun PauseButton(
         CompactIconButton(onClick = { onPause(pause.length) }, selected = false, enabled = running) {
             Icon(
                 painter = painterResource(R.drawable.ic_pause),
-                contentDescription = stringResource(R.string.dim_pause, stringResource(pause.length.labelRes())),
+                contentDescription = stringResource(R.string.dim_pause, pauseLengthLabel(pause.length)),
             )
         }
         return

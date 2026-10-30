@@ -44,16 +44,23 @@
     <string name="dim_column_floor">FLOOR</string>
     <string name="dim_start">Start dimming</string>
     <string name="dim_stop">Stop dimming</string>
-    <!-- %1$s is one of the pause_length_* strings. -->
+    <!-- %1$s is pause_length_minutes. -->
     <string name="dim_pause">Pause for %1$s</string>
     <string name="dim_pause_label">Pause</string>
     <string name="dim_resume_now">Resume now</string>
+    <!-- The pause chips' last one, Other…, opens a dialog to type any number of minutes; the range
+         line under the field names the limits. dim_pause_custom_confirm starts the pause, so it uses
+         the same verb as dim_pause. -->
+    <string name="dim_pause_other">Other…</string>
+    <string name="dim_pause_custom_title">Pause for how long?</string>
+    <string name="dim_pause_minutes_label">Minutes</string>
+    <string name="dim_pause_minutes_range">From %1$d to %2$d minutes</string>
+    <string name="dim_pause_custom_confirm">Pause</string>
+    <string name="dim_pause_cancel">Cancel</string>
     <!-- %1$s is the time left, formatted by the platform as 4:32. -->
     <string name="dim_paused_resumes_in">Paused — dimming resumes in %1$s</string>
     <string name="dim_paused_ends_in">Paused — dimming turns off in %1$s</string>
-    <string name="pause_length_1m">1 min</string>
-    <string name="pause_length_5m">5 min</string>
-    <string name="pause_length_15m">15 min</string>
+    <string name="pause_length_minutes">%1$d min</string>
     <string name="dim_permission_title">Gloam needs permission to draw over other apps</string>
     <string name="dim_permission_body">The shade is a layer on top of whatever is on screen, so Android asks you to allow it explicitly. Gloam reads nothing about the apps underneath. When you start dimming it will also ask to show a notification — that notification is how you stop Gloam from anywhere.</string>
     <string name="dim_permission_grant">Open settings</string>

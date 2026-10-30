@@ -8,16 +8,23 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -29,6 +36,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.gloam.R
@@ -104,6 +112,7 @@ private fun PauseChips(
     onPause: (PauseLength) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var choosing by rememberSaveable { mutableStateOf(false) }
     FlowRow(
         horizontalArrangement = Arrangement.spacedBy(Spacing.tight),
         itemVerticalAlignment = Alignment.CenterVertically,
@@ -121,22 +130,89 @@ private fun PauseChips(
                 modifier = Modifier.padding(start = Spacing.tight),
             )
         }
-        for (length in PauseLength.entries) {
+        // The remembered length gets a chip of its own when it is not a preset, so a length the user
+        // typed is one tap away the next time, the way the presets are.
+        val lengths = if (remembered in PauseLength.Presets) PauseLength.Presets else PauseLength.Presets + remembered
+        for (length in lengths) {
             // "Pause for 5 min" rather than the chip's bare "5 min", which says nothing on its own.
-            val description = stringResource(R.string.dim_pause, stringResource(length.labelRes()))
+            val label = pauseLengthLabel(length)
+            val description = stringResource(R.string.dim_pause, label)
             FilterChip(
                 selected = length == remembered,
                 onClick = { onPause(length) },
                 // On the label rather than the chip, so it merges into the chip's own node.
                 label = {
                     Text(
-                        text = stringResource(length.labelRes()),
+                        text = label,
                         modifier = Modifier.semantics { contentDescription = description },
                     )
                 },
             )
         }
+        FilterChip(
+            selected = false,
+            onClick = { choosing = true },
+            label = { Text(stringResource(R.string.dim_pause_other)) },
+        )
     }
+
+    if (choosing) {
+        PauseLengthDialog(
+            initial = remembered,
+            onConfirm = { length ->
+                choosing = false
+                onPause(length)
+            },
+            onDismiss = { choosing = false },
+        )
+    }
+}
+
+/**
+ * Any whole number of minutes in [PauseLength.MIN_MINUTES]..[PauseLength.MAX_MINUTES], typed. The
+ * field takes digits only, and the confirm button stays off until the number is in range, so the
+ * clamp in [PauseLength.ofMinutes] is a backstop rather than a silent correction.
+ */
+@Composable
+private fun PauseLengthDialog(
+    initial: PauseLength,
+    onConfirm: (PauseLength) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var text by rememberSaveable { mutableStateOf(initial.minutes.toString()) }
+    val minutes = text.toIntOrNull()
+    val valid = minutes != null && minutes in PauseLength.MIN_MINUTES..PauseLength.MAX_MINUTES
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.dim_pause_custom_title)) },
+        text = {
+            OutlinedTextField(
+                value = text,
+                onValueChange = { typed -> text = typed.filter(Char::isDigit).take(3) },
+                label = { Text(stringResource(R.string.dim_pause_minutes_label)) },
+                supportingText = {
+                    Text(
+                        stringResource(
+                            R.string.dim_pause_minutes_range,
+                            PauseLength.MIN_MINUTES,
+                            PauseLength.MAX_MINUTES,
+                        ),
+                    )
+                },
+                isError = text.isNotEmpty() && !valid,
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+            )
+        },
+        confirmButton = {
+            TextButton(onClick = { minutes?.let { onConfirm(PauseLength.ofMinutes(it)) } }, enabled = valid) {
+                Text(stringResource(R.string.dim_pause_custom_confirm))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.dim_pause_cancel)) }
+        },
+    )
 }
 
 private fun PauseEnd.textRes(): Int = if (resumes) R.string.dim_paused_resumes_in else R.string.dim_paused_ends_in
@@ -166,12 +242,9 @@ internal fun rememberCountdown(untilMillis: Long): String {
 private fun secondsLeft(untilMillis: Long): Long =
     ((untilMillis - System.currentTimeMillis() + 999L) / 1_000L).coerceAtLeast(0L)
 
-internal fun PauseLength.labelRes(): Int =
-    when (this) {
-        PauseLength.Minute1 -> R.string.pause_length_1m
-        PauseLength.Minutes5 -> R.string.pause_length_5m
-        PauseLength.Minutes15 -> R.string.pause_length_15m
-    }
+@Composable
+internal fun pauseLengthLabel(length: PauseLength): String =
+    stringResource(R.string.pause_length_minutes, length.minutes)
 
 /**
  * The share of a pause still left, as a ring that empties clockwise from the top — the bubble's and
