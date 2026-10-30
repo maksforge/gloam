@@ -60,7 +60,8 @@ internal fun autoOffLabel(choice: AutoOff): String {
  * so "45 minutes" needs no 0 typed in front of it.
  *
  * It opens on the current choice — or the default, when that is *Never* — with the hours focused and
- * selected, so the first digit typed replaces them, as `PauseLengthDialog` does.
+ * both fields selected, so the first digit typed into either replaces it, as `PauseLengthDialog`
+ * does.
  */
 @Composable
 internal fun AutoOffLengthDialog(
@@ -73,11 +74,10 @@ internal fun AutoOffLengthDialog(
     // keeps both across a rotation, and LaunchedEffect(Unit) runs once per showing, like
     // useEffect(..., []).
     var hours by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        val text = (start.minutes / MINUTES_PER_HOUR).toString()
-        mutableStateOf(TextFieldValue(text, selection = TextRange(0, text.length)))
+        mutableStateOf(selectedAll(start.minutes / MINUTES_PER_HOUR))
     }
     var minutes by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-        mutableStateOf(TextFieldValue((start.minutes % MINUTES_PER_HOUR).toString()))
+        mutableStateOf(selectedAll(start.minutes % MINUTES_PER_HOUR))
     }
     val focus = remember { FocusRequester() }
     LaunchedEffect(Unit) { focus.requestFocus() }
@@ -155,6 +155,11 @@ internal fun AutoOffLengthDialog(
             TextButton(onClick = onDismiss) { Text(stringResource(R.string.dim_auto_off_cancel)) }
         },
     )
+}
+
+private fun selectedAll(value: Int): TextFieldValue {
+    val text = value.toString()
+    return TextFieldValue(text, selection = TextRange(0, text.length))
 }
 
 private fun digitsOnly(typed: TextFieldValue): TextFieldValue {
