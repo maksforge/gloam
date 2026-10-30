@@ -29,11 +29,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.gloam.R
 import app.gloam.data.ThemeMode
+import app.gloam.shade.PauseLength
 import app.gloam.shade.requestAddShadeTile
 import app.gloam.theme.Spacing
 import app.gloam.ui.appViewModelExtras
 import app.gloam.ui.common.SectionHeader
 import app.gloam.ui.common.SwitchRow
+import app.gloam.ui.dim.labelRes
 import app.gloam.ui.support.SupportRequest
 import app.gloam.ui.support.hintRes
 import app.gloam.ui.support.sendSupportMail
@@ -89,6 +91,24 @@ fun SettingsScreen(
             )
 
             QuickTileRow()
+
+            SectionHeader(stringResource(R.string.settings_pause))
+            Text(
+                text = stringResource(R.string.settings_pause_body),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = Spacing.base),
+            )
+            Row(modifier = Modifier.padding(horizontal = Spacing.base, vertical = Spacing.tight)) {
+                for (length in PauseLength.entries) {
+                    FilterChip(
+                        selected = state.pauseLength == length,
+                        onClick = { viewModel.setPauseLength(length) },
+                        label = { Text(stringResource(length.labelRes())) },
+                        modifier = Modifier.padding(end = Spacing.tight),
+                    )
+                }
+            }
 
             // Advice rather than a control, because the platform leaves nothing to control: the
             // keyguard hides every `TYPE_APPLICATION_OVERLAY` window, which releases the shade's

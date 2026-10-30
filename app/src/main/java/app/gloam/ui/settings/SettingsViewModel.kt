@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import app.gloam.MainApplication
 import app.gloam.data.AppPreferences
 import app.gloam.data.ThemeMode
+import app.gloam.shade.PauseLength
 import app.gloam.theme.applyThemeMode
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +21,7 @@ data class SettingsUiState(
     val themeMode: ThemeMode = ThemeMode.DARK,
     val launcherCompact: Boolean = true,
     val controlsBubble: Boolean = true,
+    val pauseLength: PauseLength = PauseLength.Default,
 )
 
 class SettingsViewModel(
@@ -30,8 +32,9 @@ class SettingsViewModel(
             preferences.themeMode,
             preferences.launcherCompact,
             preferences.controlsBubble,
-        ) { theme, launcherCompact, controlsBubble ->
-            SettingsUiState(theme, launcherCompact, controlsBubble)
+            preferences.pauseLength,
+        ) { theme, launcherCompact, controlsBubble, pauseLength ->
+            SettingsUiState(theme, launcherCompact, controlsBubble, pauseLength)
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), SettingsUiState())
 
     /**
@@ -59,6 +62,10 @@ class SettingsViewModel(
 
     fun setControlsBubble(enabled: Boolean) {
         viewModelScope.launch { preferences.setControlsBubble(enabled) }
+    }
+
+    fun setPauseLength(length: PauseLength) {
+        viewModelScope.launch { preferences.setPauseLength(length) }
     }
 
     companion object {

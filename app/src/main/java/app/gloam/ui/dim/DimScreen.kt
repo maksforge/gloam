@@ -38,7 +38,9 @@ import app.gloam.shade.ShadeEnd
 import app.gloam.shade.canDrawShade
 import app.gloam.shade.escapeHatchLive
 import app.gloam.shade.isDue
+import app.gloam.shade.pauseShade
 import app.gloam.shade.readBacklightTop
+import app.gloam.shade.resumeShade
 import app.gloam.shade.shadePermissionIntent
 import app.gloam.shade.startShade
 import app.gloam.shade.stopShade
@@ -331,6 +333,7 @@ fun DimScreen(
                 // to say so. Start from there re-asks for what was already stored, which is a fresh
                 // deadline from now — the same as any other Start.
                 running = state.shadeUp,
+                pause = state.pause,
                 onDimLevel = viewModel::setDimLevel,
                 onWarmth = viewModel::setWarmth,
                 onWarmthColor = viewModel::setWarmthColor,
@@ -345,6 +348,8 @@ fun DimScreen(
                 // A preset is "turn on reading", not "move the sliders to reading's numbers", so it
                 // starts a shade that is down. One that is already up just follows the new values,
                 // because the service collects them — restarting it would re-set the deadline.
+                onPause = ::pauseShade,
+                onResume = ::resumeShade,
                 onPreset = { preset ->
                     viewModel.applyPreset(preset)
                     if (!state.shadeUp) startOrAsk()
