@@ -6,8 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "if": "Bash(git push*)",
-            "command": "cwd=$(python3 -c 'import json, re, sys; i = json.load(sys.stdin); c = i.get(\"tool_input\", {}).get(\"command\", \"\"); print(i.get(\"cwd\") or \".\") if re.search(r\"\\bgit\\b(\\s+-C\\s+\\S+)?\\s+push\\b\", c) else sys.exit(1)') || exit 0; root=$(git -C \"$cwd\" rev-parse --show-toplevel 2>/dev/null) || root=\"$CLAUDE_PROJECT_DIR\"; git -C \"$root\" fetch -q origin main 2>/dev/null; python3 \"$root/scripts/notes-gate.py\" --pending",
+            "command": "hook=\"$CLAUDE_PROJECT_DIR/scripts/push-notes-hook.py\"; [ -f \"$hook\" ] || exit 0; exec python3 \"$hook\"",
             "timeout": 30,
             "statusMessage": "Checking the next release has its notes"
           }
