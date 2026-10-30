@@ -1,5 +1,49 @@
 # Changelog
 
+## [1.5.0](https://github.com/maksforge/gloam/compare/v1.4.0...v1.5.0) (2026-10-30)
+
+
+### Features
+
+* add Restore to default in Settings ([1b7393e](https://github.com/maksforge/gloam/commit/1b7393eb547bd44d374702072e6320a800f9829c))
+* ask before deleting a preset, and say how a built-in comes back ([ffec946](https://github.com/maksforge/gloam/commit/ffec9469e858db99e7cf4ec67fe3026b8b556f30))
+* make every preset editable, built-ins included, and keep presets unique ([7cf3b04](https://github.com/maksforge/gloam/commit/7cf3b040c308b796954c5dfc1c5dfc56e47b1b0c))
+* pause dimming for a few minutes and restore it on its own ([0e792b4](https://github.com/maksforge/gloam/commit/0e792b473a9c9de4c9250cc50ff130e860e86ee8))
+* pause for a length of your own under Other… ([a32a5c9](https://github.com/maksforge/gloam/commit/a32a5c91980b61dee456c87056faffd81832c624))
+* pick the pause length on the full screen's chips ([103df8d](https://github.com/maksforge/gloam/commit/103df8d2538ac7a15327a71b2ee042831a702383))
+* save your own presets under a name ([c1192a4](https://github.com/maksforge/gloam/commit/c1192a460c15550734237df1de3bf4e06ea401fd))
+* show the auto-off time left as a ring on the bubble ([73d793a](https://github.com/maksforge/gloam/commit/73d793a8db8611541d9b5a82aca219dff231b5c6))
+* show the time a pause has left as a ring on the bubble and the compact button ([22db5b5](https://github.com/maksforge/gloam/commit/22db5b5c07f41a7aa6d556ef74af4190c8efe702))
+* touch and hold your own preset to rename or delete it ([e2ce1ef](https://github.com/maksforge/gloam/commit/e2ce1efea9a474ab2bd988cd8712ed8da576d22d))
+* type a custom auto-off length under Other… ([5a2c903](https://github.com/maksforge/gloam/commit/5a2c9035fc861a5886b6053d215ed4207623b9a2))
+
+
+### Bug Fixes
+
+* bound the compact warmth section by the bar in layout rather than by a label estimate ([9f895ae](https://github.com/maksforge/gloam/commit/9f895ae93a6ad3f0ae7dff3cdbb42e9ec40cce69))
+* drain the bubble's pause ring to the deadline, as the compact button does ([b867525](https://github.com/maksforge/gloam/commit/b867525501d170c914fcbe4a3da3f1738195c33b))
+* drop the unreleased saved_presets read and list the keys Restore keeps ([94abc72](https://github.com/maksforge/gloam/commit/94abc729770c3876c8172cb0f6167e54e6dc4531))
+* end a pause when the warmth colour changes ([5a8f0fb](https://github.com/maksforge/gloam/commit/5a8f0fb0d1c9668fd6ac5fabf298e661def4f0cc))
+* gate only git push on owed release notes, not every shell command ([ed1988a](https://github.com/maksforge/gloam/commit/ed1988a3f06ade64822fa68871c0f32d51869263))
+* keep a ＋ chip after the presets so saving one is never hidden ([a8d6973](https://github.com/maksforge/gloam/commit/a8d6973eb658e255aca496cb35a7bcb057c4a811))
+* keep the panel's close button on a short landscape display ([2dae826](https://github.com/maksforge/gloam/commit/2dae826cf00cb1e3e9fdb3aff97817e8a4b0f8a3))
+* keep the Spanish and Polish preset word apart from Settings ([22b568e](https://github.com/maksforge/gloam/commit/22b568e66ae80dc3d26fd4a7f891bd8ebcce1304))
+* keep the timer chips still under the finger and bound the section by the bar ([c54593e](https://github.com/maksforge/gloam/commit/c54593efefd1a5d71fee00d8506cd7ce155ab8b5))
+* let a preset set the controls without starting the shade ([19365df](https://github.com/maksforge/gloam/commit/19365dfb1b39b696939eba505fa291f71ddeaefc))
+* let TalkBack read Resume now on the compact pause button ([10eb936](https://github.com/maksforge/gloam/commit/10eb936399a1a2a086e495f46f596a51ab38232f))
+* light every preset chip whose values match, so one saved from a lit chip lights too ([956a555](https://github.com/maksforge/gloam/commit/956a5551778806bd6c566fd6611bc84cfd02cc6c))
+* lose only the unreadable row when saved presets decode ([b1390a3](https://github.com/maksforge/gloam/commit/b1390a319b5f7697f1844f3b89133b78fd611c6f))
+* merge each pause chip's spoken name into the chip ([7d7fe08](https://github.com/maksforge/gloam/commit/7d7fe08b9273a13e227e84dcab025dcc9df1b1eb))
+* name the colour in the presets hint, since a preset sets it too ([85c36b5](https://github.com/maksforge/gloam/commit/85c36b509b487bc7dcfdf2005f8020ef729c93af))
+* name the pause range as bare numbers, with no count-dependent noun ([69bcf29](https://github.com/maksforge/gloam/commit/69bcf29792c2b14d0d4e617dc6319e6366f99928))
+* open the auto-off minutes field selected, so typing after Next replaces it ([fd29e0c](https://github.com/maksforge/gloam/commit/fd29e0c5be9c80be39f08f952ccc7160b30a38cd))
+* open the pause dialog focused with its number selected, and confirm on Done ([687fcc5](https://github.com/maksforge/gloam/commit/687fcc50f3dfe6701414b2b24bf6c203f28452df))
+* redraw the pause ring once per degree and empty it clockwise ([2af5422](https://github.com/maksforge/gloam/commit/2af542236840be8ad0c524948d4517b9be3b3411))
+* say resume with one verb per language ([4f9a2d4](https://github.com/maksforge/gloam/commit/4f9a2d468011954180757fe6c9227c395d0ba248))
+* say the pause resumes, not resumed, in Brazilian Portuguese ([5c9427a](https://github.com/maksforge/gloam/commit/5c9427a5dd53df594f235daa7f38bd6a5b980f7e))
+* scroll the lit timer chip into view and test the section bound in the height sweep ([0cc849d](https://github.com/maksforge/gloam/commit/0cc849d0705fb1685a2f1ffbe3ff44914f69d7c1))
+* shorten the compact warmth column beside a shrunk bar instead of pushing the buttons off ([7cc8c61](https://github.com/maksforge/gloam/commit/7cc8c613423690b4485382a1bf4ea8ddbfb20500))
+
 ## [1.4.0](https://github.com/maksforge/gloam/compare/v1.3.1...v1.4.0) (2026-10-30)
 
 
