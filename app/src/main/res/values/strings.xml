@@ -119,8 +119,8 @@
     <string name="dim_warmth_color_label">Colour</string>
 
     <!-- The presets: three chips under Warmth, each setting the dim level, warmth and colour at once.
-         A tap never starts the shade; only Start dimming does. Labels are the situation, not the setting — short, they sit side by
-         side in one row. The line under the chips is the hint of whichever is lit, and presets_hint
+         A tap never starts the shade, and a shade already up follows the new values. Labels are the
+         situation, not the setting — short, they sit side by side in one row. The line under the chips is the hint of whichever is lit, and presets_hint
          when none is (the user has moved a control off every preset). Describe the look only:
          nothing about sleep, eyes or blue light (translator brief §2.2). -->
     <string name="preset_reading">Reading</string>
@@ -129,7 +129,7 @@
     <string name="preset_evening_hint">Lightly dimmed and strongly warm, for the hours before the lights go off.</string>
     <string name="preset_in_bed">In bed</string>
     <string name="preset_in_bed_hint">Nearly dark and deep red, for a room with the lights off.</string>
-    <string name="presets_hint">Tap one to set the dim level and warmth from it, then adjust anything above.</string>
+    <string name="presets_hint">Tap one to set the dim level, warmth and colour from it, then adjust anything above.</string>
 
     <!-- The user's own presets, saved under a name they type, as chips after the three above.
          "Preset" here is the same thing as the three built-in ones, just named by the user. When none
