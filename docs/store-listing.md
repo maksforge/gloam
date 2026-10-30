@@ -1577,61 +1577,62 @@ Novidade: ligar a camada pelo bloco das configurações rápidas agora também d
 Saved presets come first, with the button named by its label and two room names as the example
 because that is how they were asked for. Then the behaviour change: a preset tap no longer starts
 dimming, which 1.1.0's note promised it did, so the note says so in one sentence. The pause follows:
-the section label, the three lengths, and *Other…* as the way to add a length (it adds a chip; it
-does not start a pause), then what the shade does and the ring. The built-in presets are not named,
-which keeps every language clear of an uninflectable label after a preposition (brief §6.3), and
-"stays on your phone" is dropped to fit 500 in French.
+the section label and the three lengths, with the shade stepping aside tied to tapping one, then the
+ring. *Other…* comes last, in a sentence of its own, because it adds a length rather than starting a
+pause. The built-in presets are not named, and no label sits where its
+language would have to inflect it (brief §6.3). "Stays on your phone" is dropped to fit 500 in
+German and French.
 
-**English** — 412/500:
-
-```
-New: your own presets. Set the dim level, warmth and colour the way you like, tap Save as preset and name it, such as Living room or Bedroom. Touch and hold it to rename or delete it. Tapping a preset no longer starts dimming. Also new: a pause. Under Pause, tap 1, 5 or 15 min, or add your own length with Other…; the shade steps aside and comes back on its own, and a ring on the bubble shows how much is left.
-```
-
-**Polish** — 452/500:
+**English** — 411/500:
 
 ```
-Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień tak, jak lubisz, dotknij Zapisz jako zestaw i nadaj mu nazwę, na przykład Salon albo Sypialnia. Przytrzymaj go, aby zmienić nazwę albo go usunąć. Dotknięcie zestawu nie włącza już przyciemniania. Nowe jest też wstrzymanie: w sekcji Wstrzymanie dotknij 1, 5 albo 15 min lub dodaj własny czas przez Inne…; zasłona zniknie i sama wróci, a pierścień na bańce pokazuje, ile zostało.
+New: your own presets. Set the dim level, warmth and colour the way you like, tap Save as preset and name it, such as Living room or Bedroom. Touch and hold it to rename or delete it. Tapping a preset no longer starts dimming. Also new: a pause. Under Pause, tap 1, 5 or 15 min and the shade steps aside, then comes back on its own; a ring on the bubble shows how much is left. Other… adds a length of your own.
 ```
 
-**Czech** — 428/500:
+**Polish** — 447/500:
 
 ```
-Novinka: vlastní předvolby. Nastav si úroveň ztmavení, teplo barvy a odstín podle sebe, klepni na Uložit jako předvolbu a pojmenuj ji, třeba Obývák nebo Ložnice. Podržením ji přejmenuješ nebo smažeš. Klepnutí na předvolbu už nezapne ztmavení. Nově také pozastavení: v části Pozastavení klepni na 1, 5 nebo 15 min, nebo si vlastní délku přidej volbou Jiné…; závoj ustoupí a sám se vrátí a kroužek na bublině ukazuje, kolik zbývá.
+Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień tak, jak lubisz, dotknij Zapisz jako zestaw i nadaj mu nazwę, na przykład Salon albo Sypialnia. Przytrzymaj go, aby zmienić nazwę albo go usunąć. Dotknięcie zestawu nie włącza już przyciemniania. Nowe jest też wstrzymanie: w sekcji Wstrzymanie dotknij 1, 5 albo 15 min, a zasłona zniknie i sama wróci; pierścień na bańce pokazuje, ile zostało. Inne… dodaje własną długość.
 ```
 
-**German** — 494/500:
+**Czech** — 415/500:
 
 ```
-Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe so ein, wie du sie magst, tippe auf Als Vorgabe speichern und gib ihr einen Namen, etwa Wohnzimmer oder Schlafzimmer. Halte sie gedrückt, um sie umzubenennen oder zu löschen. Eine Vorgabe startet das Abdunkeln nicht mehr. Außerdem neu: eine Pause. Tippe unter Pause auf 1, 5 oder 15 Min. oder füge mit Andere… eine eigene Dauer hinzu; die Schicht tritt beiseite und kommt von selbst zurück, ein Ring an der Blase zeigt die Restzeit.
+Novinka: vlastní předvolby. Nastav si úroveň ztmavení, teplo barvy a odstín podle sebe, klepni na Uložit jako předvolbu a pojmenuj ji, třeba Obývák nebo Ložnice. Podržením ji přejmenuješ nebo smažeš. Klepnutí na předvolbu už nezapne ztmavení. Nově také pozastavení: v části Pozastavení klepni na 1, 5 nebo 15 min a závoj ustoupí, pak se sám vrátí; kroužek na bublině ukazuje, kolik zbývá. Jiné… přidá vlastní délku.
 ```
 
-**Spanish** — 436/500:
+**German** — 500/500:
 
 ```
-Novedad: tus propios preajustes. Pon el nivel de atenuación, la calidez y el color a tu gusto, toca Guardar como preajuste y ponle un nombre, como Salón o Dormitorio. Mantenlo pulsado para cambiarle el nombre o eliminarlo. Tocar un preajuste ya no empieza a atenuar. También hay una pausa: en Pausa, toca 1, 5 o 15 min, o añade tu propio tiempo con Otro…; la capa se aparta y vuelve sola, y un anillo en la burbuja muestra cuánto queda.
+Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe so ein, wie du sie magst, tippe auf Als Vorgabe speichern und gib ihr einen Namen, etwa Wohnzimmer oder Schlafzimmer. Halte sie gedrückt, um sie umzubenennen oder zu löschen. Eine Vorgabe startet das Abdunkeln nicht mehr. Außerdem neu: eine Pause. Tippe unter Pause auf 1, 5 oder 15 Min., dann tritt die Schicht beiseite und kommt von selbst zurück; ein Ring an der Blase zeigt die Restzeit. Über Andere… fügst du eine eigene Dauer hinzu.
 ```
 
-**French** — 488/500:
+**Spanish** — 437/500:
 
 ```
-Nouveau : vos propres préréglages. Réglez le niveau d'assombrissement, la chaleur et la couleur à votre goût, touchez Enregistrer comme préréglage et nommez-le, par exemple Salon ou Chambre. Appuyez longuement dessus pour le renommer ou le supprimer. Un préréglage ne lance plus l'assombrissement. Autre nouveauté : une pause. Sous Pause, touchez 1, 5 ou 15 min, ou ajoutez votre durée avec Autre… ; le voile s'efface puis revient seul, et un anneau sur la bulle indique le temps restant.
+Novedad: tus propios preajustes. Pon el nivel de atenuación, la calidez y el color a tu gusto, toca Guardar como preajuste y ponle un nombre, como Salón o Dormitorio. Mantenlo pulsado para cambiarle el nombre o eliminarlo. Tocar un preajuste ya no empieza a atenuar. También hay una pausa: en Pausa, toca 1, 5 o 15 min y la capa se aparta, luego vuelve sola; un anillo en la burbuja muestra cuánto queda. Otro… añade una duración propia.
 ```
 
-**Italian** — 476/500:
+**French** — 486/500:
 
 ```
-Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e il colore come preferisci, tocca Salva come preimpostazione e dalle un nome, per esempio Soggiorno o Camera da letto. Tienila premuta per rinominarla o eliminarla. Toccare una preimpostazione non avvia più l'oscuramento. Nuova anche la pausa: sotto Pausa tocca 1, 5 o 15 min, o aggiungi una durata tua con Altro…; il velo si fa da parte e torna da solo, e un anello sulla bolla mostra quanto manca.
+Nouveau : vos propres préréglages. Réglez le niveau d'assombrissement, la chaleur et la couleur à votre goût, touchez Enregistrer comme préréglage et nommez-le, par exemple Salon ou Chambre. Appuyez longuement dessus pour le renommer ou le supprimer. Un préréglage ne lance plus l'assombrissement. Autre nouveauté : une pause. Sous Pause, touchez 1, 5 ou 15 min et le voile s'efface, puis revient seul ; un anneau sur la bulle indique le temps restant. Autre… ajoute votre propre durée.
 ```
 
-**Brazilian Portuguese** — 449/500:
+**Italian** — 467/500:
 
 ```
-Novidade: suas próprias predefinições. Ajuste o nível de escurecimento, a calidez e a cor do seu jeito, toque em Salvar como predefinição e dê um nome a ela, como Sala ou Quarto. Toque e segure para renomear ou excluir. Tocar numa predefinição não começa mais a escurecer. Também há uma pausa: em Pausa, toque em 1, 5 ou 15 min, ou adicione seu próprio tempo em Outro…; a camada sai da frente e volta sozinha, e um anel na bolha mostra quanto falta.
+Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e il colore come preferisci, tocca Salva come preimpostazione e dalle un nome, per esempio Soggiorno o Camera da letto. Tienila premuta per rinominarla o eliminarla. Toccare una preimpostazione non avvia più l'oscuramento. Nuova anche la pausa: sotto Pausa tocca 1, 5 o 15 min e il velo si scosta, poi torna da solo; un anello sulla bolla mostra quanto manca. Altro… aggiunge una durata tua.
+```
+
+**Brazilian Portuguese** — 446/500:
+
+```
+Novidade: suas próprias predefinições. Ajuste o nível de escurecimento, a calidez e a cor do seu jeito, toque em Salvar como predefinição e dê um nome a ela, como Sala ou Quarto. Toque e segure para renomear ou excluir. Tocar numa predefinição não começa mais a escurecer. Também há uma pausa: em Pausa, toque em 1, 5 ou 15 min e a camada sai da frente, depois volta sozinha; um anel na bolha mostra quanto falta. Outro… adiciona uma duração sua.
 ```
 
 **Ukrainian** — 438/500:
 
 ```
-Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок так, як тобі подобається, торкнися Зберегти як набір і дай йому назву, наприклад Вітальня чи Спальня. Утримуй його, щоб перейменувати чи видалити. Дотик до набору більше не вмикає затемнення. А ще пауза: у розділі Пауза торкнися 1, 5 або 15 хв або додай свій час через Інше…; запона відступить, а потім повернеться сама, і кільце на бульбашці показує, скільки лишилося.
+Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок так, як тобі подобається, торкнися Зберегти як набір і дай йому назву, наприклад Вітальня чи Спальня. Утримуй його, щоб перейменувати чи видалити. Дотик до набору більше не вмикає затемнення. А ще пауза: у розділі Пауза торкнися 1, 5 або 15 хв, і запона відступить, а потім повернеться сама; кільце на бульбашці показує, скільки лишилося. Інше… додає власну тривалість.
 ```
