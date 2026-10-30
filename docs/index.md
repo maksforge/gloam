@@ -40,7 +40,7 @@ in a properly dark room. Gloam is the range underneath it.
 - **Warms the screen.** A separate control tints the shade, and a second bar picks the tint, from
   amber to deep red. The tint eases off on its own as the dim level nears its darkest, so the
   controls together always leave something readable underneath.
-- **Starts from a preset.** *Reading*, *Evening* and *In bed* each set the dim level, the warmth
+- **Sets everything from a preset.** *Reading*, *Evening* and *In bed* each set the dim level, the warmth
   and its colour in one tap, with a line saying what each is for. Move any control afterwards and
   you are simply on your own settings.
 - **Brings the controls to where you are.** Tap the ongoing notification and a small panel opens
