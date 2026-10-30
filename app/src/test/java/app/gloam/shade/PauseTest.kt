@@ -13,10 +13,11 @@ import org.junit.Test
 class PauseTest {
     private val now = 1_800_000_000_000L
     private val minute = 60_000L
+    private val swept = PauseLength.Presets + PauseLength.ofMinutes(PauseLength.MAX_MINUTES)
 
     @Test
     fun `a pause ends no later than the deadline, and resumes only when the deadline is past it`() {
-        for (length in PauseLength.Presets) {
+        for (length in swept) {
             val until = pausedUntilFrom(now, length)
             assertEquals(now + length.minutes * minute, until)
             for (offsetSeconds in -60..(length.minutes * 60 + 60)) {
@@ -31,7 +32,7 @@ class PauseTest {
 
     @Test
     fun `with no deadline a pause always resumes when it runs out`() {
-        for (length in PauseLength.Presets) {
+        for (length in swept) {
             val until = pausedUntilFrom(now, length)
             assertEquals(PauseEnd(atMillis = until, resumes = true), pauseEnd(until, null))
         }
