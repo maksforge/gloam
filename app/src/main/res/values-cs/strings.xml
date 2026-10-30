@@ -68,7 +68,7 @@
     <string name="preset_in_bed_hint">Skoro tma a sytě červená, pro pokoj se zhasnutým světlem.</string>
     <string name="presets_hint">Klepnutím na jednu začneš ztmavovat od ní, pak můžeš upravit cokoli nad tím.</string>
 
-    <string name="preset_saved_hint">Tvoje vlastní předvolba. Klepnutím se k tomuto nastavení kdykoli vrátíš.</string>
+    <string name="preset_saved_hint">Tvoje vlastní předvolba. Podržením kterékoli své ji přejmenuješ nebo smažeš.</string>
     <string name="preset_save">Uložit jako předvolbu</string>
     <string name="preset_save_body">Uloží aktuální úroveň ztmavení, teplo barvy a odstín pod názvem, který si zvolíš.</string>
     <string name="preset_name_label">Název</string>

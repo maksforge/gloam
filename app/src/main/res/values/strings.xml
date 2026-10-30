@@ -119,7 +119,7 @@
          title; when one of the user's own is lit, preset_saved_hint replaces the hint and preset_edit
          opens a dialog to rename or delete it. preset_replace is the save button's label when the
          typed name already belongs to a saved preset. -->
-    <string name="preset_saved_hint">Your own preset. Tap it any time to come back to these settings.</string>
+    <string name="preset_saved_hint">Your own preset. Touch and hold any of yours to rename or delete it.</string>
     <string name="preset_save">Save as preset</string>
     <string name="preset_save_body">Saves the current dim level, warmth and colour under a name of your own.</string>
     <string name="preset_name_label">Name</string>

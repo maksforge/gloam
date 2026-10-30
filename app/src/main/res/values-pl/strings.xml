@@ -57,7 +57,7 @@
     <string name="preset_in_bed_hint">Prawie ciemno i głęboka czerwień, do pokoju ze zgaszonym światłem.</string>
     <string name="presets_hint">Dotknij jednego, aby od niego zacząć przyciemnianie, a potem dostosuj wszystko powyżej.</string>
 
-    <string name="preset_saved_hint">Twój własny zestaw. Dotknij go w dowolnej chwili, aby wrócić do tych wartości.</string>
+    <string name="preset_saved_hint">Twój własny zestaw. Przytrzymaj dowolny ze swoich, aby zmienić jego nazwę albo go usunąć.</string>
     <string name="preset_save">Zapisz jako zestaw</string>
     <string name="preset_save_body">Zapisuje obecny poziom przyciemnienia, ciepło barwy i odcień pod wybraną przez ciebie nazwą.</string>
     <string name="preset_name_label">Nazwa</string>
