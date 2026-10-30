@@ -1570,3 +1570,64 @@ Novidade: ligar a camada pelo bloco das configurações rápidas agora também d
 ```
 Нове: увімкнення запони плиткою швидких налаштувань тепер теж залишає бульбашку біля краю екрана, тож керування на відстані одного дотику, без відкривання Gloam. Той самий перемикач вимикає її, в Налаштування → Керування.
 ```
+
+### 1.5.0 — your own presets
+
+**One owner-visible change so far.** A user asked to keep their own settings for different rooms under
+names of their own; the note names the button by its label so a reader can find it, gives two room
+names as the example because that is how it was asked for, and ends on the phone because nothing
+about a preset leaves it.
+
+**English** — 280/500:
+
+```
+New: your own presets. Set the dim level, warmth and colour the way you like, tap Save as preset and give it a name, such as Living room or Bedroom. It sits beside Reading, Evening and In bed, one tap away. Touch and hold it to rename or delete it. Everything stays on your phone.
+```
+
+**Polish** — 315/500:
+
+```
+Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień tak, jak lubisz, dotknij Zapisz jako zestaw i nadaj mu nazwę, na przykład Salon albo Sypialnia. Pojawi się obok Czytanie, Wieczór i W łóżku, o jedno dotknięcie. Przytrzymaj go, aby zmienić nazwę albo go usunąć. Wszystko zostaje w telefonie.
+```
+
+**Czech** — 288/500:
+
+```
+Novinka: vlastní předvolby. Nastav si úroveň ztmavení, teplo barvy a odstín podle sebe, klepni na Uložit jako předvolbu a pojmenuj ji, třeba Obývák nebo Ložnice. Objeví se vedle Čtení, Večer a V posteli, na jedno klepnutí. Podržením ji přejmenuješ nebo smažeš. Všechno zůstává v telefonu.
+```
+
+**German** — 330/500:
+
+```
+Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe so ein, wie du sie magst, tippe auf Als Vorgabe speichern und gib ihr einen Namen, etwa Wohnzimmer oder Schlafzimmer. Sie steht neben Lesen, Abend und Im Bett, einen Tipp entfernt. Halte sie gedrückt, um sie umzubenennen oder zu löschen. Alles bleibt auf deinem Handy.
+```
+
+**Spanish** — 309/500:
+
+```
+Novedad: tus propios preajustes. Pon el nivel de atenuación, la calidez y el color a tu gusto, toca Guardar como preajuste y ponle un nombre, como Salón o Dormitorio. Aparece junto a Lectura, Noche y En la cama, a un toque. Mantenlo pulsado para cambiarle el nombre o eliminarlo. Todo se queda en tu teléfono.
+```
+
+**French** — 364/500:
+
+```
+Nouveau : vos propres préréglages. Réglez le niveau d'assombrissement, la chaleur et la couleur à votre goût, touchez Enregistrer comme préréglage et donnez-lui un nom, par exemple Salon ou Chambre. Il s'affiche à côté de Lecture, Soirée et Au lit, à un toucher. Appuyez de manière prolongée dessus pour le renommer ou le supprimer. Tout reste sur votre téléphone.
+```
+
+**Italian** — 326/500:
+
+```
+Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e il colore come preferisci, tocca Salva come preimpostazione e dalle un nome, per esempio Soggiorno o Camera da letto. Compare accanto a Lettura, Sera e A letto, a un tocco. Tienila premuta per rinominarla o eliminarla. Tutto resta sul tuo telefono.
+```
+
+**Brazilian Portuguese** — 306/500:
+
+```
+Novidade: suas próprias predefinições. Ajuste o nível de escurecimento, a calidez e a cor do seu jeito, toque em Salvar como predefinição e dê um nome a ela, como Sala ou Quarto. Ela aparece ao lado de Leitura, Noite e Na cama, a um toque. Toque e segure para renomear ou excluir. Tudo fica no seu celular.
+```
+
+**Ukrainian** — 327/500:
+
+```
+Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок так, як тобі подобається, торкнися Зберегти як набір і дай йому назву, наприклад Вітальня чи Спальня. Він з'явиться поруч із Читання, Вечір і У ліжку, на відстані одного дотику. Утримуй його, щоб перейменувати чи видалити. Усе залишається на твоєму телефоні.
+```
