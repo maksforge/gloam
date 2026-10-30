@@ -8,10 +8,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -20,13 +22,17 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
@@ -36,7 +42,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import app.gloam.R
@@ -149,8 +158,7 @@ private fun PauseChips(
                 },
             )
         }
-        FilterChip(
-            selected = false,
+        AssistChip(
             onClick = { choosing = true },
             label = { Text(stringResource(R.string.dim_pause_other)) },
         )
@@ -172,6 +180,9 @@ private fun PauseChips(
  * Any whole number of minutes in [PauseLength.MIN_MINUTES]..[PauseLength.MAX_MINUTES], typed. The
  * field takes digits only, and the confirm button stays off until the number is in range, so the
  * clamp in [PauseLength.ofMinutes] is a backstop rather than a silent correction.
+ *
+ * It opens focused with the remembered number selected, so the first digit typed replaces it rather
+ * than turning `5` into `52`.
  */
 @Composable
 private fun PauseLengthDialog(
@@ -179,16 +190,31 @@ private fun PauseLengthDialog(
     onConfirm: (PauseLength) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    var text by rememberSaveable { mutableStateOf(initial.minutes.toString()) }
-    val minutes = text.toIntOrNull()
-    val valid = minutes != null && minutes in PauseLength.MIN_MINUTES..PauseLength.MAX_MINUTES
+    // Kotlin note: a TextFieldValue is the text plus its selection, like an input's value with
+    // selectionStart/End held in state. rememberSaveable needs its Saver to put it in the Bundle
+    // that survives rotation, and LaunchedEffect(Unit) is useEffect(..., []): once per showing.
+    var field by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        val text = initial.minutes.toString()
+        mutableStateOf(TextFieldValue(text, selection = TextRange(0, text.length)))
+    }
+    val focus = remember { FocusRequester() }
+    LaunchedEffect(Unit) { focus.requestFocus() }
+    val chosen =
+        field.text
+            .toIntOrNull()
+            ?.takeIf { it in PauseLength.MIN_MINUTES..PauseLength.MAX_MINUTES }
+            ?.let(PauseLength::ofMinutes)
+    val confirm = { chosen?.let(onConfirm) }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.dim_pause_custom_title)) },
         text = {
             OutlinedTextField(
-                value = text,
-                onValueChange = { typed -> text = typed.filter(Char::isDigit).take(3) },
+                value = field,
+                onValueChange = { typed ->
+                    val digits = typed.text.filter(Char::isDigit).take(3)
+                    field = if (digits == typed.text) typed else TextFieldValue(digits, TextRange(digits.length))
+                },
                 label = { Text(stringResource(R.string.dim_pause_minutes_label)) },
                 supportingText = {
                     Text(
@@ -199,13 +225,15 @@ private fun PauseLengthDialog(
                         ),
                     )
                 },
-                isError = text.isNotEmpty() && !valid,
+                isError = field.text.isNotEmpty() && chosen == null,
                 singleLine = true,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = { confirm() }),
+                modifier = Modifier.focusRequester(focus),
             )
         },
         confirmButton = {
-            TextButton(onClick = { minutes?.let { onConfirm(PauseLength.ofMinutes(it)) } }, enabled = valid) {
+            TextButton(onClick = { confirm() }, enabled = chosen != null) {
                 Text(stringResource(R.string.dim_pause_custom_confirm))
             }
         },
