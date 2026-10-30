@@ -354,8 +354,8 @@ internal class BubbleTouchLayout(
  * each side. Tucked, the outer gap grows until the shape ends exactly at the display's edge (the
  * window runs on past it), and the outer corners go square. The mark is centred in whatever is left,
  * so it is always in the part that shows. While a pause runs, a ring around the mark empties as it
- * does — drawn to the pause's own end rather than to a deadline that may cut it short, which only
- * the service knows and which takes the bubble down with the shade anyway.
+ * does — drawn to [pauseEnd], so a deadline that cuts the pause short drains it to the deadline, as
+ * the compact button's ring does.
  *
  * Kotlin note: `animateDpAsState` is the Compose equivalent of a CSS transition on a value — the
  * composable states the target, and the framework tweens the number it reads on every frame.
@@ -368,9 +368,11 @@ internal fun BubbleContent(
     leaving: StateFlow<Boolean>,
     tucked: StateFlow<BubbleSide?>,
     pause: StateFlow<PauseSpan?>,
+    deadline: StateFlow<Long?>,
 ) {
     val isPressed by pressed.collectAsStateWithLifecycle()
     val pauseSpan by pause.collectAsStateWithLifecycle()
+    val offAt by deadline.collectAsStateWithLifecycle()
     val isLeaving by leaving.collectAsStateWithLifecycle()
     val tuckedSide by tucked.collectAsStateWithLifecycle()
     val resting = if (isPressed) null else tuckedSide
@@ -434,7 +436,7 @@ internal fun BubbleContent(
             pauseSpan?.let {
                 PauseRing(
                     from = it.from,
-                    end = it.until,
+                    end = pauseEnd(it.until, offAt).atMillis,
                     color = colors.onPrimaryContainer,
                     modifier = Modifier.size(34.dp),
                     strokeWidth = 2.5.dp,
