@@ -175,6 +175,10 @@ class ColumnGeometryTest {
                         "of the ${available}dp on offer",
                     compactStackHeightDp(bar, stack.buttons) <= available + 0.001f,
                 )
+                assertTrue(
+                    "The timer section may grow to ${sectionMaxHeightDp(bar)}dp beside a ${bar}dp bar",
+                    sectionMaxHeightDp(bar) <= bar,
+                )
                 available += 1f
             }
         }
@@ -199,33 +203,6 @@ class ColumnGeometryTest {
                 assertEquals("A button was dropped on ${available}dp, which has room for all four", 4, stack.buttons)
             }
             available += 0.5f
-        }
-    }
-
-    /**
-     * An open timer section shares the bar's row, so it must not make that row taller than the bar:
-     * six chips are 328dp against a bar [compactStack] may have shrunk to its floor, and a row that
-     * grew past the bar would push the close row off the surface it was just proven to fit.
-     */
-    @Test
-    fun `the close row still fits with the timer section open`() {
-        val chips = listOf(5, 6, 9)
-        for (wanted in 3..4) {
-            var available = BAR_MIN_HEIGHT_DP + BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP
-            while (available <= 1400f) {
-                val stack = compactStack(available, wanted)
-                for (count in chips) {
-                    val section = count * 48f + (count - 1) * 8f
-                    val row = barRowHeightDp(stack.barHeightDp, section)
-                    assertTrue(
-                        "$count chips beside a ${stack.barHeightDp}dp bar make a ${row}dp row, which with " +
-                            "${stack.buttons} buttons needs ${compactStackHeightDp(row, stack.buttons)}dp " +
-                            "of the ${available}dp on offer",
-                        compactStackHeightDp(row, stack.buttons) <= available + 0.001f,
-                    )
-                }
-                available += 0.5f
-            }
         }
     }
 

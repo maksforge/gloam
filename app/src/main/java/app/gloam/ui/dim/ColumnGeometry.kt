@@ -90,12 +90,6 @@ const val BAR_SECTION_WIDTH_DP = 140f
  */
 fun sectionMaxHeightDp(barHeightDp: Float): Float = barHeightDp
 
-/** The row the bar shares with an open section [sectionHeightDp] tall, bounded as the section is. */
-fun barRowHeightDp(
-    barHeightDp: Float,
-    sectionHeightDp: Float,
-): Float = maxOf(barHeightDp, sectionHeightDp.coerceAtMost(sectionMaxHeightDp(barHeightDp)))
-
 /** The warmth column the compact surface opens to the left of the bar. Up is warmer. */
 const val WARMTH_COLUMN_WIDTH_DP = 60f
 const val WARMTH_COLUMN_HEIGHT_DP = 300f
