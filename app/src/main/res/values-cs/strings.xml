@@ -142,6 +142,13 @@
     <string name="settings_restart_body">Gloam po restartu telefonu závoj vrátí. Tento telefon nechá aplikaci běžet po spuštění jen tehdy, když má zapnuté automatické spouštění, a Gloam nemá jak zjistit, jestli zapnuté je — takže pokud se závoj nevrátí, tohle je nastavení, na které se podívat.</string>
     <string name="settings_restart_open">Otevřít nastavení automatického spouštění</string>
 
+    <string name="settings_restore">Výchozí nastavení</string>
+    <string name="settings_restore_body">Vrátí předvolby a všechna nastavení do původního stavu.</string>
+    <string name="settings_restore_button">Obnovit výchozí</string>
+    <string name="settings_restore_confirm_title">Obnovit výchozí nastavení?</string>
+    <string name="settings_restore_confirm_body">Úroveň ztmavení, teplo barvy, odstín, předvolby, plán a všechna ostatní nastavení včetně jazyka se vrátí do původního stavu. Tvoje uložené předvolby budou smazány. Tuto akci nelze vrátit zpět.</string>
+    <string name="settings_restore_confirm">Obnovit</string>
+    <string name="settings_restore_cancel">Zrušit</string>
 
     <string name="settings_about">O aplikaci</string>
     <string name="settings_support">Pomoc a zpětná vazba</string>

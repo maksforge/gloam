@@ -143,6 +143,13 @@
     <string name="settings_restart_body">O Gloam recoloca a camada quando seu celular reinicia. Este celular só deixa um aplicativo rodar na inicialização se a inicialização automática estiver ativada para ele, e o Gloam não tem como verificar se está: então, se a camada não voltar, é essa a configuração para olhar.</string>
     <string name="settings_restart_open">Abrir configurações de inicialização automática</string>
 
+    <string name="settings_restore">Configurações padrão</string>
+    <string name="settings_restore_body">Volta as predefinições e todas as configurações ao padrão original do Gloam.</string>
+    <string name="settings_restore_button">Restaurar padrão</string>
+    <string name="settings_restore_confirm_title">Restaurar o padrão?</string>
+    <string name="settings_restore_confirm_body">Nível de escurecimento, calidez, cor, predefinições, programação e todas as outras configurações, inclusive o idioma, voltam ao padrão original. As predefinições que você salvou são excluídas. Não é possível desfazer.</string>
+    <string name="settings_restore_confirm">Restaurar</string>
+    <string name="settings_restore_cancel">Cancelar</string>
 
     <string name="settings_about">Sobre</string>
     <string name="settings_support">Ajuda e comentários</string>

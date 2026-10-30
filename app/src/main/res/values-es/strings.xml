@@ -142,6 +142,13 @@
     <string name="settings_restart_body">Gloam vuelve a poner la capa cuando tu teléfono se reinicia. Este teléfono solo deja que una aplicación se ejecute al arrancar si tiene el inicio automático activado, y Gloam no tiene forma de comprobar si lo está: así que, si la capa no vuelve, este es el ajuste que conviene mirar.</string>
     <string name="settings_restart_open">Abrir ajustes de inicio automático</string>
 
+    <string name="settings_restore">Ajustes predeterminados</string>
+    <string name="settings_restore_body">Devuelve los preajustes y todos los ajustes a como venía Gloam.</string>
+    <string name="settings_restore_button">Restablecer valores predeterminados</string>
+    <string name="settings_restore_confirm_title">¿Restablecer valores predeterminados?</string>
+    <string name="settings_restore_confirm_body">El nivel de atenuación, la calidez, el color, los preajustes, el horario y todos los demás ajustes, incluido el idioma, vuelven a como venía Gloam. Los preajustes que guardaste se eliminan. No se puede deshacer.</string>
+    <string name="settings_restore_confirm">Restablecer</string>
+    <string name="settings_restore_cancel">Cancelar</string>
 
     <string name="settings_about">Acerca de</string>
     <string name="settings_support">Ayuda y comentarios</string>

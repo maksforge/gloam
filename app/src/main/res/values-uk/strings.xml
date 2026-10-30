@@ -146,6 +146,13 @@
     <string name="settings_restart_body">Gloam повертає запону, коли телефон перезавантажується. Цей телефон дозволяє застосунку працювати після запуску лише тоді, коли для нього ввімкнений автозапуск, а Gloam не має як перевірити, чи ввімкнений він — тож якщо запона не повернулася, це те налаштування, яке варто переглянути.</string>
     <string name="settings_restart_open">Відкрити налаштування автозапуску</string>
 
+    <string name="settings_restore">Типові налаштування</string>
+    <string name="settings_restore_body">Повертає набори й усі налаштування до початкових.</string>
+    <string name="settings_restore_button">Відновити типові</string>
+    <string name="settings_restore_confirm_title">Відновити типові налаштування?</string>
+    <string name="settings_restore_confirm_body">Рівень затемнення, теплота, відтінок, набори, розклад та всі інші налаштування, разом із мовою, повернуться до початкових. Збережені тобою набори буде видалено. Цю дію не можна скасувати.</string>
+    <string name="settings_restore_confirm">Відновити</string>
+    <string name="settings_restore_cancel">Скасувати</string>
 
     <string name="settings_about">Про застосунок</string>
     <string name="settings_support">Довідка та відгуки</string>

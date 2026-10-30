@@ -128,6 +128,30 @@ class AppPreferences(
 
         // Read only until PRESETS is first written, which removes it; see `decodePresets`.
         val LEGACY_SAVED_PRESETS = stringPreferencesKey("saved_presets")
+
+        /**
+         * What *Restore to default* removes: every setting, so each reads its default again. Not the
+         * live state (running, deadline, began-at, the honoured night), not the counters and one-time
+         * asks, and not the lent location, which is another file. A new setting key belongs here.
+         */
+        val SETTINGS: List<Preferences.Key<*>> =
+            listOf(
+                THEME_MODE,
+                DIM_LEVEL,
+                WARMTH,
+                WARMTH_COLOR,
+                LOWER_BACKLIGHT,
+                AUTO_OFF_MINUTES,
+                PAUSE_MINUTES,
+                SCHEDULE_ENABLED,
+                SCHEDULE_ON_MINUTES,
+                SCHEDULE_OFF_MINUTES,
+                SCHEDULE_KIND,
+                LAUNCHER_COMPACT,
+                CONTROLS_BUBBLE,
+                PRESETS,
+                LEGACY_SAVED_PRESETS,
+            )
     }
 
     /**
@@ -570,6 +594,15 @@ class AppPreferences(
             prefs[Keys.PRESETS] = encodePresets(changed)
             prefs.remove(Keys.LEGACY_SAVED_PRESETS)
         }
+    }
+
+    /**
+     * Every setting back to how the app came, in one edit: the keys are removed rather than written,
+     * so each reads its default again and stays free to change in a later version. A running shade
+     * keeps running and follows the defaults, because the service collects these same keys.
+     */
+    suspend fun restoreDefaults() {
+        store.edit { prefs -> Keys.SETTINGS.forEach { prefs.remove(it) } }
     }
 
     suspend fun setLauncherCompact(enabled: Boolean) {

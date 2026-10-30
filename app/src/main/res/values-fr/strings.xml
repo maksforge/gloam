@@ -143,6 +143,13 @@
     <string name="settings_restart_body">Gloam remet le voile quand votre téléphone redémarre. Ce téléphone ne laisse une application démarrer au lancement que si le démarrage automatique est activé pour elle, et Gloam n\'a aucun moyen de vérifier s\'il l\'est : donc si le voile ne revient pas, c\'est le paramètre à regarder.</string>
     <string name="settings_restart_open">Ouvrir les paramètres de démarrage automatique</string>
 
+    <string name="settings_restore">Paramètres par défaut</string>
+    <string name="settings_restore_body">Remet les préréglages et tous les paramètres dans l\'état d\'origine de Gloam.</string>
+    <string name="settings_restore_button">Rétablir les valeurs par défaut</string>
+    <string name="settings_restore_confirm_title">Rétablir les valeurs par défaut ?</string>
+    <string name="settings_restore_confirm_body">Le niveau d\'assombrissement, la chaleur, la couleur, les préréglages, la programmation et tous les autres paramètres, langue comprise, reviennent à leur état d\'origine. Les préréglages que vous avez enregistrés sont supprimés. Cette action est irréversible.</string>
+    <string name="settings_restore_confirm">Rétablir</string>
+    <string name="settings_restore_cancel">Annuler</string>
 
     <string name="settings_about">À propos</string>
     <string name="settings_support">Aide et commentaires</string>
