@@ -134,9 +134,9 @@
     <!-- The user's own presets, saved under a name they type, as chips after the three above.
          "Preset" here is the same thing as the three built-in ones, just named by the user. preset_save is
          what screen readers say for the ＋ chip after them (it shows no text) and the save dialog's
-         title; when one of the user's own is lit, preset_saved_hint replaces the hint and preset_edit
-         opens a dialog to rename or delete it. preset_replace is the save button's label when the
-         typed name already belongs to a saved preset. -->
+         title; when one of the user's own is lit, preset_edit opens a dialog to rename or delete it, and
+         preset_saved_hint replaces the hint unless a built-in one is lit beside it. preset_replace is
+         the save button's label when the typed name already belongs to a saved preset. -->
     <string name="preset_saved_hint">Your own preset. Touch and hold any of yours to rename or delete it.</string>
     <string name="preset_save">Save as preset</string>
     <string name="preset_save_body">Saves the current dim level, warmth and colour under a name of your own.</string>

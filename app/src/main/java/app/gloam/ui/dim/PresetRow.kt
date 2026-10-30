@@ -42,11 +42,13 @@ import app.gloam.theme.Spacing
  * The built-in presets, then the user's own, as chips, and a **＋** chip after them that saves the
  * current values as a new preset — always there, whatever is lit, so saving is never hidden behind
  * moving a slider first. Under them, **one line saying what the lit one is for**, with *Edit* beside
- * it when the lit one is the user's own. A long press on one of the user's own opens the same rename/delete dialog
+ * it when one of the user's own is lit. A long press on one of the user's own opens the same rename/delete dialog
  * without applying it, so deleting a preset doesn't change the sliders on the way.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
- * numbers unlights its chip. A built-in wins a tie with a saved preset carrying the same numbers.
+ * numbers unlights its chip. Every chip carrying the current numbers lights, so a preset saved from a
+ * lit one lights beside it; the hint is then the built-in's, and *Edit* opens the first lit one of the
+ * user's own.
  */
 @Composable
 fun PresetRow(
@@ -61,8 +63,7 @@ fun PresetRow(
     onDeletePreset: (name: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val builtIn = Preset.matching(dimLevel, warmth, warmthColor)
-    val saved = if (builtIn == null) savedPresets.firstOrNull { it.matches(dimLevel, warmth, warmthColor) } else null
+    val lit = LitPresets.of(dimLevel, warmth, warmthColor, savedPresets)
     // Kotlin note: `rememberSaveable` is `useState` that also survives rotation and process death,
     // so a half-typed name is still in the dialog when the user comes back to it.
     var saving by rememberSaveable { mutableStateOf(false) }
@@ -73,14 +74,14 @@ fun PresetRow(
         FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.tight)) {
             Preset.entries.forEach { preset ->
                 FilterChip(
-                    selected = preset == builtIn,
+                    selected = preset == lit.builtIn,
                     onClick = { onPreset(preset) },
                     label = { Text(stringResource(preset.label)) },
                 )
             }
             savedPresets.forEach { preset ->
                 FilterChip(
-                    selected = preset == saved,
+                    selected = preset in lit.saved,
                     onClick = { onSavedPreset(preset) },
                     label = { Text(preset.name) },
                     modifier = Modifier.onLongPress(preset.name, editLabel) { editing = preset.name },
@@ -95,16 +96,16 @@ fun PresetRow(
             Text(
                 text =
                     when {
-                        builtIn != null -> stringResource(builtIn.hint)
-                        saved != null -> stringResource(R.string.preset_saved_hint)
+                        lit.builtIn != null -> stringResource(lit.builtIn.hint)
+                        lit.saved.isNotEmpty() -> stringResource(R.string.preset_saved_hint)
                         else -> stringResource(R.string.presets_hint)
                     },
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
             )
-            if (saved != null) {
-                TextButton(onClick = { editing = saved.name }) { Text(stringResource(R.string.preset_edit)) }
+            lit.saved.firstOrNull()?.let { preset ->
+                TextButton(onClick = { editing = preset.name }) { Text(stringResource(R.string.preset_edit)) }
             }
         }
     }
@@ -140,6 +141,24 @@ fun PresetRow(
                 editing = null
             },
             onDismiss = { editing = null },
+        )
+    }
+}
+
+/** The chips the current values light: the built-in, if any, and every saved preset carrying them. */
+internal data class LitPresets(
+    val builtIn: Preset?,
+    val saved: List<SavedPreset>,
+) {
+    companion object {
+        fun of(
+            dimLevel: Int,
+            warmth: Int,
+            warmthColor: Int,
+            savedPresets: List<SavedPreset>,
+        ) = LitPresets(
+            builtIn = Preset.matching(dimLevel, warmth, warmthColor),
+            saved = savedPresets.filter { it.matches(dimLevel, warmth, warmthColor) },
         )
     }
 }
