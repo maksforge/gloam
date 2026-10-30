@@ -41,8 +41,8 @@ private const val PLAY_STORE_APP = "com.android.vending"
  * An enum rather than two `@StringRes` parameters on [sendSupportMail], because the subject and the
  * prompt are a **pair**: a bug subject over a feature prompt is a mail that sorts into the wrong
  * folder and reads as a mistake, and separate parameters are exactly the shape that lets it happen.
- * Same idiom as `AppChannel` and `AutoOff` — an enum carrying its own constants instead of a `when`
- * mapping two of them together at the call site.
+ * Same idiom as `AppChannel` — an enum carrying its own constants instead of a `when` mapping two
+ * of them together at the call site.
  *
  * **The subject is `translatable="false"` and the prompt is not.** The subject carries a filter tag
  * the developer sorts on and the user never reads; the prompt is a sentence addressed to them. A
