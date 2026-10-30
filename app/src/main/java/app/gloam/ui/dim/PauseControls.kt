@@ -1,9 +1,6 @@
 package app.gloam.ui.dim
 
 import android.text.format.DateUtils
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.FlowRow
@@ -181,8 +178,9 @@ internal fun PauseLength.labelRes(): Int =
  * the compact button's way of saying "paused, and about this much to go" with no digits to read.
  *
  * A faint full circle under the arc, so a nearly empty ring still reads as a ring rather than as a
- * stray mark. The arc is recomputed once a second and tweened across it, so a one-minute pause moves
- * smoothly rather than in six-degree steps.
+ * stray mark. The gap opens at the top and grows clockwise. The loop ticks about once per degree of
+ * the whole pause, never faster than a frame, so a long pause redraws rarely and a one-minute one
+ * still moves smoothly.
  */
 @Composable
 internal fun PauseRing(
@@ -193,12 +191,12 @@ internal fun PauseRing(
     strokeWidth: Dp = 3.dp,
 ) {
     val left by produceState(pauseLeft(System.currentTimeMillis(), from, end), from, end) {
+        val tick = ((end - from) / 360).coerceAtLeast(16L)
         while (value > 0f) {
-            delay(1_000L)
+            delay(tick)
             value = pauseLeft(System.currentTimeMillis(), from, end)
         }
     }
-    val shown by animateFloatAsState(left, tween(durationMillis = 1_000, easing = LinearEasing))
     Canvas(modifier) {
         val stroke = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
         val inset = stroke.width / 2
@@ -213,6 +211,14 @@ internal fun PauseRing(
             size = arcSize,
             style = stroke,
         )
-        drawArc(color, -90f, 360f * shown, useCenter = false, topLeft = topLeft, size = arcSize, style = stroke)
+        drawArc(
+            color,
+            -90f + 360f * (1f - left),
+            360f * left,
+            useCenter = false,
+            topLeft = topLeft,
+            size = arcSize,
+            style = stroke,
+        )
     }
 }
