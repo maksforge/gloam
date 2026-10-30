@@ -7,7 +7,7 @@
           {
             "type": "command",
             "if": "Bash(git push*)",
-            "command": "git -C \"$CLAUDE_PROJECT_DIR\" fetch -q origin main 2>/dev/null; python3 \"$CLAUDE_PROJECT_DIR/scripts/notes-gate.py\" --pending",
+            "command": "python3 -c 'import json, re, sys; c = json.load(sys.stdin).get(\"tool_input\", {}).get(\"command\", \"\"); sys.exit(0 if re.search(r\"\\bgit\\b(\\s+-C\\s+\\S+)?\\s+push\\b\", c) else 1)' || exit 0; git -C \"$CLAUDE_PROJECT_DIR\" fetch -q origin main 2>/dev/null; python3 \"$CLAUDE_PROJECT_DIR/scripts/notes-gate.py\" --pending",
             "timeout": 30,
             "statusMessage": "Checking the next release has its notes"
           }
