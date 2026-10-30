@@ -82,6 +82,20 @@ const val BAR_ICON_BUTTON_DP = 52f
  */
 const val BAR_SECTION_WIDTH_DP = 140f
 
+/**
+ * The tallest the timer section may draw beside a bar [barHeightDp] tall: the bar itself. Six chips
+ * at their 48dp touch target are 328dp, more in a large font, and the bar is shorter than that
+ * whenever [compactStack] has shrunk it. Taller content scrolls inside this rather than growing the
+ * row, which would push the buttons under the bar off the surface.
+ */
+fun sectionMaxHeightDp(barHeightDp: Float): Float = barHeightDp
+
+/** The row the bar shares with an open section [sectionHeightDp] tall, bounded as the section is. */
+fun barRowHeightDp(
+    barHeightDp: Float,
+    sectionHeightDp: Float,
+): Float = maxOf(barHeightDp, sectionHeightDp.coerceAtMost(sectionMaxHeightDp(barHeightDp)))
+
 /** The warmth column the compact surface opens to the left of the bar. Up is warmer. */
 const val WARMTH_COLUMN_WIDTH_DP = 60f
 const val WARMTH_COLUMN_HEIGHT_DP = 300f
