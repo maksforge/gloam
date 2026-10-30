@@ -160,13 +160,14 @@ fun CompactControls(
         // `hasBoundedHeight` rather than a comparison against `Dp.Infinity`: an unbounded parent —
         // a scrolling column, or a measure pass before the window has been given a size — reports
         // no maximum at all, and the design's own height is the right answer there.
-        val barHeight =
-            barHeightDp(
+        val closeRows = if (onClose != null) 1 else 0
+        val stack =
+            compactStack(
                 availableHeightDp = if (constraints.hasBoundedHeight) maxHeight.value else BAR_HEIGHT_DP,
-                // The panel's close button is a fourth row under the bar, and it is 62dp the bar
-                // does not get. The host that has a back gesture passes no `onClose` and keeps them.
-                buttons = if (onClose != null) 4 else 3,
-            ).dp
+                buttons = 3 + closeRows,
+            )
+        val barHeight = stack.barHeightDp.dp
+        val optionalRows = stack.buttons - closeRows
 
         Column(
             horizontalAlignment = Alignment.End,
@@ -201,38 +202,44 @@ fun CompactControls(
             // that grows to the left would otherwise drag them away from it when a section opens.
             Box(modifier = Modifier.width(BAR_WIDTH_DP.dp), contentAlignment = Alignment.Center) {
                 Column(verticalArrangement = Arrangement.spacedBy(Spacing.tight)) {
-                    CompactIconButton(
-                        onClick = { show(CompactSection.Warmth) },
-                        selected = section == CompactSection.Warmth,
-                    ) {
-                        // The glyph is the way out of the section it opened, which is why it changes:
-                        // the button is in the same place either way, and a second tap on a sun that
-                        // still says "open me" reads as a control that did not take.
-                        if (section == CompactSection.Warmth) {
+                    if (optionalRows >= 1) {
+                        CompactIconButton(
+                            onClick = { show(CompactSection.Warmth) },
+                            selected = section == CompactSection.Warmth,
+                        ) {
+                            // The glyph is the way out of the section it opened, which is why it changes:
+                            // the button is in the same place either way, and a second tap on a sun that
+                            // still says "open me" reads as a control that did not take.
+                            if (section == CompactSection.Warmth) {
+                                Icon(
+                                    imageVector = Icons.Default.Close,
+                                    contentDescription = stringResource(R.string.dim_warmth_label),
+                                )
+                            } else {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_warmth),
+                                    contentDescription = stringResource(R.string.dim_warmth_label),
+                                )
+                            }
+                        }
+                    }
+                    if (optionalRows >= 2) {
+                        CompactIconButton(
+                            onClick = { show(CompactSection.Timer) },
+                            selected = section == CompactSection.Timer,
+                        ) {
                             Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = stringResource(R.string.dim_warmth_label),
-                            )
-                        } else {
-                            Icon(
-                                painter = painterResource(R.drawable.ic_warmth),
-                                contentDescription = stringResource(R.string.dim_warmth_label),
+                                painter = painterResource(R.drawable.ic_timer),
+                                // The section header's own words, so the button and what it opens agree.
+                                // Icon buttons have no visible label, so this is the only name a screen
+                                // reader gets.
+                                contentDescription = stringResource(R.string.dim_auto_off_label),
                             )
                         }
                     }
-                    CompactIconButton(
-                        onClick = { show(CompactSection.Timer) },
-                        selected = section == CompactSection.Timer,
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_timer),
-                            // The section header's own words, so the button and what it opens agree.
-                            // Icon buttons have no visible label, so this is the only name a screen
-                            // reader gets.
-                            contentDescription = stringResource(R.string.dim_auto_off_label),
-                        )
+                    if (optionalRows >= 3) {
+                        PauseButton(running = running, pause = pause, onPause = onPause, onResume = onResume)
                     }
-                    PauseButton(running = running, pause = pause, onPause = onPause, onResume = onResume)
                     if (onClose != null) {
                         CompactIconButton(onClick = onClose, selected = false) {
                             Icon(
@@ -543,7 +550,7 @@ private fun PauseButton(
 }
 
 /**
- * The three (or four) round buttons under the bar.
+ * The round buttons under the bar.
  *
  * `OutlinedIconButton` rather than the filled one: filled is reserved for the control that changes
  * what the *screen* looks like, and on this surface that is the foot band. These open a section and

@@ -163,24 +163,42 @@ class ColumnGeometryTest {
      */
     @Test
     fun `the bar and its buttons fit the height they are given`() {
-        var available = 200f
-        while (available <= 1400f) {
-            // Four buttons is the panel, which carries a close button the Activity host does not.
-            val buttons = if (available.toInt() % 2 == 0) 3 else 4
-            val bar = barHeightDp(available, buttons)
-            assertTrue("A ${bar}dp bar on ${available}dp is taller than the design's maximum", bar <= BAR_HEIGHT_DP)
-            assertTrue("A ${bar}dp bar is below the usable floor", bar >= BAR_MIN_HEIGHT_DP)
-            val group = bar + (BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP) * buttons
-            // Above the floor the whole group fits; at the floor the bar has stopped shrinking,
-            // which is the deliberate trade — a control too short to use is worse than one that
-            // overflows a landscape window nobody dims a book in.
-            if (bar > BAR_MIN_HEIGHT_DP) {
+        for (wanted in 3..4) {
+            var available = BAR_MIN_HEIGHT_DP + BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP
+            while (available <= 1400f) {
+                val stack = compactStack(available, wanted)
+                val bar = stack.barHeightDp
+                assertTrue("A ${bar}dp bar on ${available}dp is taller than the design's maximum", bar <= BAR_HEIGHT_DP)
+                assertTrue("A ${bar}dp bar is below the usable floor", bar >= BAR_MIN_HEIGHT_DP)
                 assertTrue(
-                    "The bar and its $buttons buttons need ${group}dp of the ${available}dp on offer",
-                    group <= available + 0.001f,
+                    "The bar and ${stack.buttons} buttons need ${compactStackHeightDp(bar, stack.buttons)}dp " +
+                        "of the ${available}dp on offer",
+                    compactStackHeightDp(bar, stack.buttons) <= available + 0.001f,
                 )
+                available += 1f
             }
-            available += 1f
+        }
+    }
+
+    /**
+     * The close row is the panel's first way out (ADR-0011), so it survives a landscape display that
+     * has the bar at its floor: the buttons above it go first, and never all of it.
+     */
+    @Test
+    fun `the close row fits even with the bar at its floor`() {
+        var available = BAR_MIN_HEIGHT_DP + BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP
+        while (available <= 1400f) {
+            val stack = compactStack(available, 4)
+            assertTrue("No close row on ${available}dp", stack.buttons >= 1)
+            assertTrue(
+                "The close row ends at ${compactStackHeightDp(stack.barHeightDp, stack.buttons)}dp, " +
+                    "past the ${available}dp on offer",
+                compactStackHeightDp(stack.barHeightDp, stack.buttons) <= available + 0.001f,
+            )
+            if (available >= compactStackHeightDp(BAR_MIN_HEIGHT_DP, 4)) {
+                assertEquals("A button was dropped on ${available}dp, which has room for all four", 4, stack.buttons)
+            }
+            available += 0.5f
         }
     }
 

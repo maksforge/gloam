@@ -177,15 +177,14 @@ fun valuePlacement(
  * the floor is the point below which the track is too short to set a level with; below *that* the
  * control would be a picture again.
  *
- * [buttons] is three in the Activity host and four in the panel, which has a close button because the
- * Back key never reaches it. It is a parameter rather than a constant precisely because that
- * difference is 62dp of the same screen.
+ * [buttons] is a parameter rather than a constant because [compactStack] drops buttons that do not
+ * fit, and each one it drops is 62dp the bar gets back.
  */
 fun barHeightDp(
     availableHeightDp: Float,
     buttons: Int,
 ): Float {
-    val underIt = (BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP) * buttons.coerceAtLeast(0)
+    val underIt = compactStackHeightDp(0f, buttons.coerceAtLeast(0))
     return (availableHeightDp - underIt).coerceIn(BAR_MIN_HEIGHT_DP, BAR_HEIGHT_DP)
 }
 
@@ -194,6 +193,36 @@ fun barHeightDp(
  * finger is not four levels.
  */
 const val BAR_MIN_HEIGHT_DP = 200f
+
+/**
+ * The bar's height and how many of the [buttons] wanted under it are drawn, on [availableHeightDp].
+ *
+ * **The last button is the panel's close, and it is never the one that goes** (ADR-0011): once the
+ * bar is at its floor the group stops shrinking, so on a short landscape display the buttons are
+ * dropped from the one above the close upward until the group fits. Somewhere a button has to go,
+ * and every one of them but the close is also on the full screen.
+ */
+data class CompactStack(
+    val barHeightDp: Float,
+    val buttons: Int,
+)
+
+fun compactStack(
+    availableHeightDp: Float,
+    buttons: Int,
+): CompactStack {
+    var shown = buttons.coerceAtLeast(0)
+    while (shown > 1 && compactStackHeightDp(barHeightDp(availableHeightDp, shown), shown) > availableHeightDp) {
+        shown--
+    }
+    return CompactStack(barHeightDp(availableHeightDp, shown), shown)
+}
+
+/** The bar and [buttons] rows under it, each row a gap and a button. */
+fun compactStackHeightDp(
+    barHeightDp: Float,
+    buttons: Int,
+): Float = barHeightDp + (BAR_GROUP_GAP_DP + BAR_ICON_BUTTON_DP) * buttons
 
 /** The draggable part of a bar [barHeightDp] tall — everything above the foot band. */
 fun barTrackHeightDp(barHeightDp: Float): Float = (barHeightDp - BAR_FOOT_HEIGHT_DP).coerceAtLeast(1f)
