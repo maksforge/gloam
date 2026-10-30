@@ -79,7 +79,7 @@
     <string name="preset_evening_hint">Légèrement assombri et très chaud, pour les heures avant d\'éteindre la lumière.</string>
     <string name="preset_in_bed">Au lit</string>
     <string name="preset_in_bed_hint">Presque noir et rouge profond, pour une pièce où la lumière est éteinte.</string>
-    <string name="presets_hint">Touchez-en un pour en reprendre le niveau d\'assombrissement et la chaleur, puis ajustez ce que vous voulez au-dessus.</string>
+    <string name="presets_hint">Touchez-en un pour en reprendre le niveau d\'assombrissement, la chaleur et la couleur, puis ajustez ce que vous voulez au-dessus.</string>
 
     <string name="preset_saved_hint">Votre propre préréglage. Appuyez de manière prolongée sur l\'un des vôtres pour le renommer ou le supprimer.</string>
     <string name="preset_save">Enregistrer comme préréglage</string>

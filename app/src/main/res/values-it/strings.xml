@@ -76,7 +76,7 @@
     <string name="preset_evening_hint">Poco oscurato e molto caldo, per le ore prima di spegnere la luce.</string>
     <string name="preset_in_bed">A letto</string>
     <string name="preset_in_bed_hint">Quasi buio e rosso intenso, per una stanza con la luce spenta.</string>
-    <string name="presets_hint">Toccane uno per prenderne il livello di oscuramento e il calore, poi regola quello che vuoi qui sopra.</string>
+    <string name="presets_hint">Toccane uno per prenderne il livello di oscuramento, il calore e il colore, poi regola quello che vuoi qui sopra.</string>
 
     <string name="preset_saved_hint">La tua preimpostazione. Tieni premuta una delle tue per rinominarla o eliminarla.</string>
     <string name="preset_save">Salva come preimpostazione</string>
