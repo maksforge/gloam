@@ -175,7 +175,7 @@ def main() -> int:
     if args.dir:
         args.dir.mkdir(parents=True, exist_ok=True)
         for locale, body in notes.items():
-            (args.dir / f"whatsnew-{locale}").write_text(body + "\n", encoding="utf-8")
+            (args.dir / f"whatsnew-{locale}").write_text(body, encoding="utf-8")
         print(f"-- wrote {len(notes)} files to {args.dir}", file=sys.stderr)
 
     for problem in problems:
