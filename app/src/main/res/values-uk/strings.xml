@@ -36,7 +36,7 @@
     <string name="dim_stop">Припинити затемнення</string>
     <string name="dim_pause">Пауза на %1$s</string>
     <string name="dim_resume_now">Продовжити зараз</string>
-    <string name="dim_paused_resumes_in">Пауза — затемнення повернеться через %1$s</string>
+    <string name="dim_paused_resumes_in">Пауза — затемнення продовжиться через %1$s</string>
     <string name="dim_paused_ends_in">Пауза — затемнення вимкнеться через %1$s</string>
     <string name="pause_length_1m">1 хв</string>
     <string name="pause_length_5m">5 хв</string>
@@ -189,7 +189,7 @@
     <string name="shade_notification_stop">Зупинити</string>
     <string name="shade_notification_until">До %1$s</string>
     <string name="shade_notification_title_paused">Затемнення на паузі</string>
-    <string name="shade_notification_resumes_at">Повернеться о %1$s</string>
+    <string name="shade_notification_resumes_at">Продовжиться о %1$s</string>
     <string name="shade_notification_text_backlight">Твій повзунок яскравості призупинений, поки Gloam затемнює</string>
 
 </resources>

@@ -21,7 +21,7 @@
     <string name="dim_stop">Wyłącz przyciemnianie</string>
     <string name="dim_pause">Wstrzymaj na %1$s</string>
     <string name="dim_resume_now">Wznów teraz</string>
-    <string name="dim_paused_resumes_in">Wstrzymane — przyciemnianie wróci za %1$s</string>
+    <string name="dim_paused_resumes_in">Wstrzymane — przyciemnianie zostanie wznowione za %1$s</string>
     <string name="dim_paused_ends_in">Wstrzymane — przyciemnianie wyłączy się za %1$s</string>
     <string name="pause_length_1m">1 min</string>
     <string name="pause_length_5m">5 min</string>
@@ -174,7 +174,7 @@
     <string name="shade_notification_stop">Zatrzymaj</string>
     <string name="shade_notification_until">Do %1$s</string>
     <string name="shade_notification_title_paused">Przyciemnianie wstrzymane</string>
-    <string name="shade_notification_resumes_at">Wróci o %1$s</string>
+    <string name="shade_notification_resumes_at">Wznowienie o %1$s</string>
     <string name="shade_notification_text_backlight">Suwak jasności telefonu nic nie zmienia, gdy Gloam przyciemnia</string>
 
 </resources>
