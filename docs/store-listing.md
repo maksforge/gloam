@@ -1509,3 +1509,64 @@ Novo endereço de suporte: “Relatar um problema” e “Sugerir um recurso”,
 ```
 Нова адреса підтримки: «Повідомити про проблему» і «Запропонувати функцію», в Налаштування → Довідка та відгуки, тепер надсилають листи на gloam.support@maksforge.com. Більше нічого не змінилося.
 ```
+
+### 1.4.0 — the bubble from the tile
+
+**One owner-visible change.** A start from the Quick Settings tile now leaves the bubble, unless Gloam
+itself is in front (ADR-0016's 2026-10-30 amendment). Readers met the bubble in 1.2.1, so the note
+names the new route to it and the switch that already governs it, and leaves out the exception, which
+nobody would notice as missing.
+
+**English** — 220/500:
+
+```
+New: turning the shade on from the Quick Settings tile now leaves the bubble on the edge of the screen too, so the controls are one tap away without opening Gloam. The same switch turns it off, under Settings → Controls.
+```
+
+**Polish** — 222/500:
+
+```
+Nowość: włączenie zasłony kafelkiem szybkich ustawień zostawia teraz też bańkę przy krawędzi ekranu, więc sterowanie masz o jedno dotknięcie, bez otwierania Gloam. Wyłącza ją ten sam przełącznik, w Ustawienia → Sterowanie.
+```
+
+**Czech** — 206/500:
+
+```
+Novinka: zapnutí závoje dlaždicí v Rychlém nastavení teď také nechá bublinu u okraje obrazovky, takže ovládání máš na jedno klepnutí, bez otevírání Gloamu. Vypíná ji stejný přepínač, v Nastavení → Ovládání.
+```
+
+**German** — 266/500:
+
+```
+Neu: Schaltest du die Schicht über die Schnelleinstellungen-Kachel ein, bleibt jetzt auch die Blase am Bildschirmrand zurück, sodass die Steuerung nur einen Tipp entfernt ist, ohne Gloam zu öffnen. Derselbe Schalter schaltet sie aus, unter Einstellungen → Steuerung.
+```
+
+**Spanish** — 234/500:
+
+```
+Novedad: activar la capa desde el mosaico de ajustes rápidos ahora también deja la burbuja en el borde de la pantalla, así que los controles quedan a un toque sin abrir Gloam. El mismo interruptor la desactiva, en Ajustes → Controles.
+```
+
+**French** — 241/500:
+
+```
+Nouveau : activer le voile depuis la tuile des réglages rapides laisse désormais aussi la bulle au bord de l'écran, pour que les commandes soient à un toucher sans ouvrir Gloam. Le même interrupteur la désactive, dans Paramètres → Commandes.
+```
+
+**Italian** — 230/500:
+
+```
+Novità: accendere il velo dal riquadro delle impostazioni rapide ora lascia anche la bolla sul bordo dello schermo, così i comandi sono a un tocco senza aprire Gloam. Lo stesso interruttore la disattiva, in Impostazioni → Comandi.
+```
+
+**Brazilian Portuguese** — 217/500:
+
+```
+Novidade: ligar a camada pelo bloco das configurações rápidas agora também deixa a bolha na borda da tela, então os controles ficam a um toque sem abrir o Gloam. A mesma opção a desativa, em Configurações → Controles.
+```
+
+**Ukrainian** — 221/500:
+
+```
+Нове: увімкнення запони плиткою швидких налаштувань тепер теж залишає бульбашку біля краю екрана, тож керування на відстані одного дотику, без відкривання Gloam. Той самий перемикач вимикає її, в Налаштування → Керування.
+```
