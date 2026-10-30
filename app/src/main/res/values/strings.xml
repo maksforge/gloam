@@ -113,6 +113,25 @@
     <string name="preset_in_bed_hint">Nearly dark and deep red, for a room with the lights off.</string>
     <string name="presets_hint">Tap one to start dimming from it, then adjust anything above.</string>
 
+    <!-- The user's own presets, saved under a name they type, as chips after the three above.
+         "Preset" here is the same thing as the three built-in ones, just named by the user. When none
+         is lit, preset_save sits beside presets_hint as a text button and is also the save dialog's
+         title; when one of the user's own is lit, preset_saved_hint replaces the hint and preset_edit
+         opens a dialog to rename or delete it. preset_replace is the save button's label when the
+         typed name already belongs to a saved preset. -->
+    <string name="preset_saved_hint">Your own preset. Tap it any time to come back to these settings.</string>
+    <string name="preset_save">Save as preset</string>
+    <string name="preset_save_body">Saves the current dim level, warmth and colour under a name of your own.</string>
+    <string name="preset_name_label">Name</string>
+    <string name="preset_save_confirm">Save</string>
+    <string name="preset_replace">Replace</string>
+    <string name="preset_replace_note">A preset with this name already exists. Its settings will be replaced.</string>
+    <string name="preset_name_taken">Another preset already has this name.</string>
+    <string name="preset_edit">Edit</string>
+    <string name="preset_edit_title">Edit preset</string>
+    <string name="preset_delete">Delete</string>
+    <string name="preset_cancel">Cancel</string>
+
     <!-- The compact controls (docs/phase-3.md §2, §10). The floating window shows the same sliders
          and nothing else, so this is its one way to the rest of the app — without it the dialog is a
          dead end with no Settings behind it. "Open Gloam" and not "Open the app": the user knows the

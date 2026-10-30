@@ -70,6 +70,19 @@
     <string name="preset_in_bed_hint">Presque noir et rouge profond, pour une pièce où la lumière est éteinte.</string>
     <string name="presets_hint">Touchez-en un pour commencer à assombrir avec, puis ajustez ce que vous voulez au-dessus.</string>
 
+    <string name="preset_saved_hint">Votre propre préréglage. Touchez-le à tout moment pour revenir à ces réglages.</string>
+    <string name="preset_save">Enregistrer comme préréglage</string>
+    <string name="preset_save_body">Enregistre le niveau d\'assombrissement, la chaleur et la couleur actuels sous un nom de votre choix.</string>
+    <string name="preset_name_label">Nom</string>
+    <string name="preset_save_confirm">Enregistrer</string>
+    <string name="preset_replace">Remplacer</string>
+    <string name="preset_replace_note">Un préréglage porte déjà ce nom. Ses réglages seront remplacés.</string>
+    <string name="preset_name_taken">Un autre préréglage porte déjà ce nom.</string>
+    <string name="preset_edit">Modifier</string>
+    <string name="preset_edit_title">Modifier le préréglage</string>
+    <string name="preset_delete">Supprimer</string>
+    <string name="preset_cancel">Annuler</string>
+
     <string name="controls_open_app">Ouvrir Gloam</string>
     <string name="panel_close">Fermer les commandes</string>
 

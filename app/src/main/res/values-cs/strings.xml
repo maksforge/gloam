@@ -68,6 +68,19 @@
     <string name="preset_in_bed_hint">Skoro tma a sytě červená, pro pokoj se zhasnutým světlem.</string>
     <string name="presets_hint">Klepnutím na jednu začneš ztmavovat od ní, pak můžeš upravit cokoli nad tím.</string>
 
+    <string name="preset_saved_hint">Tvoje vlastní předvolba. Klepnutím se k tomuto nastavení kdykoli vrátíš.</string>
+    <string name="preset_save">Uložit jako předvolbu</string>
+    <string name="preset_save_body">Uloží aktuální úroveň ztmavení, teplo barvy a odstín pod názvem, který si zvolíš.</string>
+    <string name="preset_name_label">Název</string>
+    <string name="preset_save_confirm">Uložit</string>
+    <string name="preset_replace">Nahradit</string>
+    <string name="preset_replace_note">Předvolba s tímto názvem už existuje. Její nastavení se nahradí.</string>
+    <string name="preset_name_taken">Tento název už má jiná předvolba.</string>
+    <string name="preset_edit">Upravit</string>
+    <string name="preset_edit_title">Upravit předvolbu</string>
+    <string name="preset_delete">Smazat</string>
+    <string name="preset_cancel">Zrušit</string>
+
     <string name="controls_open_app">Otevřít Gloam</string>
     <string name="panel_close">Zavřít ovládání</string>
 

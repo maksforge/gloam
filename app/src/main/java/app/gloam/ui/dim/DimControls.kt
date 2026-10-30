@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.gloam.R
+import app.gloam.data.SavedPreset
 import app.gloam.shade.AutoOff
 import app.gloam.shade.Schedule
 import app.gloam.shade.ScheduleKind
@@ -105,7 +106,12 @@ fun DimControls(
     onWarmth: (Int) -> Unit,
     onWarmthColor: (Int) -> Unit,
     onToggleRunning: () -> Unit,
+    savedPresets: List<SavedPreset>,
     onPreset: (Preset) -> Unit,
+    onSavedPreset: (SavedPreset) -> Unit,
+    onSavePreset: (name: String) -> Unit,
+    onRenamePreset: (from: String, to: String) -> Unit,
+    onDeletePreset: (name: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -153,8 +159,15 @@ fun DimControls(
         )
 
         PresetRow(
-            selected = Preset.matching(dimLevel, warmth, warmthColor),
+            dimLevel = dimLevel,
+            warmth = warmth,
+            warmthColor = warmthColor,
+            savedPresets = savedPresets,
             onPreset = onPreset,
+            onSavedPreset = onSavedPreset,
+            onSavePreset = onSavePreset,
+            onRenamePreset = onRenamePreset,
+            onDeletePreset = onDeletePreset,
             modifier = Modifier.padding(start = Spacing.base, end = Spacing.base, bottom = Spacing.base),
         )
 
@@ -162,37 +175,6 @@ fun DimControls(
             running = running,
             onToggleRunning = onToggleRunning,
             modifier = Modifier.padding(horizontal = Spacing.base),
-        )
-    }
-}
-
-/**
- * The presets as chips, and **one line under them saying what the lit one is for** — which is the
- * help a user asked for, put where the choice is made rather than behind an icon nobody taps.
- *
- * [selected] is derived from the values by [Preset.matching], never stored, so dragging any control
- * off a preset's numbers unlights its chip and the line falls back to the general hint.
- */
-@Composable
-private fun PresetRow(
-    selected: Preset?,
-    onPreset: (Preset) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.hair)) {
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.tight)) {
-            Preset.entries.forEach { preset ->
-                FilterChip(
-                    selected = preset == selected,
-                    onClick = { onPreset(preset) },
-                    label = { Text(stringResource(preset.label)) },
-                )
-            }
-        }
-        Text(
-            text = stringResource(selected?.hint ?: R.string.presets_hint),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
 }

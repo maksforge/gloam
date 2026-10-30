@@ -4,18 +4,14 @@ import androidx.annotation.StringRes
 import app.gloam.R
 
 /**
- * A named starting point for the dim level, warmth and warmth colour — **three values chosen at build
- * time, never a list the user grows**.
+ * A built-in named starting point for the dim level, warmth and warmth colour — **chosen at build
+ * time and translated**. The ones the user names are [app.gloam.data.SavedPreset].
  *
- * That distinction is the whole storage story. A fixed set is settings rather than records
- * (CLAUDE.md's cardinality test), and this set is not even settings: **nothing about a preset is
- * stored**. Tapping one writes the three values it carries into the same keys the controls already
- * write, and which preset is "on" is worked out from those values by [matching] at every read. So
- * there is no `current_preset` key to back up, to go stale when the user nudges a slider afterwards,
- * or to migrate — the user's own values are the only truth, and a preset is a way of typing them.
- *
- * User-made presets would be a list, and `docs/PLAN.md`'s *Not in this plan* prices that: it
- * brings the database back.
+ * **Nothing about which preset is lit is stored.** Tapping one writes the three values it carries
+ * into the same keys the controls already write, and which preset is "on" is worked out from those
+ * values by [matching] at every read. So there is no `current_preset` key to back up, to go stale
+ * when the user nudges a slider afterwards, or to migrate — the user's own values are the only
+ * truth, and a preset is a way of typing them.
  *
  * Kotlin note for a JS reader: an `enum class` with constructor parameters is a closed set of
  * singleton objects, each carrying its own fields — closer to a frozen object of frozen objects than

@@ -69,6 +69,19 @@
     <string name="preset_in_bed_hint">Casi a oscuras y en rojo intenso, para una habitación con la luz apagada.</string>
     <string name="presets_hint">Toca uno para empezar a atenuar con él y luego ajusta lo que quieras arriba.</string>
 
+    <string name="preset_saved_hint">Tu propio ajuste. Tócalo cuando quieras para volver a estos valores.</string>
+    <string name="preset_save">Guardar como ajuste</string>
+    <string name="preset_save_body">Guarda el nivel de atenuación, la calidez y el color actuales con un nombre que tú elijas.</string>
+    <string name="preset_name_label">Nombre</string>
+    <string name="preset_save_confirm">Guardar</string>
+    <string name="preset_replace">Reemplazar</string>
+    <string name="preset_replace_note">Ya hay un ajuste con este nombre. Sus valores se reemplazarán.</string>
+    <string name="preset_name_taken">Otro ajuste ya tiene este nombre.</string>
+    <string name="preset_edit">Editar</string>
+    <string name="preset_edit_title">Editar ajuste</string>
+    <string name="preset_delete">Eliminar</string>
+    <string name="preset_cancel">Cancelar</string>
+
     <string name="controls_open_app">Abrir Gloam</string>
     <string name="panel_close">Cerrar los controles</string>
 

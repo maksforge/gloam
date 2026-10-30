@@ -117,6 +117,7 @@ class AppPreferences(
         val SCHEDULE_KIND = stringPreferencesKey("schedule_kind")
         val SHADE_STARTS = intPreferencesKey("shade_starts")
         val TIP_ASKED = booleanPreferencesKey("tip_asked")
+        val SAVED_PRESETS = stringPreferencesKey("saved_presets")
     }
 
     /**
@@ -231,6 +232,9 @@ class AppPreferences(
      */
     val warmthColor: Flow<Int> =
         store.data.map { (it[Keys.WARMTH_COLOR] ?: DEFAULT_WARMTH_COLOR).coerceIn(0, 100) }
+
+    /** The presets the user named, in the order they were first saved. A setting: welcome on a new phone. */
+    val savedPresets: Flow<List<SavedPreset>> = store.data.map { decodeSavedPresets(it[Keys.SAVED_PRESETS]) }
 
     /**
      * Whether a tap on the launcher icon opens the **compact controls** instead of the full app
@@ -500,6 +504,40 @@ class AppPreferences(
             it[Keys.DIM_LEVEL] = dimLevel.coerceIn(0, 100)
             it[Keys.WARMTH] = warmth.coerceIn(0, 100)
             it[Keys.WARMTH_COLOR] = warmthColor.coerceIn(0, 100)
+        }
+    }
+
+    /**
+     * Saves the dim level, warmth and colour **as they are stored now** under [name], replacing a
+     * preset of that name if there is one. Read inside the same edit as the write, so the values
+     * saved are the ones the shade is showing rather than a screen's copy of them a frame old.
+     */
+    suspend fun saveCurrentAsPreset(name: String) {
+        store.edit {
+            val preset =
+                SavedPreset(
+                    name = name.trim().take(PRESET_NAME_MAX_LENGTH),
+                    dimLevel = (it[Keys.DIM_LEVEL] ?: DEFAULT_DIM_LEVEL).coerceIn(0, 100),
+                    warmth = (it[Keys.WARMTH] ?: 0).coerceIn(0, 100),
+                    warmthColor = (it[Keys.WARMTH_COLOR] ?: DEFAULT_WARMTH_COLOR).coerceIn(0, 100),
+                )
+            it[Keys.SAVED_PRESETS] = encodeSavedPresets(decodeSavedPresets(it[Keys.SAVED_PRESETS]).withSaved(preset))
+        }
+    }
+
+    suspend fun renamePreset(
+        from: String,
+        to: String,
+    ) {
+        store.edit {
+            val presets = decodeSavedPresets(it[Keys.SAVED_PRESETS])
+            it[Keys.SAVED_PRESETS] = encodeSavedPresets(presets.renamed(from, to.trim().take(PRESET_NAME_MAX_LENGTH)))
+        }
+    }
+
+    suspend fun deletePreset(name: String) {
+        store.edit {
+            it[Keys.SAVED_PRESETS] = encodeSavedPresets(decodeSavedPresets(it[Keys.SAVED_PRESETS]).without(name))
         }
     }
 
