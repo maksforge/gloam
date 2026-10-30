@@ -62,7 +62,7 @@ let us do otherwise".
   amendments, and `shade_began_at` is what that cost once).
   **A list the user creates is still not a database.** Saved presets are JSON under one key
   (`data/SavedPreset.kt`) — read whole, written whole, decoded tolerantly. Room comes back only for
-  something that needs querying or relations, and then ADR-0001 comes with it
+  something that needs querying, relations or partial writes, and then ADR-0001 comes with it
   ([ADR-0007](docs/adr/0007-gloam-stores-settings-not-records-so-it-has-no-database.md)'s amendment).
   Nothing online, ever.
 - **The shade must never trap the user.** It is a window over every other app, so two things are
@@ -141,7 +141,8 @@ app/src/main/java/<namespace>/
                the app shell and Nav3 wiring stay at the package root, not under ui/ — they describe
                how the app hangs together rather than any one screen. ControlsActivity is the
                compact controls' host: a second host for the same shell, which is why it is here
-  data/        AppPreferences.kt — the DataStore keys and their defaults. No database
+  data/        AppPreferences.kt — the DataStore keys and their defaults; SavedPreset.kt — the
+               user's own presets, JSON under one of those keys. No database
   shade/       ShadeService.kt, the overlay window and the foreground service that owns it;
                PanelWindow.kt, the *second* window — its flags, its size bound and the Compose host
                it needs because there is no Activity under it;
