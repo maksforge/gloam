@@ -345,11 +345,14 @@ fun DimScreen(
                         startOrAsk()
                     }
                 },
+                onPause = { length ->
+                    viewModel.setPauseLength(length)
+                    pauseShade(length)
+                },
+                onResume = ::resumeShade,
                 // A preset is "turn on reading", not "move the sliders to reading's numbers", so it
                 // starts a shade that is down. One that is already up just follows the new values,
                 // because the service collects them — restarting it would re-set the deadline.
-                onPause = ::pauseShade,
-                onResume = ::resumeShade,
                 onPreset = { preset ->
                     viewModel.applyPreset(preset)
                     if (!state.shadeUp) startOrAsk()

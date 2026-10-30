@@ -2,18 +2,17 @@ package app.gloam.ui.dim
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,6 +21,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import app.gloam.R
 import app.gloam.shade.PauseEnd
@@ -46,32 +47,25 @@ fun pauseUi(
 ): PauseUi = PauseUi(length, pausedUntil?.let { pauseEnd(it, offAtMillis) })
 
 /**
- * The full screen's pause: a button while the shade is up, and while paused a line saying how long
- * is left beside the way back. Nothing at all while the shade is down, because there is nothing to
- * pause.
+ * The full screen's pause: a chip per length while the shade is up, and while paused a line saying
+ * how long is left beside the way back. Nothing at all while the shade is down, because there is
+ * nothing to pause.
+ *
+ * A tap both pauses and remembers the length, so the chip that is lit is the one the compact
+ * controls' single button will use — lit the way the auto-off chips light their choice.
  */
 @Composable
 fun PauseRow(
     running: Boolean,
     pause: PauseUi,
-    onPause: () -> Unit,
+    onPause: (PauseLength) -> Unit,
     onResume: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     if (!running) return
     val end = pause.end
     if (end == null) {
-        OutlinedButton(
-            onClick = onPause,
-            shape = RoundedCornerShape(percent = 50),
-            modifier = modifier.fillMaxWidth().height(48.dp),
-        ) {
-            Icon(painter = painterResource(R.drawable.ic_pause), contentDescription = null)
-            Text(
-                text = stringResource(R.string.dim_pause, stringResource(pause.length.labelRes())),
-                modifier = Modifier.padding(start = Spacing.tight),
-            )
-        }
+        PauseChips(remembered = pause.length, onPause = onPause, modifier = modifier)
         return
     }
     Row(
@@ -89,6 +83,42 @@ fun PauseRow(
             Text(
                 text = stringResource(R.string.dim_resume_now),
                 modifier = Modifier.padding(start = Spacing.tight),
+            )
+        }
+    }
+}
+
+@Composable
+private fun PauseChips(
+    remembered: PauseLength,
+    onPause: (PauseLength) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(Spacing.tight),
+        itemVerticalAlignment = Alignment.CenterVertically,
+        modifier = modifier.fillMaxWidth(),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = Spacing.tight)) {
+            Icon(
+                painter = painterResource(R.drawable.ic_pause),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Text(
+                text = stringResource(R.string.dim_pause_label),
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(start = Spacing.tight),
+            )
+        }
+        for (length in PauseLength.entries) {
+            // "Pause for 5 min" rather than the chip's bare "5 min", which says nothing on its own.
+            val description = stringResource(R.string.dim_pause, stringResource(length.labelRes()))
+            FilterChip(
+                selected = length == remembered,
+                onClick = { onPause(length) },
+                label = { Text(stringResource(length.labelRes())) },
+                modifier = Modifier.semantics { contentDescription = description },
             )
         }
     }

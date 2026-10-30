@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import app.gloam.R
 import app.gloam.shade.AutoOff
+import app.gloam.shade.PauseLength
 import app.gloam.theme.Spacing
 import kotlin.math.roundToInt
 
@@ -104,10 +105,10 @@ private fun CompactSection.toggling(target: CompactSection): CompactSection =
  * @param onSectionOpen fires when a disclosure opens or closes, because in the panel the window's
  *   *width* is the safety bound and a section opening is the only thing that changes what it needs.
  *   The Activity host ignores it: its window is laid out by the window manager around its content.
- * @param onClose the panel's way out, and **`null` in the compact host, which has no equivalent.**
- *   Closing an Activity is the system's job — the back gesture does it — but the panel carries
- *   `FLAG_NOT_FOCUSABLE`, so the Back key never reaches it and this button plus the idle timeout are
- *   its only exits that do not also take the shade down.
+ * @param onClose the panel's way out: it carries `FLAG_NOT_FOCUSABLE`, so the Back key never
+ *   reaches it and this button plus the idle timeout are its only exits that do not also take the
+ *   shade down. The compact host passes one too, so both draw the same group (`ControlsBody`).
+ * @param onPause pauses for the length it is handed, which here is always the remembered one.
  * @param onOpenApp the pips, and the long press on the foot band. Both hosts route it to the full
  *   app rather than to a settings screen — that is where Settings is, and it is also the only way to
  *   reach the explainer, the schedule and everything this surface deliberately does not carry.
@@ -124,7 +125,7 @@ fun CompactControls(
     onWarmth: (Int) -> Unit,
     onAutoOff: (AutoOff) -> Unit,
     onToggleRunning: () -> Unit,
-    onPause: () -> Unit,
+    onPause: (PauseLength) -> Unit,
     onResume: () -> Unit,
     onOpenApp: () -> Unit,
     modifier: Modifier = Modifier,
@@ -523,12 +524,12 @@ private fun TimerSection(
 private fun PauseButton(
     running: Boolean,
     pause: PauseUi,
-    onPause: () -> Unit,
+    onPause: (PauseLength) -> Unit,
     onResume: () -> Unit,
 ) {
     val end = pause.end
     if (end == null || !running) {
-        CompactIconButton(onClick = onPause, selected = false, enabled = running) {
+        CompactIconButton(onClick = { onPause(pause.length) }, selected = false, enabled = running) {
             Icon(
                 painter = painterResource(R.drawable.ic_pause),
                 contentDescription = stringResource(R.string.dim_pause, stringResource(pause.length.labelRes())),

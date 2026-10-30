@@ -104,8 +104,7 @@
     <string name="settings_launcher_compact_hint">Дотик до Gloam відкриває лише повзунки замість усього застосунку. Повідомлення завжди відкриває мале керування.</string>
     <string name="settings_controls_bubble">Залишати бульбашку, що відкриває керування</string>
     <string name="settings_controls_bubble_hint">Під час затемнення дотик поза керуванням згортає його в маленьку бульбашку, а увімкнення запони плиткою швидких налаштувань теж залишає бульбашку. Торкнися її, щоб відкрити керування, або перетягни на ✕, щоб прибрати.</string>
-    <string name="settings_pause">Пауза</string>
-    <string name="settings_pause_body">Пауза ненадовго прибирає запону й повертає тобі твою яскравість, а потім саме знову затемнює екран. Обери, як надовго.</string>
+    <string name="dim_pause_label">Пауза</string>
     <string name="bubble_open">Відкрити керування</string>
     <string name="bubble_remove">Прибрати бульбашку</string>
     <string name="bubble_prompt_title">Залишити бульбашку?</string>

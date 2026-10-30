@@ -100,8 +100,7 @@
     <string name="settings_launcher_compact_hint">Klepnutí na Gloam otevře jen posuvníky místo celé aplikace. Oznámení otevírá malé ovládání vždy.</string>
     <string name="settings_controls_bubble">Nechat bublinu, která otevře ovládání</string>
     <string name="settings_controls_bubble_hint">Během ztmavování klepnutí mimo ovládání zmenší ovládání na malou bublinu a bublinu nechá i zapnutí závoje dlaždicí v Rychlém nastavení. Klepnutím na ni otevřeš ovládání, přetažením na ✕ ji odstraníš.</string>
-    <string name="settings_pause">Pozastavení</string>
-    <string name="settings_pause_body">Pozastavení na chvíli odstraní závoj a vrátí ti vlastní jasnost, pak obrazovku samo znovu ztmaví. Vyber, na jak dlouho.</string>
+    <string name="dim_pause_label">Pozastavení</string>
     <string name="bubble_open">Otevřít ovládání</string>
     <string name="bubble_remove">Odstranit bublinu</string>
     <string name="bubble_prompt_title">Ponechat bublinu?</string>

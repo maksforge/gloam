@@ -253,6 +253,11 @@ class DimViewModel(
         viewModelScope.launch { preferences.endShadeAt(reason) }
     }
 
+    /** Remembered so the compact controls' single pause button pauses for the length picked here. */
+    fun setPauseLength(length: PauseLength) {
+        viewModelScope.launch { preferences.setPauseLength(length) }
+    }
+
     /**
      * The chip. **While the shade is up this also rewrites the deadline, from now rather than from
      * when the shade started** — which is the reading somebody expects from tapping "2 hours" while
