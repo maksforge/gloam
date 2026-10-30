@@ -140,6 +140,13 @@
     <string name="settings_restart_body">Gloam rimette il velo quando il telefono si riavvia. Questo telefono lascia partire un\'app all\'avvio solo se l\'avvio automatico è attivo per essa, e Gloam non ha modo di controllare se lo è: quindi, se il velo non torna, questa è l\'impostazione da guardare.</string>
     <string name="settings_restart_open">Apri le impostazioni di avvio automatico</string>
 
+    <string name="settings_restore">Impostazioni predefinite</string>
+    <string name="settings_restore_body">Riporta le preimpostazioni e tutte le impostazioni allo stato originale di Gloam.</string>
+    <string name="settings_restore_button">Ripristina predefiniti</string>
+    <string name="settings_restore_confirm_title">Ripristinare i predefiniti?</string>
+    <string name="settings_restore_confirm_body">Livello di oscuramento, calore, colore, preimpostazioni, programmazione e tutte le altre impostazioni, lingua compresa, tornano allo stato originale. Le preimpostazioni che hai salvato vengono eliminate. L\'operazione non si può annullare.</string>
+    <string name="settings_restore_confirm">Ripristina</string>
+    <string name="settings_restore_cancel">Annulla</string>
 
     <string name="settings_about">Informazioni</string>
     <string name="settings_support">Aiuto e commenti</string>

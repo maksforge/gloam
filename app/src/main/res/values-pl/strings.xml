@@ -131,6 +131,13 @@
     <string name="settings_restart_body">Gloam przywraca zasłonę po ponownym uruchomieniu telefonu. Ten telefon pozwala aplikacji działać po starcie tylko wtedy, gdy ma włączony autostart, a Gloam nie ma jak sprawdzić, czy jest włączony — więc jeśli zasłona nie wróci, to jest ustawienie, któremu warto się przyjrzeć.</string>
     <string name="settings_restart_open">Otwórz ustawienia autostartu</string>
 
+    <string name="settings_restore">Ustawienia domyślne</string>
+    <string name="settings_restore_body">Przywraca zestawy i wszystkie ustawienia do wartości początkowych.</string>
+    <string name="settings_restore_button">Przywróć domyślne</string>
+    <string name="settings_restore_confirm_title">Przywrócić ustawienia domyślne?</string>
+    <string name="settings_restore_confirm_body">Poziom przyciemnienia, ciepło barwy, odcień, zestawy, harmonogram i wszystkie inne ustawienia, łącznie z językiem, wrócą do wartości początkowych. Zapisane przez ciebie zestawy zostaną usunięte. Tego nie można cofnąć.</string>
+    <string name="settings_restore_confirm">Przywróć</string>
+    <string name="settings_restore_cancel">Anuluj</string>
 
     <string name="settings_about">O aplikacji</string>
     <string name="settings_support">Pomoc i opinie</string>

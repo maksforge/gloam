@@ -142,6 +142,13 @@
     <string name="settings_restart_body">Gloam legt die Schicht nach einem Neustart deines Telefons wieder an. Dieses Telefon lässt eine App nur beim Start laufen, wenn Autostart für sie eingeschaltet ist, und Gloam kann nicht nachsehen, ob er es ist — wenn die Schicht also nicht zurückkommt, ist das die Einstellung, in die du schauen solltest.</string>
     <string name="settings_restart_open">Autostart-Einstellungen öffnen</string>
 
+    <string name="settings_restore">Standardeinstellungen</string>
+    <string name="settings_restore_body">Setzt die Vorgaben und alle Einstellungen auf den Auslieferungszustand zurück.</string>
+    <string name="settings_restore_button">Auf Standard zurücksetzen</string>
+    <string name="settings_restore_confirm_title">Auf Standard zurücksetzen?</string>
+    <string name="settings_restore_confirm_body">Abdunklungsstufe, Wärme, Farbe, Vorgaben, Zeitplan und alle anderen Einstellungen, auch die Sprache, kehren in den Auslieferungszustand zurück. Deine gespeicherten Vorgaben werden gelöscht. Das lässt sich nicht rückgängig machen.</string>
+    <string name="settings_restore_confirm">Zurücksetzen</string>
+    <string name="settings_restore_cancel">Abbrechen</string>
 
     <string name="settings_about">Über die App</string>
     <string name="settings_support">Hilfe und Rückmeldung</string>

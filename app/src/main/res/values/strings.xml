@@ -262,6 +262,16 @@
     <string name="settings_restart_body">Gloam puts the shade back when your phone restarts. This phone only lets an app run at startup if autostart is switched on for it, and Gloam has no way to check whether it is — so if the shade does not come back, this is the setting to look at.</string>
     <string name="settings_restart_open">Open autostart settings</string>
 
+    <!-- Settings → Restore to default: everything the user can set goes back to how the app came,
+         after a confirmation. It does not stop a shade that is on, which simply takes the default
+         values. "Presets you saved" are deleted; the three built-in ones come back. -->
+    <string name="settings_restore">Default settings</string>
+    <string name="settings_restore_body">Puts the presets and every setting back the way Gloam came.</string>
+    <string name="settings_restore_button">Restore to default</string>
+    <string name="settings_restore_confirm_title">Restore to default?</string>
+    <string name="settings_restore_confirm_body">Dim level, warmth, colour, presets, the schedule and every other setting go back to how Gloam came, the language included. Presets you saved are deleted. This cannot be undone.</string>
+    <string name="settings_restore_confirm">Restore</string>
+    <string name="settings_restore_cancel">Cancel</string>
 
     <string name="settings_about">About</string>
     <string name="settings_support">Help and feedback</string>
