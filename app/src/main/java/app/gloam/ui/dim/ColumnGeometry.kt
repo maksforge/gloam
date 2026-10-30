@@ -177,7 +177,7 @@ fun valuePlacement(
  * the floor is the point below which the track is too short to set a level with; below *that* the
  * control would be a picture again.
  *
- * [buttons] is two in the Activity host and three in the panel, which has a close button because the
+ * [buttons] is three in the Activity host and four in the panel, which has a close button because the
  * Back key never reaches it. It is a parameter rather than a constant precisely because that
  * difference is 62dp of the same screen.
  */

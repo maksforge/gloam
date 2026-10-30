@@ -119,10 +119,13 @@ fun CompactControls(
     warmthColor: Int,
     running: Boolean,
     autoOff: AutoOff,
+    pause: PauseUi,
     onDimLevel: (Int) -> Unit,
     onWarmth: (Int) -> Unit,
     onAutoOff: (AutoOff) -> Unit,
     onToggleRunning: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
     onOpenApp: () -> Unit,
     modifier: Modifier = Modifier,
     onSectionOpen: (Boolean) -> Unit = {},
@@ -160,9 +163,9 @@ fun CompactControls(
         val barHeight =
             barHeightDp(
                 availableHeightDp = if (constraints.hasBoundedHeight) maxHeight.value else BAR_HEIGHT_DP,
-                // The panel's close button is a third row under the bar, and it is 62dp the bar
+                // The panel's close button is a fourth row under the bar, and it is 62dp the bar
                 // does not get. The host that has a back gesture passes no `onClose` and keeps them.
-                buttons = if (onClose != null) 3 else 2,
+                buttons = if (onClose != null) 4 else 3,
             ).dp
 
         Column(
@@ -229,6 +232,7 @@ fun CompactControls(
                             contentDescription = stringResource(R.string.dim_auto_off_label),
                         )
                     }
+                    PauseButton(running = running, pause = pause, onPause = onPause, onResume = onResume)
                     if (onClose != null) {
                         CompactIconButton(onClick = onClose, selected = false) {
                             Icon(
@@ -503,7 +507,43 @@ private fun TimerSection(
 }
 
 /**
- * The two (or three) round buttons under the bar.
+ * Pause, or while paused the time left above a play glyph, which a tap resumes from.
+ *
+ * Disabled rather than hidden while the shade is down: the group is centred, and a button that came
+ * and went with the shade would move the bar under the thumb at every start and stop.
+ */
+@Composable
+private fun PauseButton(
+    running: Boolean,
+    pause: PauseUi,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
+) {
+    val end = pause.end
+    if (end == null || !running) {
+        CompactIconButton(onClick = onPause, selected = false, enabled = running) {
+            Icon(
+                painter = painterResource(R.drawable.ic_pause),
+                contentDescription = stringResource(R.string.dim_pause, stringResource(pause.length.labelRes())),
+            )
+        }
+        return
+    }
+    val remaining = rememberCountdown(end.atMillis)
+    val description = stringResource(R.string.dim_resume_now)
+    CompactIconButton(onClick = onResume, selected = true) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.semantics(mergeDescendants = true) { contentDescription = description },
+        ) {
+            Icon(imageVector = Icons.Default.PlayArrow, contentDescription = null, modifier = Modifier.size(18.dp))
+            Text(text = remaining, style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
+
+/**
+ * The three (or four) round buttons under the bar.
  *
  * `OutlinedIconButton` rather than the filled one: filled is reserved for the control that changes
  * what the *screen* looks like, and on this surface that is the foot band. These open a section and
@@ -514,10 +554,12 @@ private fun TimerSection(
 private fun CompactIconButton(
     onClick: () -> Unit,
     selected: Boolean,
+    enabled: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     OutlinedIconButton(
         onClick = onClick,
+        enabled = enabled,
         modifier = Modifier.size(BAR_ICON_BUTTON_DP.dp),
         shape = RoundedCornerShape(percent = 50),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),

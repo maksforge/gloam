@@ -102,11 +102,14 @@ fun DimControls(
     warmth: Int,
     warmthColor: Int,
     running: Boolean,
+    pause: PauseUi,
     onDimLevel: (Int) -> Unit,
     onWarmth: (Int) -> Unit,
     onWarmthColor: (Int) -> Unit,
     onToggleRunning: () -> Unit,
     savedPresets: List<SavedPreset>,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
     onPreset: (Preset) -> Unit,
     onSavedPreset: (SavedPreset) -> Unit,
     onSavePreset: (name: String) -> Unit,
@@ -175,6 +178,14 @@ fun DimControls(
             running = running,
             onToggleRunning = onToggleRunning,
             modifier = Modifier.padding(horizontal = Spacing.base),
+        )
+
+        PauseRow(
+            running = running,
+            pause = pause,
+            onPause = onPause,
+            onResume = onResume,
+            modifier = Modifier.padding(start = Spacing.base, end = Spacing.base, top = Spacing.tight),
         )
     }
 }

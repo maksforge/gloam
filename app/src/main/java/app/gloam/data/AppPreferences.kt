@@ -11,6 +11,7 @@ import app.gloam.shade.AutoOff
 import app.gloam.shade.Coordinates
 import app.gloam.shade.Location
 import app.gloam.shade.NO_DEADLINE
+import app.gloam.shade.PauseLength
 import app.gloam.shade.Schedule
 import app.gloam.shade.ScheduleKind
 import app.gloam.shade.deadlineOrNull
@@ -100,6 +101,7 @@ class AppPreferences(
         val WARMTH_COLOR = intPreferencesKey("warmth_color")
         val AUTO_OFF_MINUTES = intPreferencesKey("auto_off_minutes")
         val OFF_AT_MILLIS = longPreferencesKey("off_at_millis")
+        val PAUSE_MINUTES = intPreferencesKey("pause_minutes")
 
         /**
          * When the shade was started. Absent rather than `0` when unknown, which is what an install
@@ -189,6 +191,13 @@ class AppPreferences(
      */
     val autoOff: Flow<AutoOff> =
         store.data.map { AutoOff.ofMinutes(it[Keys.AUTO_OFF_MINUTES] ?: AutoOff.Default.minutes) }
+
+    /**
+     * How long a pause clears the shade for (CONTEXT.md: **pause**). The length is a setting and
+     * travels with a backup; the pause itself is live state and is never stored.
+     */
+    val pauseLength: Flow<PauseLength> =
+        store.data.map { PauseLength.ofMinutes(it[Keys.PAUSE_MINUTES] ?: PauseLength.Default.minutes) }
 
     /**
      * Whether Gloam may take the **backlight** down before it draws the shade (ADR-0010).
@@ -413,6 +422,10 @@ class AppPreferences(
 
     suspend fun setAutoOff(choice: AutoOff) {
         store.edit { it[Keys.AUTO_OFF_MINUTES] = choice.minutes }
+    }
+
+    suspend fun setPauseLength(length: PauseLength) {
+        store.edit { it[Keys.PAUSE_MINUTES] = length.minutes }
     }
 
     /**

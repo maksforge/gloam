@@ -297,6 +297,12 @@ class ShadeService : Service() {
      */
     private var currentDeadline: Long? = null
 
+    /** The instant the current pause ends, or `null` when the shade is not paused. Mirrored into [shadePausedUntil]. */
+    private var pausedUntil: Long? = null
+
+    /** The wait for [pausedUntil], cancelled by anything that ends the pause first. */
+    private var pauseJob: Job? = null
+
     /**
      * True from the moment this service has decided to stop, and it exists because of a platform
      * rule rather than a preference of ours.
@@ -491,7 +497,16 @@ class ShadeService : Service() {
         }.distinctUntilChanged()
             .onEach { settings ->
                 lastSettings = settings
-                applyShadeValues(settings)
+                // Moving a control during a pause is asking to see what it does.
+                if (pausedUntil != null) endPause() else applyShadeValues(settings)
+            }.launchIn(scope)
+
+        pauseRequests
+            .onEach { request ->
+                when (request) {
+                    PauseRequest.Pause -> pause()
+                    PauseRequest.Resume -> endPause()
+                }
             }.launchIn(scope)
 
         // The compact controls opening, asking for the panel to go: one edge bar at a time, the one
@@ -636,6 +651,8 @@ class ShadeService : Service() {
         // Before the scope, because the only thing the receiver does is feed a flow collected on it.
         unregisterReceiver(screenOnReceiver)
         scope.cancel()
+        pauseJob = null
+        setPausedUntil(null)
         // Before the shade, because the panel is a child of the shade's lifetime rather than a peer
         // of it: there is no state in which the panel is up and the shade is not. This is the third
         // of the panel's three ways out, and the only one the user does not ask for.
@@ -820,6 +837,9 @@ class ShadeService : Service() {
             running = intent.running,
             autoOff = preferences.autoOff.first(),
             themeMode = preferences.themeMode.first(),
+            offAtMillis = intent.offAtMillis,
+            pauseLength = preferences.pauseLength.first(),
+            pausedUntil = pausedUntil,
         )
     }
 
@@ -894,6 +914,8 @@ class ShadeService : Service() {
                 onWarmth = { warmth -> scope.launch { preferences.setWarmth(warmth) } },
                 onAutoOff = ::setPanelAutoOff,
                 onToggleRunning = ::togglePanelRunning,
+                onPause = ::pause,
+                onResume = ::endPause,
                 onOpenApp = ::openFullAppFromPanel,
                 onSectionOpen = ::onPanelSectionOpen,
                 onClose = ::removePanelWindow,
@@ -1078,12 +1100,12 @@ class ShadeService : Service() {
             preferences.warmth.onEach { v -> state.update { it.copy(warmth = v) } }.launchIn(this)
             preferences.warmthColor.onEach { v -> state.update { it.copy(warmthColor = v) } }.launchIn(this)
             preferences.autoOff.onEach { v -> state.update { it.copy(autoOff = v) } }.launchIn(this)
-            // The intent's deadline half is no longer drawn here — the edge bar shows the chips and
-            // not the time they resolve to — so this collector reads the flag and lets the rest of
-            // the value go.
+            preferences.pauseLength.onEach { v -> state.update { it.copy(pauseLength = v) } }.launchIn(this)
+            shadePausedUntil.onEach { v -> state.update { it.copy(pausedUntil = v) } }.launchIn(this)
+            // The deadline only for the pause's sake: a pause that the deadline will end says so.
             preferences
                 .shadeIntent
-                .onEach { v -> state.update { it.copy(running = v.running) } }
+                .onEach { v -> state.update { it.copy(running = v.running, offAtMillis = v.offAtMillis) } }
                 .launchIn(this)
             preferences.themeMode.onEach { v -> state.update { it.copy(themeMode = v) } }.launchIn(this)
 
@@ -1564,12 +1586,69 @@ class ShadeService : Service() {
     }
 
     /**
+     * Clear the shade and release the backlight for the chosen length, keeping the service, its
+     * notification and the stored intent exactly as they are (CONTEXT.md: **pause**).
+     *
+     * Cleared by drawing dim level 0 rather than by removing the window: the panel and the bubble
+     * both hang off the shade's window, and level 0 already means *running, transparent, the
+     * backlight the user's own*. It also drops [backlightTop], so the resume captures afresh from
+     * wherever the user left their own brightness during the pause.
+     */
+    private fun pause() {
+        if (shadeView == null) return
+        scope.launch {
+            val until = pausedUntilFrom(System.currentTimeMillis(), preferences.pauseLength.first())
+            pauseJob?.cancel()
+            setPausedUntil(until)
+            lastSettings?.let { applyShadeValues(it) }
+            syncNotificationText()
+            pauseJob = scope.launch { awaitPauseEnd(until) }
+        }
+    }
+
+    /**
+     * The deadline loop's wall-clock wait, for its reason: `delay` runs on uptime, which stops in
+     * deep sleep, so a single long wait would end the pause late on a sleeping phone.
+     *
+     * **Ending a pause is not a start** (ADR-0012's amendment). Nothing here writes the deadline, and
+     * when the deadline falls inside the pause the shade is left clear for the deadline loop to take
+     * down rather than raised for the moments in between.
+     */
+    private suspend fun awaitPauseEnd(until: Long) {
+        while (true) {
+            val remaining = until - System.currentTimeMillis()
+            if (remaining <= 0) break
+            withTimeoutOrNull(min(remaining, DEADLINE_RECHECK_MS)) { screenOns.first() }
+        }
+        if (!pauseEnd(until, currentDeadline).resumes) return
+        // Cleared first, so [endPause] does not cancel the coroutine calling it.
+        pauseJob = null
+        endPause()
+    }
+
+    /** Bring the shade and the backlight back, from the pause running out or from a resume tap. */
+    private fun endPause() {
+        pauseJob?.cancel()
+        pauseJob = null
+        if (pausedUntil == null) return
+        setPausedUntil(null)
+        lastSettings?.let { applyShadeValues(it) }
+        syncNotificationText()
+    }
+
+    private fun setPausedUntil(until: Long?) {
+        pausedUntil = until
+        reportPausedUntil(until)
+    }
+
+    /**
      * One dim level in, a backlight and an alpha out — the arithmetic itself is [shadeValuesFor],
      * which has no Android under it and is proven by `ShadeRampTest` rather than by looking at a
      * screen. What is left here is the part that genuinely needs a device: deciding *when* the
      * override is captured and when it is let go.
      */
-    private fun applyShadeValues(settings: DimSettings) {
+    private fun applyShadeValues(requested: DimSettings) {
+        val settings = if (pausedUntil != null) requested.copy(dimLevel = 0, warmth = 0) else requested
         // The override goes from released to applied exactly when the level crosses 0 or the toggle
         // comes on, and that is the moment to read: any later and we would be reading a brightness
         // the user could no longer see to change. A user who wants their own slider back drags Gloam
@@ -1632,7 +1711,7 @@ class ShadeService : Service() {
      */
     private fun syncNotificationText() {
         if (stopping) return
-        val facts = NotificationFacts(backlightOverrideLive(), currentDeadline)
+        val facts = NotificationFacts(backlightOverrideLive(), currentDeadline, pausedUntil)
         if (facts == announced) return
         announced = facts
         val manager = getSystemService(NotificationManager::class.java) ?: return
@@ -1685,6 +1764,7 @@ class ShadeService : Service() {
     private data class NotificationFacts(
         val backlightLive: Boolean,
         val offAtMillis: Long?,
+        val pausedUntil: Long?,
     )
 
     private fun buildNotification(): Notification {
@@ -1719,11 +1799,21 @@ class ShadeService : Service() {
                 Intent(this, ShadeService::class.java).setAction(ACTION_STOP),
                 PendingIntent.FLAG_IMMUTABLE,
             )
+        val pause = pausedUntil?.let { pauseEnd(it, currentDeadline) }
         val builder =
             NotificationCompat
                 .Builder(this, AppChannel.Shade.id)
-                .setContentTitle(getString(R.string.shade_notification_title))
-                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(
+                    getString(
+                        if (pause ==
+                            null
+                        ) {
+                            R.string.shade_notification_title
+                        } else {
+                            R.string.shade_notification_title_paused
+                        },
+                    ),
+                ).setSmallIcon(R.drawable.ic_notification)
                 .setContentIntent(open)
                 .addAction(0, getString(R.string.shade_notification_stop), stop)
                 // Not dismissible: this notification is the way back out of a very dark screen.
@@ -1734,7 +1824,10 @@ class ShadeService : Service() {
         // it. Here it is on a surface drawn above the shade. Conditional rather than always present
         // because it would otherwise tell a user who turned the backlight toggle off that their
         // brightness slider is paused, which is false.
-        if (backlightOverrideLive()) {
+        if (pause != null) {
+            val text = if (pause.resumes) R.string.shade_notification_resumes_at else R.string.dim_auto_off_at
+            builder.setContentText(getString(text, formatTime(pause.atMillis)))
+        } else if (backlightOverrideLive()) {
             builder.setContentText(getString(R.string.shade_notification_text_backlight))
         }
         // **The deadline goes in the subtext, and the surface matters more than the string does.**
@@ -1744,7 +1837,10 @@ class ShadeService : Service() {
         // their screen. `setSubText` rather than `setContentText` so it does not displace Phase 1's
         // backlight sentence, which would otherwise be lost on nearly every episode that has a
         // deadline; absent rather than empty when there is none.
-        currentDeadline?.let { builder.setSubText(getString(R.string.shade_notification_until, formatTime(it))) }
+        // Left off while a pause runs out on the deadline, because the content text already names it.
+        if (pause == null || pause.resumes) {
+            currentDeadline?.let { builder.setSubText(getString(R.string.shade_notification_until, formatTime(it))) }
+        }
         return builder.build()
     }
 }

@@ -29,6 +29,13 @@
     <string name="dim_column_floor">MINIMO</string>
     <string name="dim_start">Inizia a oscurare</string>
     <string name="dim_stop">Smetti di oscurare</string>
+    <string name="dim_pause">Pausa di %1$s</string>
+    <string name="dim_resume_now">Riprendi ora</string>
+    <string name="dim_paused_resumes_in">In pausa — l\'oscuramento riprende tra %1$s</string>
+    <string name="dim_paused_ends_in">In pausa — l\'oscuramento si spegne tra %1$s</string>
+    <string name="pause_length_1m">1 min</string>
+    <string name="pause_length_5m">5 min</string>
+    <string name="pause_length_15m">15 min</string>
     <string name="dim_permission_title">Gloam ha bisogno del permesso di disegnare sopra le altre app</string>
     <string name="dim_permission_body">Il velo è uno strato sopra ciò che si trova sullo schermo, quindi Android chiede questo permesso in modo esplicito. Gloam non legge nulla sulle app che stanno sotto. Quando inizierai a oscurare, chiederà anche di mostrare una notifica: è da quella notifica che Gloam si ferma da qualunque punto.</string>
     <string name="dim_permission_grant">Apri le impostazioni</string>
@@ -92,6 +99,8 @@
     <string name="settings_launcher_compact_hint">Toccare Gloam apre solo i cursori invece dell\'app intera. La notifica apre sempre i comandi piccoli.</string>
     <string name="settings_controls_bubble">Lascia una bolla che apre i comandi</string>
     <string name="settings_controls_bubble_hint">Durante l\'oscuramento, toccare fuori dai comandi li riduce a una piccola bolla, e anche accendere il velo dal riquadro delle impostazioni rapide ne lascia una. Toccala per aprire i comandi o trascinala sulla ✕ per rimuoverla.</string>
+    <string name="settings_pause">Pausa</string>
+    <string name="settings_pause_body">La pausa toglie il velo per un po\' e ti restituisce la tua luminosità, poi lo schermo torna a oscurarsi da sé. Scegli quanto dura.</string>
     <string name="bubble_open">Apri i comandi</string>
     <string name="bubble_remove">Rimuovi la bolla</string>
     <string name="bubble_prompt_title">Tenere la bolla?</string>
@@ -174,6 +183,8 @@
     <string name="shade_notification_title">Schermo oscurato</string>
     <string name="shade_notification_stop">Ferma</string>
     <string name="shade_notification_until">Fino alle %1$s</string>
+    <string name="shade_notification_title_paused">Oscuramento in pausa</string>
+    <string name="shade_notification_resumes_at">Riprende alle %1$s</string>
     <string name="shade_notification_text_backlight">Il tuo cursore della luminosità è in pausa mentre Gloam oscura</string>
 
 </resources>

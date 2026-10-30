@@ -21,6 +21,8 @@ import app.gloam.shade.canDrawShade
 import app.gloam.shade.dismissPanelAndBubble
 import app.gloam.shade.escapeHatchLive
 import app.gloam.shade.panelOnScreen
+import app.gloam.shade.pauseShade
+import app.gloam.shade.resumeShade
 import app.gloam.shade.showControlsBubble
 import app.gloam.shade.startShade
 import app.gloam.shade.stopShade
@@ -342,6 +344,7 @@ private fun ControlsBody(
         // The live half as well as the intent, as on the full screen — see `DimUiState.shadeUp`.
         running = state.shadeUp,
         autoOff = state.autoOff,
+        pause = state.pause,
         onDimLevel = viewModel::setDimLevel,
         onWarmth = viewModel::setWarmth,
         onAutoOff = viewModel::setAutoOff,
@@ -354,6 +357,8 @@ private fun ControlsBody(
                 onStart()
             }
         },
+        onPause = ::pauseShade,
+        onResume = ::resumeShade,
         onOpenApp = onOpenApp,
         onClose = onClose,
         modifier = modifier,

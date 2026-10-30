@@ -23,6 +23,7 @@ import app.gloam.ui.dim.BAR_GROUP_GAP_DP
 import app.gloam.ui.dim.BAR_SECTION_WIDTH_DP
 import app.gloam.ui.dim.BAR_WIDTH_DP
 import app.gloam.ui.dim.CompactControls
+import app.gloam.ui.dim.pauseUi
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -282,7 +283,8 @@ private class TouchReportingLayout(
  *
  * **It carries less than it did, because the edge bar draws less.** The schedule summary, the
  * battery-exemption warning and the deadline read-out are gone from this surface: what is left is
- * the level, the warmth, run/stop and the auto-off chips. Everything dropped is a *read* rather than
+ * the level, the warmth, run/stop, pause and the auto-off chips. The deadline is carried again only
+ * so a pause it will cut short can say so. Everything dropped is a *read* rather than
  * a control, and the pips at the top of the bar are one tap from the screen that has all of them.
  * A window that must stay legible at the backlight floor, block as little of the app underneath as it can and
  * be dismissible by somebody who cannot see the rest of the screen cannot also be a dashboard.
@@ -294,6 +296,9 @@ data class PanelState(
     val running: Boolean,
     val autoOff: AutoOff,
     val themeMode: ThemeMode,
+    val offAtMillis: Long?,
+    val pauseLength: PauseLength,
+    val pausedUntil: Long?,
 )
 
 /**
@@ -319,6 +324,8 @@ internal fun PanelContent(
     onWarmth: (Int) -> Unit,
     onAutoOff: (AutoOff) -> Unit,
     onToggleRunning: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
     onOpenApp: () -> Unit,
     onSectionOpen: (Boolean) -> Unit,
     onClose: () -> Unit,
@@ -345,10 +352,13 @@ internal fun PanelContent(
             warmthColor = current.warmthColor,
             running = current.running,
             autoOff = current.autoOff,
+            pause = pauseUi(current.pauseLength, current.pausedUntil, current.offAtMillis),
             onDimLevel = onDimLevel,
             onWarmth = onWarmth,
             onAutoOff = onAutoOff,
             onToggleRunning = onToggleRunning,
+            onPause = onPause,
+            onResume = onResume,
             onOpenApp = onOpenApp,
             onSectionOpen = onSectionOpen,
             onClose = onClose,

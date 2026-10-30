@@ -32,6 +32,13 @@
     <string name="dim_column_floor">MINIMUM</string>
     <string name="dim_start">Commencer à assombrir</string>
     <string name="dim_stop">Arrêter d\'assombrir</string>
+    <string name="dim_pause">Pause de %1$s</string>
+    <string name="dim_resume_now">Reprendre maintenant</string>
+    <string name="dim_paused_resumes_in">En pause — l\'assombrissement reprend dans %1$s</string>
+    <string name="dim_paused_ends_in">En pause — l\'assombrissement s\'arrête dans %1$s</string>
+    <string name="pause_length_1m">1 min</string>
+    <string name="pause_length_5m">5 min</string>
+    <string name="pause_length_15m">15 min</string>
     <string name="dim_permission_title">Gloam a besoin de l\'autorisation de dessiner par-dessus les autres applications</string>
     <string name="dim_permission_body">Le voile est une couche posée sur ce qui est à l\'écran, c\'est pourquoi Android demande cette autorisation explicitement. Gloam ne lit rien sur les applications situées en dessous. Quand vous commencerez à assombrir, il demandera aussi à afficher une notification : c\'est par cette notification que Gloam s\'arrête depuis n\'importe où.</string>
     <string name="dim_permission_grant">Ouvrir les paramètres</string>
@@ -95,6 +102,8 @@
     <string name="settings_launcher_compact_hint">Toucher Gloam ouvre seulement les curseurs au lieu de toute l\'application. La notification ouvre toujours les petites commandes.</string>
     <string name="settings_controls_bubble">Laisser une bulle qui ouvre les commandes</string>
     <string name="settings_controls_bubble_hint">Pendant l\'assombrissement, toucher en dehors des commandes les réduit à une petite bulle, et activer le voile depuis la tuile des réglages rapides en laisse une aussi. Touchez-la pour ouvrir les commandes, ou faites-la glisser sur le ✕ pour la retirer.</string>
+    <string name="settings_pause">Pause</string>
+    <string name="settings_pause_body">La pause retire le voile un moment et vous rend votre propre luminosité, puis l\'écran s\'assombrit de nouveau tout seul. Choisissez sa durée.</string>
     <string name="bubble_open">Ouvrir les commandes</string>
     <string name="bubble_remove">Retirer la bulle</string>
     <string name="bubble_prompt_title">Garder la bulle ?</string>
@@ -177,6 +186,8 @@
     <string name="shade_notification_title">Écran assombri</string>
     <string name="shade_notification_stop">Arrêter</string>
     <string name="shade_notification_until">Jusqu\'à %1$s</string>
+    <string name="shade_notification_title_paused">Assombrissement en pause</string>
+    <string name="shade_notification_resumes_at">Reprend à %1$s</string>
     <string name="shade_notification_text_backlight">Votre curseur de luminosité est suspendu pendant que Gloam assombrit</string>
 
 </resources>
