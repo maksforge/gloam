@@ -93,8 +93,8 @@ details are in the
 
 ## Support
 
-**gloam.dimmer@gmail.com** — an ordinary mailbox that a person reads.
+**gloam.support@maksforge.com** — an ordinary mailbox that a person reads.
 
 ## The source
 
-Built in the open at **[github.com/srednimax/gloam](https://github.com/srednimax/gloam)**.
+Built in the open at **[github.com/maksforge/gloam](https://github.com/maksforge/gloam)**.

@@ -130,6 +130,21 @@ rebuilt from those rather than read off the log. **And its closing guard counts 
 the package**, so the schedule re-arming itself for the next night reads as *"the run is not over"*
 the morning after a run that finished perfectly — read *which* alarm is pending before believing it.
 
+## The support address — open until the new route has carried a real report
+
+`gloam.support@maksforge.com` replaces `gloam.dimmer@gmail.com` from 1.3.1. Why both stay alive for
+good is in [`store-listing.md`](store-listing.md); these are the one-off steps.
+
+- [ ] **The Console's contact email changes in Store settings the day this merges**, not at the
+      upload: Pages republishes `privacy-policy.md` and `index.md` from `main` on merge, and the
+      policy says the address is also the listing's. Then update the Store settings line in
+      [`play-app-content.md`](play-app-content.md).
+- [ ] **The IARC rating contact moves at the next resubmission** — the one the tip already owes
+      below. Record the new contact under *Content rating* in `play-app-content.md`.
+- [ ] **The route has carried a real report.** Only Gmail's send-as confirmation has come through
+      Cloudflare. Send *Report a problem* from a non-Gmail account to the new address and confirm it
+      lands in the inbox, not Spam, with the `#bug` and `#feature` filters still applying.
+
 ## The tip — open until a real purchase is consumed
 
 ADR-0009's 2026-10-11 amendment. The code is in; these are the parts only Play and a phone can prove.
