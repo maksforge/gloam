@@ -1,5 +1,8 @@
 package app.gloam.ui.dim
 
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
@@ -19,7 +22,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.PointerEventPass
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.onLongClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import app.gloam.R
@@ -30,7 +37,8 @@ import app.gloam.theme.Spacing
 /**
  * The built-in presets, then the user's own, as chips — and **one line under them saying what the lit
  * one is for**, with the action that fits it: *Save as preset* when no chip is lit, *Edit* when one
- * of the user's own is.
+ * of the user's own is. A long press on one of the user's own opens the same rename/delete dialog
+ * without applying it, so deleting a preset doesn't start the shade on the way.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
  * numbers unlights its chip. A built-in wins a tie with a saved preset carrying the same numbers.
@@ -54,6 +62,7 @@ fun PresetRow(
     // so a half-typed name is still in the dialog when the user comes back to it.
     var saving by rememberSaveable { mutableStateOf(false) }
     var editing by rememberSaveable { mutableStateOf<String?>(null) }
+    val editLabel = stringResource(R.string.preset_edit)
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.hair)) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.tight)) {
@@ -69,6 +78,7 @@ fun PresetRow(
                     selected = preset == saved,
                     onClick = { onSavedPreset(preset) },
                     label = { Text(preset.name) },
+                    modifier = Modifier.onLongPress(preset.name, editLabel) { editing = preset.name },
                 )
             }
         }
@@ -205,3 +215,39 @@ private fun PresetNameDialog(
         },
     )
 }
+
+/**
+ * Runs [action] on a long press and keeps the press from reaching the chip's own click.
+ *
+ * `FilterChip` owns its `clickable` and has no long-click slot, so this listens on the
+ * [PointerEventPass.Initial] pass — parent before child, the reverse of DOM bubbling — and consumes
+ * the rest of the gesture once it fires, which the chip's click reads as a cancel. The semantics
+ * action is what TalkBack's "double-tap and hold" calls.
+ */
+private fun Modifier.onLongPress(
+    key: Any,
+    label: String,
+    action: () -> Unit,
+): Modifier =
+    semantics {
+        onLongClick(label) {
+            action()
+            true
+        }
+    }.pointerInput(key) {
+        awaitEachGesture {
+            awaitFirstDown(requireUnconsumed = false, pass = PointerEventPass.Initial)
+            val ended =
+                withTimeoutOrNull(viewConfiguration.longPressTimeoutMillis) {
+                    waitForUpOrCancellation(PointerEventPass.Initial)
+                    true
+                }
+            if (ended == null) {
+                action()
+                do {
+                    val event = awaitPointerEvent(PointerEventPass.Initial)
+                    event.changes.forEach { it.consume() }
+                } while (event.changes.any { it.pressed })
+            }
+        }
+    }
