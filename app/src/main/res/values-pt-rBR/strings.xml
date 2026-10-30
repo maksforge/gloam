@@ -35,10 +35,10 @@
     <string name="dim_pause">Pausar por %1$s</string>
     <string name="dim_resume_now">Retomar agora</string>
     <string name="dim_pause_other">Outro…</string>
-    <string name="dim_pause_custom_title">Pausar por quanto tempo?</string>
+    <string name="dim_pause_custom_title">Nova duração da pausa</string>
     <string name="dim_pause_minutes_label">Minutos</string>
     <string name="dim_pause_minutes_range">%1$d–%2$d</string>
-    <string name="dim_pause_custom_confirm">Pausar</string>
+    <string name="dim_pause_custom_confirm">Adicionar</string>
     <string name="dim_pause_cancel">Cancelar</string>
     <string name="dim_paused_resumes_in">Pausado — o escurecimento é retomado em %1$s</string>
     <string name="dim_paused_ends_in">Pausado — desliga em %1$s</string>
@@ -79,7 +79,7 @@
     <string name="preset_evening_hint">Escurecimento leve e muita calidez, para as horas antes de apagar a luz.</string>
     <string name="preset_in_bed">Na cama</string>
     <string name="preset_in_bed_hint">Quase escuro e vermelho intenso, para um quarto com a luz apagada.</string>
-    <string name="presets_hint">Toque em um para começar a escurecer a partir dele e depois ajuste o que quiser acima.</string>
+    <string name="presets_hint">Toque em um para usar o nível de escurecimento e a calidez dele e depois ajuste o que quiser acima.</string>
 
     <string name="preset_saved_hint">Sua própria predefinição. Toque e segure qualquer uma das suas para renomear ou excluir.</string>
     <string name="preset_save">Salvar como predefinição</string>

@@ -262,10 +262,7 @@ fun DimScreen(
         requestNotifications()
     }
 
-    /**
-     * Start, by whichever route the notification permission leaves open. Shared by the Start button
-     * and the presets, so a preset tap can never start a shade the button would have asked first.
-     */
+    /** Start, by whichever route the notification permission leaves open. */
     fun startOrAsk() {
         when {
             // Granted, or one denial already spent. Android permits two denials before the dialog
@@ -349,19 +346,13 @@ fun DimScreen(
                     viewModel.setPauseLength(length)
                     pauseShade(length)
                 },
+                onPauseLength = viewModel::setPauseLength,
                 onResume = ::resumeShade,
-                // A preset is "turn on reading", not "move the sliders to reading's numbers", so it
-                // starts a shade that is down. One that is already up just follows the new values,
-                // because the service collects them — restarting it would re-set the deadline.
-                onPreset = { preset ->
-                    viewModel.applyPreset(preset)
-                    if (!state.shadeUp) startOrAsk()
-                },
+                // A preset only sets the sliders; Start is the one way to begin dimming. A shade that
+                // is already up follows the new values, because the service collects them.
+                onPreset = viewModel::applyPreset,
                 savedPresets = state.savedPresets,
-                onSavedPreset = { preset ->
-                    viewModel.applySavedPreset(preset)
-                    if (!state.shadeUp) startOrAsk()
-                },
+                onSavedPreset = viewModel::applySavedPreset,
                 onSavePreset = viewModel::saveCurrentAsPreset,
                 onRenamePreset = viewModel::renamePreset,
                 onDeletePreset = viewModel::deletePreset,

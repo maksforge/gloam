@@ -38,7 +38,7 @@ import app.gloam.theme.Spacing
  * The built-in presets, then the user's own, as chips — and **one line under them saying what the lit
  * one is for**, with the action that fits it: *Save as preset* when no chip is lit, *Edit* when one
  * of the user's own is. A long press on one of the user's own opens the same rename/delete dialog
- * without applying it, so deleting a preset doesn't start the shade on the way.
+ * without applying it, so deleting a preset doesn't change the sliders on the way.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
  * numbers unlights its chip. A built-in wins a tie with a saved preset carrying the same numbers.

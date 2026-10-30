@@ -37,10 +37,10 @@
     <string name="dim_pause">Пауза на %1$s</string>
     <string name="dim_resume_now">Продовжити зараз</string>
     <string name="dim_pause_other">Інше…</string>
-    <string name="dim_pause_custom_title">На скільки поставити на паузу?</string>
+    <string name="dim_pause_custom_title">Нова тривалість паузи</string>
     <string name="dim_pause_minutes_label">Хвилини</string>
     <string name="dim_pause_minutes_range">%1$d–%2$d</string>
-    <string name="dim_pause_custom_confirm">Поставити на паузу</string>
+    <string name="dim_pause_custom_confirm">Додати</string>
     <string name="dim_pause_cancel">Скасувати</string>
     <string name="dim_paused_resumes_in">Пауза — затемнення продовжиться через %1$s</string>
     <string name="dim_paused_ends_in">Пауза — затемнення вимкнеться через %1$s</string>
@@ -81,7 +81,7 @@
     <string name="preset_evening_hint">Легке затемнення й сильна теплота, на години перед тим, як вимкнути світло.</string>
     <string name="preset_in_bed">У ліжку</string>
     <string name="preset_in_bed_hint">Майже темно й насичено-червоний, для кімнати з вимкненим світлом.</string>
-    <string name="presets_hint">Торкнися одного, щоб почати затемнення з нього, а потім налаштуй усе вище.</string>
+    <string name="presets_hint">Торкнися одного, щоб узяти з нього рівень затемнення й теплоту, а потім налаштуй усе вище.</string>
 
     <string name="preset_saved_hint">Твій власний набір. Утримуй будь-який зі своїх, щоб перейменувати чи видалити його.</string>
     <string name="preset_save">Зберегти як набір</string>
