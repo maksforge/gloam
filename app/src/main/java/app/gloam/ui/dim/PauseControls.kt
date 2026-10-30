@@ -117,8 +117,13 @@ private fun PauseChips(
             FilterChip(
                 selected = length == remembered,
                 onClick = { onPause(length) },
-                label = { Text(stringResource(length.labelRes())) },
-                modifier = Modifier.semantics { contentDescription = description },
+                // On the label rather than the chip, so it merges into the chip's own node.
+                label = {
+                    Text(
+                        text = stringResource(length.labelRes()),
+                        modifier = Modifier.semantics { contentDescription = description },
+                    )
+                },
             )
         }
     }
