@@ -186,7 +186,7 @@
     <string name="shade_notification_stop">Parar</string>
     <string name="shade_notification_until">Até %1$s</string>
     <string name="shade_notification_title_paused">Escurecimento pausado</string>
-    <string name="shade_notification_resumes_at">Retomado às %1$s</string>
+    <string name="shade_notification_resumes_at">Retoma às %1$s</string>
     <string name="shade_notification_text_backlight">Seu controle de brilho fica pausado enquanto o Gloam escurece</string>
 
 </resources>
