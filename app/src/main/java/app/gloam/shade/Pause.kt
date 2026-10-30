@@ -7,21 +7,25 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 /**
- * How long a pause lasts (CONTEXT.md: **pause**). A fixed set of three, so it is one setting rather
- * than a list, and it is stored as minutes for [AutoOff]'s reason: a later build may offer more.
+ * How long a pause lasts (CONTEXT.md: **pause**), in whole minutes: one of the [Presets] the chips
+ * offer, or a length the user typed under *Other…*, kept within [MIN_MINUTES]..[MAX_MINUTES].
+ *
+ * Kotlin note: a `@JvmInline value class` is erased to its one field at run time — a bare `Int`,
+ * like a TypeScript branded type — while the type checker still keeps it apart from other `Int`s.
+ * The private constructor means every instance went through [ofMinutes]'s clamp.
  */
-enum class PauseLength(
+@JvmInline
+value class PauseLength private constructor(
     val minutes: Int,
 ) {
-    Minute1(1),
-    Minutes5(5),
-    Minutes15(15),
-    ;
-
     companion object {
-        val Default = Minutes5
+        const val MIN_MINUTES = 1
+        const val MAX_MINUTES = 120
 
-        fun ofMinutes(minutes: Int): PauseLength = entries.firstOrNull { it.minutes == minutes } ?: Default
+        val Presets: List<PauseLength> = listOf(1, 5, 15).map(::PauseLength)
+        val Default = PauseLength(5)
+
+        fun ofMinutes(minutes: Int): PauseLength = PauseLength(minutes.coerceIn(MIN_MINUTES, MAX_MINUTES))
     }
 }
 

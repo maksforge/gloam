@@ -16,7 +16,7 @@ class PauseTest {
 
     @Test
     fun `a pause ends no later than the deadline, and resumes only when the deadline is past it`() {
-        for (length in PauseLength.entries) {
+        for (length in PauseLength.Presets) {
             val until = pausedUntilFrom(now, length)
             assertEquals(now + length.minutes * minute, until)
             for (offsetSeconds in -60..(length.minutes * 60 + 60)) {
@@ -31,7 +31,7 @@ class PauseTest {
 
     @Test
     fun `with no deadline a pause always resumes when it runs out`() {
-        for (length in PauseLength.entries) {
+        for (length in PauseLength.Presets) {
             val until = pausedUntilFrom(now, length)
             assertEquals(PauseEnd(atMillis = until, resumes = true), pauseEnd(until, null))
         }
@@ -44,10 +44,12 @@ class PauseTest {
     }
 
     @Test
-    fun `an unrecognised stored length reads as the default`() {
-        assertEquals(PauseLength.Minutes5, PauseLength.Default)
-        assertEquals(PauseLength.Default, PauseLength.ofMinutes(7))
-        for (length in PauseLength.entries) assertEquals(length, PauseLength.ofMinutes(length.minutes))
+    fun `any stored length is kept, clamped to the range`() {
+        assertEquals(5, PauseLength.Default.minutes)
+        assertEquals(7, PauseLength.ofMinutes(7).minutes)
+        assertEquals(PauseLength.MIN_MINUTES, PauseLength.ofMinutes(0).minutes)
+        assertEquals(PauseLength.MAX_MINUTES, PauseLength.ofMinutes(10_000).minutes)
+        for (length in PauseLength.Presets) assertEquals(length, PauseLength.ofMinutes(length.minutes))
     }
 
     @Test
