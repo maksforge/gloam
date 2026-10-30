@@ -66,12 +66,13 @@ data class PauseSpan(
 )
 
 /**
- * How much of a pause is left, from 1 at its start to 0 at [end] — what the pause ring draws.
+ * How much of a span is left, from 1 at [from] to 0 at [end] — what the time-left ring draws, for a
+ * pause or for the deadline.
  *
- * [end] is passed rather than read from the span, so a pause the deadline will cut short drains
- * towards the deadline instead of towards a resume that will not come.
+ * For a pause, [end] is passed rather than read from the span, so a pause the deadline will cut
+ * short drains towards the deadline instead of towards a resume that will not come.
  */
-fun pauseLeft(
+fun fractionLeft(
     now: Long,
     from: Long,
     end: Long,

@@ -53,7 +53,7 @@ import app.gloam.R
 import app.gloam.data.ThemeMode
 import app.gloam.theme.AppTheme
 import app.gloam.theme.Spacing
-import app.gloam.ui.dim.PauseRing
+import app.gloam.ui.dim.TimeLeftRing
 import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -353,9 +353,10 @@ internal class BubbleTouchLayout(
  * The morph is four animated numbers: the gap to each side of the window, and the corner radius on
  * each side. Tucked, the outer gap grows until the shape ends exactly at the display's edge (the
  * window runs on past it), and the outer corners go square. The mark is centred in whatever is left,
- * so it is always in the part that shows. While a pause runs, a ring around the mark empties as it
- * does — drawn to [pauseEnd], so a deadline that cuts the pause short drains it to the deadline, as
- * the compact button's ring does.
+ * so it is always in the part that shows. A ring around the mark empties as the nearer end comes:
+ * a pause while one runs, drawn to [pauseEnd] as the compact button's is, and otherwise the
+ * deadline, from when it was set. A pause never outlasts the deadline, so the pause is always the
+ * nearer of the two, and a closed set of controls still says the shade will come down on its own.
  *
  * Kotlin note: `animateDpAsState` is the Compose equivalent of a CSS transition on a value — the
  * composable states the target, and the framework tweens the number it reads on every frame.
@@ -369,10 +370,17 @@ internal fun BubbleContent(
     tucked: StateFlow<BubbleSide?>,
     pause: StateFlow<PauseSpan?>,
     deadline: StateFlow<Long?>,
+    deadlineFrom: StateFlow<Long?>,
 ) {
     val isPressed by pressed.collectAsStateWithLifecycle()
     val pauseSpan by pause.collectAsStateWithLifecycle()
     val offAt by deadline.collectAsStateWithLifecycle()
+    val offFrom by deadlineFrom.collectAsStateWithLifecycle()
+    // Kotlin note: `to` builds a Pair, and `?.let { (from, end) -> … }` below destructures it —
+    // `const [from, end] = ring ?? []` with the null case skipped.
+    val ring =
+        pauseSpan?.let { it.from to pauseEnd(it.until, offAt).atMillis }
+            ?: offAt?.let { end -> offFrom?.let { it to end } }
     val isLeaving by leaving.collectAsStateWithLifecycle()
     val tuckedSide by tucked.collectAsStateWithLifecycle()
     val resting = if (isPressed) null else tuckedSide
@@ -433,10 +441,10 @@ internal fun BubbleContent(
                     .background(colors.primaryContainer, shape),
             contentAlignment = Alignment.Center,
         ) {
-            pauseSpan?.let {
-                PauseRing(
-                    from = it.from,
-                    end = pauseEnd(it.until, offAt).atMillis,
+            ring?.let { (from, end) ->
+                TimeLeftRing(
+                    from = from,
+                    end = end,
                     color = colors.onPrimaryContainer,
                     modifier = Modifier.size(34.dp),
                     strokeWidth = 2.5.dp,
