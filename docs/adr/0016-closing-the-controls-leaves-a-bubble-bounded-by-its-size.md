@@ -77,3 +77,9 @@ the launcher simply does not raise it. A 39dp peek therefore left about 13dp of 
 touchable in any app. `BUBBLE_PEEK_DP` is now 50dp, which leaves about 24dp clear of the strip; the
 tab still docks flush to the border, it is only wider. The strip's width follows the phone's gesture
 settings, so this is a margin for the default, not a guarantee.
+
+Amendment, 2026-10-30. **A start from the Quick Settings tile leaves the bubble too.** The tile turns
+the shade on with nothing of Gloam's on screen, so the user had to find the notification to reach the
+controls. That is the same problem this ADR solved for closing the controls. Starting from the app
+and from the schedule still leave no bubble: the app is already in front, and a scheduled start
+happens while nobody is looking.

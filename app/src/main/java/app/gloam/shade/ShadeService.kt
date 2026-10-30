@@ -70,6 +70,9 @@ private const val ACTION_STOP = "app.gloam.shade.STOP"
  */
 private const val ACTION_SHOW_PANEL = "app.gloam.shade.SHOW_PANEL"
 
+/** A start that also leaves the bubble, for the Quick Settings tile (ADR-0016's amendment). */
+private const val EXTRA_LEAVE_BUBBLE = "app.gloam.shade.LEAVE_BUBBLE"
+
 private const val NOTIFICATION_ID = 1
 
 /** Logcat's own name for this class, so `adb logcat -s ShadeService:*` finds the auto-off line. */
@@ -605,7 +608,12 @@ class ShadeService : Service() {
         // own Start, the boot receiver, and Android's `START_STICKY` restart with a null intent —
         // raises the shade. The `else` is the load-bearing half: it is what keeps a summon that
         // arrives at a dead service from putting the shade up as a side effect of creating one.
-        if (intent?.action == ACTION_SHOW_PANEL) showPanel() else addShadeWindow()
+        if (intent?.action == ACTION_SHOW_PANEL) {
+            showPanel()
+        } else {
+            addShadeWindow()
+            if (intent?.getBooleanExtra(EXTRA_LEAVE_BUBBLE, false) == true) showBubble()
+        }
         return START_STICKY
     }
 
@@ -1749,8 +1757,10 @@ class ShadeService : Service() {
  * a few seconds or Android kills the process with an ANR — which `onStartCommand` does on its first
  * statement for exactly that reason.
  */
-fun Context.startShade() {
-    startForegroundService(Intent(this, ShadeService::class.java))
+fun Context.startShade(leaveBubble: Boolean = false) {
+    startForegroundService(
+        Intent(this, ShadeService::class.java).putExtra(EXTRA_LEAVE_BUBBLE, leaveBubble),
+    )
 }
 
 /** Stop the shade and take the window down. */
