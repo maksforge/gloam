@@ -46,11 +46,11 @@ import app.gloam.theme.Spacing
  * saves the current values as a new preset, always there whatever is lit. Under them, **one line
  * saying what the lit one is for**, with *Edit* beside it whenever one is lit. A long press on any
  * chip opens the same rename/delete dialog without applying it, so deleting a preset doesn't change
- * the sliders on the way.
+ * the sliders on the way. Deleting asks first.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
  * numbers unlights its chip. Presets are unique in their values, so normally one chip lights; a list
- * from before that rule may light two, and then the hint and *Edit* follow the first.
+ * that breaks the rule may light two, and then the hint and *Edit* follow the first.
  */
 @Composable
 fun PresetRow(
@@ -71,6 +71,7 @@ fun PresetRow(
     // so a half-typed name is still in the dialog when the user comes back to it.
     var saving by rememberSaveable { mutableStateOf(false) }
     var editingId by rememberSaveable { mutableStateOf<String?>(null) }
+    var deletingId by rememberSaveable { mutableStateOf<String?>(null) }
     val editLabel = stringResource(R.string.preset_edit)
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.hair)) {
@@ -131,12 +132,50 @@ fun PresetRow(
                 editingId = null
             },
             onDelete = {
-                onDeletePreset(preset.id)
+                deletingId = preset.id
                 editingId = null
             },
             onDismiss = { editingId = null },
         )
     }
+    presets.firstOrNull { it.id == deletingId }?.let { preset ->
+        DeletePresetDialog(
+            name = preset.displayName(labelOf),
+            builtIn = preset.builtIn != null,
+            onConfirm = {
+                onDeletePreset(preset.id)
+                deletingId = null
+            },
+            onDismiss = { deletingId = null },
+        )
+    }
+}
+
+/** A built-in comes back only through *Restore to default*, which resets everything else too, so the body says so. */
+@Composable
+private fun DeletePresetDialog(
+    name: String,
+    builtIn: Boolean,
+    onConfirm: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.preset_delete_confirm_title, name)) },
+        text =
+            if (builtIn) {
+                {
+                    Text(
+                        stringResource(R.string.preset_delete_builtin_body),
+                        style = MaterialTheme.typography.bodyMedium,
+                    )
+                }
+            } else {
+                null
+            },
+        confirmButton = { TextButton(onClick = onConfirm) { Text(stringResource(R.string.preset_delete)) } },
+        dismissButton = { TextButton(onClick = onDismiss) { Text(stringResource(R.string.preset_cancel)) } },
+    )
 }
 
 /**
