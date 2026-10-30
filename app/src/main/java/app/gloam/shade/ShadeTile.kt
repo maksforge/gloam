@@ -11,6 +11,8 @@ import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ProcessLifecycleOwner
 import app.gloam.ControlsActivity
 import app.gloam.MainApplication
 import app.gloam.R
@@ -142,8 +144,8 @@ class ShadeTile : TileService() {
      * auto-off applies exactly as it does to the button on the dim screen. `Deadlines.kt` explains
      * why a scheduled start is the case that must not take it.
      *
-     * A start from here also leaves the bubble, because nothing of Gloam's is on screen afterwards
-     * to bring the controls back (ADR-0016's amendment).
+     * A start from here also leaves the bubble, unless Gloam itself is under Quick Settings
+     * (ADR-0016's amendment).
      *
      * The scope is created here rather than reusing [listening], because a click can be the last
      * thing that happens before the platform stops listening, and cancelling mid-write would leave
@@ -152,6 +154,11 @@ class ShadeTile : TileService() {
     override fun onClick() {
         super.onClick()
         val app = application as MainApplication
+        val gloamInFront =
+            ProcessLifecycleOwner
+                .get()
+                .lifecycle.currentState
+                .isAtLeast(Lifecycle.State.STARTED)
         CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
             val running = preferences.shadeIntent.first().running
             if (running) {
@@ -159,7 +166,7 @@ class ShadeTile : TileService() {
                 app.stopShade()
             } else if (app.canDrawShade()) {
                 preferences.beginShadeAt(ShadeStart.ByHand)
-                app.startShade(leaveBubble = true)
+                app.startShade(leaveBubble = !gloamInFront)
             } else {
                 openTheApp()
             }
