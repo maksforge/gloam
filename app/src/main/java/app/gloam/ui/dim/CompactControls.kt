@@ -10,11 +10,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
@@ -185,7 +188,7 @@ fun CompactControls(
                     CompactSection.Warmth ->
                         WarmthSection(warmth = warmth, warmthColor = warmthColor, onWarmth = onWarmth)
                     CompactSection.Timer ->
-                        TimerSection(autoOff = autoOff, onAutoOff = onAutoOff)
+                        TimerSection(autoOff = autoOff, barHeight = barHeight, onAutoOff = onAutoOff)
                     CompactSection.None -> Unit
                 }
 
@@ -485,21 +488,35 @@ private fun WarmthSection(
  *
  * **The chips do not close the section.** Staying open is what lets the selection redraw under the
  * finger that just tapped, which is the only confirmation this surface gives that anything happened.
+ * So no chip may move when one is tapped: the typed length keeps its row for as long as the section
+ * is open, even after a preset replaces it, because the stack is bottom-aligned and a row dropping
+ * out of it would slide every chip above it out from under the finger.
+ *
  * A stack rather than a wrapped row: the window is 84dp of bar plus whatever a section is allowed,
  * and a row would either be clipped or be the thing that decides the window's width in a language
- * nobody tested.
+ * nobody tested. Its height is bounded the same way, by [sectionMaxHeightDp], and scrolls past it —
+ * an unbounded stack would push the buttons under the bar, the close row among them, off the surface.
  */
 @Composable
 private fun TimerSection(
     autoOff: AutoOff,
+    barHeight: Dp,
     onAutoOff: (AutoOff) -> Unit,
 ) {
+    // Kotlin note: `remember` with no keys is computed once, when the section opens, and kept until
+    // it closes — a `useRef` initial value, not a `useMemo` that recomputes.
+    val openedWith = remember { autoOff }
+    val choices = (AutoOff.choicesWith(openedWith) + AutoOff.choicesWith(autoOff)).distinct()
     Column(
         horizontalAlignment = Alignment.End,
         verticalArrangement = Arrangement.spacedBy(Spacing.tight),
-        modifier = Modifier.widthIn(max = BAR_SECTION_WIDTH_DP.dp),
+        modifier =
+            Modifier
+                .widthIn(max = BAR_SECTION_WIDTH_DP.dp)
+                .heightIn(max = sectionMaxHeightDp(barHeight.value).dp)
+                .verticalScroll(rememberScrollState()),
     ) {
-        for (choice in AutoOff.choicesWith(autoOff)) {
+        for (choice in choices) {
             FilterChip(
                 selected = autoOff == choice,
                 onClick = { onAutoOff(choice) },
