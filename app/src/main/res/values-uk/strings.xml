@@ -67,10 +67,22 @@
     <string name="dim_auto_off_at">Вимкнеться о %1$s</string>
 
     <string name="compact_auto_off_never">Ніколи</string>
-    <string name="compact_auto_off_30m">30 хв</string>
-    <string name="compact_auto_off_1h">1 год</string>
-    <string name="compact_auto_off_2h">2 год</string>
-    <string name="compact_auto_off_4h">4 год</string>
+    <string name="auto_off_length_minutes">%1$d хв</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d год</item>
+        <item quantity="few">%d год</item>
+        <item quantity="many">%d год</item>
+        <item quantity="other">%d год</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d год %2$d хв</string>
+
+    <string name="dim_auto_off_other">Інше…</string>
+    <string name="dim_auto_off_custom_title">Вимкнути через</string>
+    <string name="dim_auto_off_hours_label">Години</string>
+    <string name="dim_auto_off_minutes_label">Хвилини</string>
+    <string name="dim_auto_off_custom_range">Від %1$s до %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Встановити</string>
+    <string name="dim_auto_off_cancel">Скасувати</string>
 
     <string name="dim_warmth_label">Теплота</string>
     <string name="dim_warmth_color_label">Відтінок</string>

@@ -72,9 +72,10 @@ import kotlinx.coroutines.launch
  * ## The two-minute deadline — Phase 2, checkpoint B
  *
  * R7, R8a and R8b all need a deadline shorter than thirty minutes, and **nothing in the shipped app
- * can make one**: `AutoOff`'s smallest value is `Minutes30`, and a debug-only entry in that enum
- * would live in `main/`, drive the chip row, and put its label through the translation gate — the
- * exact failure this source-set seam exists to prevent. `adb` cannot do it either, because DataStore
+ * could make one** when they were taken: the shortest auto-off was thirty minutes, and a debug-only
+ * choice would have lived in `main/`, driven the chip row, and put its label through the translation
+ * gate — the exact failure this source-set seam exists to prevent. A typed auto-off now goes down to
+ * a minute, but only in whole minutes and only from the full screen. `adb` cannot do it either, because DataStore
  * sits in credential-encrypted storage and the live process holds its state in memory.
  *
  * So the same justification the sweep above carries applies here: **only the app can do this to

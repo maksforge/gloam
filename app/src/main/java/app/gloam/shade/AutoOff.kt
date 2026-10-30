@@ -1,32 +1,35 @@
 package app.gloam.shade
 
 /**
- * How long a shade the user started by hand stays up (CONTEXT.md: **auto-off**).
+ * How long a shade the user started by hand stays up (CONTEXT.md: **auto-off**), in whole minutes:
+ * one of the [Presets] the chips offer, or a length typed under *Other…*, kept within
+ * [MIN_MINUTES]..[MAX_MINUTES].
  *
- * A **fixed set of five**, so it is five settings and not a list — `CLAUDE.md`'s cardinality test.
- * Nobody creates a value here at runtime, which is why this stays in DataStore and no database comes
- * back with it.
+ * Still **one setting**, not a list — `CLAUDE.md`'s cardinality test. A typed length replaces the
+ * choice rather than adding a row, which is why this stays a single key in DataStore.
  *
  * **[Never] is the choice that disables it, and "off" is not available to mean that.** CONTEXT.md
  * reserves *off* for the shade not being drawn, so "auto-off: off" is a sentence meaning the shade
  * stays on — a settings row that can be read backwards is a settings row somebody reads backwards.
  *
- * Kotlin note: an `enum class` with a constructor argument is a lookup table. The minutes travel
- * with the member rather than in a `when` somewhere else, which is the same shape `AppChannel` and
- * `TopLevelDestination` already use here — and it is what lets storage hold a plain number while the
- * UI holds a case (see [ofMinutes]).
+ * Kotlin note: a `@JvmInline value class` is erased to its one field at run time — a bare `Int`,
+ * like a TypeScript branded type — while the type checker still keeps it apart from other `Int`s.
+ * The private constructor means every instance went through [ofMinutes], the shape `PauseLength`
+ * has too.
  */
-enum class AutoOff(
+@JvmInline
+value class AutoOff private constructor(
     val minutes: Int,
 ) {
-    Never(0),
-    Minutes30(30),
-    Hour1(60),
-    Hours2(120),
-    Hours4(240),
-    ;
-
     companion object {
+        const val MIN_MINUTES = 1
+        const val MAX_MINUTES = 12 * 60
+
+        /** Stored as `0`, which no typed length can reach: [MIN_MINUTES] is one. */
+        val Never = AutoOff(0)
+
+        val Presets: List<AutoOff> = listOf(Never) + listOf(30, 60, 120, 240).map(::AutoOff)
+
         /**
          * Two hours, and it ships **provisional**.
          *
@@ -40,22 +43,19 @@ enum class AutoOff(
          * notification's Stop action takes a long-press to reach on HyperOS (`phase-1.md`, R8) and
          * the app's own Stop button sits under the shade. A safety floor is not put to a vote.
          */
-        val Default = Hours2
+        val Default = AutoOff(120)
 
         /**
-         * The stored minutes back into a case, falling back to [Default] rather than throwing.
-         *
-         * **Storage holds the minutes rather than the name**, which is the opposite of what
-         * `theme_mode` does, and the difference is which direction the value can move: a theme mode
-         * is a closed set, while a duration is a number a later build might offer more of. An `Int`
-         * lets a future *3 hours* exist without a stored `Hours3` that today's build cannot parse —
-         * it reads as unrecognised, and unrecognised means the default.
-         *
-         * The fallback is the same rule `themeMode` follows and for the same reason: a preference
-         * file survives a downgrade, and the wrong duration is a far better outcome than a crash
-         * loop at startup.
+         * The stored minutes back into a choice. `0` is [Never]; anything else is a length, clamped
+         * rather than refused, so a preference file from another build can never crash the read —
+         * and a clamp errs short, towards light, which is ADR-0012's direction.
          */
-        fun ofMinutes(minutes: Int): AutoOff = entries.firstOrNull { it.minutes == minutes } ?: Default
+        fun ofMinutes(minutes: Int): AutoOff =
+            if (minutes == 0) Never else AutoOff(minutes.coerceIn(MIN_MINUTES, MAX_MINUTES))
+
+        /** The chips to offer: the presets, and the remembered length after them when it is not one. */
+        fun choicesWith(remembered: AutoOff): List<AutoOff> =
+            if (remembered in Presets) Presets else Presets + remembered
     }
 }
 

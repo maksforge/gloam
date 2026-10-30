@@ -65,10 +65,21 @@
     <string name="dim_auto_off_at">Desliga às %1$s</string>
 
     <string name="compact_auto_off_never">Nunca</string>
-    <string name="compact_auto_off_30m">30 min</string>
-    <string name="compact_auto_off_1h">1 hora</string>
-    <string name="compact_auto_off_2h">2 horas</string>
-    <string name="compact_auto_off_4h">4 horas</string>
+    <string name="auto_off_length_minutes">%1$d min</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d hora</item>
+        <item quantity="many">%d horas</item>
+        <item quantity="other">%d horas</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d h %2$d min</string>
+
+    <string name="dim_auto_off_other">Outro…</string>
+    <string name="dim_auto_off_custom_title">Desligar após</string>
+    <string name="dim_auto_off_hours_label">Horas</string>
+    <string name="dim_auto_off_minutes_label">Minutos</string>
+    <string name="dim_auto_off_custom_range">Entre %1$s e %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Definir</string>
+    <string name="dim_auto_off_cancel">Cancelar</string>
 
     <string name="dim_warmth_label">Calidez</string>
     <string name="dim_warmth_color_label">Cor</string>

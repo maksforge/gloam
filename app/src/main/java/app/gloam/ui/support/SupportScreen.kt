@@ -209,7 +209,7 @@ private fun SupportRow(
 
 /**
  * Kotlin note: extensions on the enum rather than two more fields in it, the same split
- * `AutoOff.labelRes()` makes. [SupportRequest] carries what the *mail* is made of and has no Android
+ * `ThemeMode.labelRes()` makes. [SupportRequest] carries what the *mail* is made of and has no Android
  * UI in it; what a row is labelled is the UI layer's business.
  *
  * `internal` rather than `private` because one of the three rows is not on this screen: Settings'

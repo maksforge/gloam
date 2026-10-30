@@ -62,10 +62,21 @@
     <string name="dim_auto_off_at">Si spegne alle %1$s</string>
 
     <string name="compact_auto_off_never">Mai</string>
-    <string name="compact_auto_off_30m">30 min</string>
-    <string name="compact_auto_off_1h">1 ora</string>
-    <string name="compact_auto_off_2h">2 ore</string>
-    <string name="compact_auto_off_4h">4 ore</string>
+    <string name="auto_off_length_minutes">%1$d min</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d ora</item>
+        <item quantity="many">%d ore</item>
+        <item quantity="other">%d ore</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d h %2$d min</string>
+
+    <string name="dim_auto_off_other">Altro…</string>
+    <string name="dim_auto_off_custom_title">Spegnersi dopo</string>
+    <string name="dim_auto_off_hours_label">Ore</string>
+    <string name="dim_auto_off_minutes_label">Minuti</string>
+    <string name="dim_auto_off_custom_range">Tra %1$s e %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Imposta</string>
+    <string name="dim_auto_off_cancel">Annulla</string>
 
     <string name="dim_warmth_label">Calore</string>
     <string name="dim_warmth_color_label">Colore</string>

@@ -65,10 +65,20 @@
     <string name="dim_auto_off_at">Endet um %1$s</string>
 
     <string name="compact_auto_off_never">Nie</string>
-    <string name="compact_auto_off_30m">30 Min.</string>
-    <string name="compact_auto_off_1h">1 Std.</string>
-    <string name="compact_auto_off_2h">2 Std.</string>
-    <string name="compact_auto_off_4h">4 Std.</string>
+    <string name="auto_off_length_minutes">%1$d Min.</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d Std.</item>
+        <item quantity="other">%d Std.</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d Std. %2$d Min.</string>
+
+    <string name="dim_auto_off_other">Andere…</string>
+    <string name="dim_auto_off_custom_title">Beenden nach</string>
+    <string name="dim_auto_off_hours_label">Stunden</string>
+    <string name="dim_auto_off_minutes_label">Minuten</string>
+    <string name="dim_auto_off_custom_range">Zwischen %1$s und %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Festlegen</string>
+    <string name="dim_auto_off_cancel">Abbrechen</string>
 
     <string name="dim_warmth_label">Wärme</string>
     <string name="dim_warmth_color_label">Farbe</string>

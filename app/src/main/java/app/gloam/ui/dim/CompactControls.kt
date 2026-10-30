@@ -480,7 +480,8 @@ private fun WarmthSection(
 }
 
 /**
- * The five auto-off values as a stack of pills, right-aligned beside the bar.
+ * The auto-off presets as a stack of pills, right-aligned beside the bar, with a length typed on the
+ * full screen as a sixth. No *Other…* here: the panel is an overlay window with no dialog to open.
  *
  * **The chips do not close the section.** Staying open is what lets the selection redraw under the
  * finger that just tapped, which is the only confirmation this surface gives that anything happened.
@@ -498,11 +499,11 @@ private fun TimerSection(
         verticalArrangement = Arrangement.spacedBy(Spacing.tight),
         modifier = Modifier.widthIn(max = BAR_SECTION_WIDTH_DP.dp),
     ) {
-        for (choice in AutoOff.entries) {
+        for (choice in AutoOff.choicesWith(autoOff)) {
             FilterChip(
                 selected = autoOff == choice,
                 onClick = { onAutoOff(choice) },
-                label = { Text(stringResource(choice.shortLabelRes())) },
+                label = { Text(autoOffLabel(choice)) },
                 shape = RoundedCornerShape(percent = 50),
                 colors =
                     FilterChipDefaults.filterChipColors(
