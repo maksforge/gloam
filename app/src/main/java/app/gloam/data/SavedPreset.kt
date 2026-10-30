@@ -1,8 +1,9 @@
 package app.gloam.data
 
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.decodeFromJsonElement
 
 const val PRESET_NAME_MAX_LENGTH = 30
 
@@ -38,18 +39,20 @@ private val json = Json { ignoreUnknownKeys = true }
 
 fun encodeSavedPresets(presets: List<SavedPreset>): String = json.encodeToString(presets)
 
-/** A file that will not parse reads as no saved presets rather than as a crash on every launch. */
+/**
+ * Decoded row by row, so one unreadable row loses only itself: the writes read this list back and
+ * store it whole, and an all-or-nothing read would turn one bad row into deleting every preset.
+ */
 fun decodeSavedPresets(text: String?): List<SavedPreset> {
     if (text == null) return emptyList()
-    val decoded =
+    val rows =
         try {
-            json.decodeFromString<List<SavedPreset>>(text)
-        } catch (_: SerializationException) {
-            return emptyList()
+            json.decodeFromString<List<JsonElement>>(text)
         } catch (_: IllegalArgumentException) {
             return emptyList()
         }
-    return decoded
+    return rows
+        .mapNotNull(::decodeRow)
         .filter { it.name.isNotBlank() }
         .map {
             it.copy(
@@ -61,7 +64,17 @@ fun decodeSavedPresets(text: String?): List<SavedPreset> {
         }
 }
 
-/** Replaces the preset with the same name in place, or appends a new one at the end. */
+// SerializationException extends IllegalArgumentException, so this one catch covers both.
+private fun decodeRow(row: JsonElement): SavedPreset? =
+    try {
+        json.decodeFromJsonElement<SavedPreset>(row)
+    } catch (_: IllegalArgumentException) {
+        null
+    }
+
+// Kotlin note: these three are extension functions — like adding a method to `Array.prototype`,
+// except resolved at compile time, visible only where imported, and returning a new list rather
+// than mutating this one.
 fun List<SavedPreset>.withSaved(preset: SavedPreset): List<SavedPreset> =
     if (any { it.isNamed(preset.name) }) {
         map { if (it.isNamed(preset.name)) preset else it }
@@ -69,7 +82,6 @@ fun List<SavedPreset>.withSaved(preset: SavedPreset): List<SavedPreset> =
         this + preset
     }
 
-/** Renames in place, keeping the order; a no-op when [from] is not in the list. */
 fun List<SavedPreset>.renamed(
     from: String,
     to: String,
