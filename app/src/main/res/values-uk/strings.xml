@@ -82,8 +82,8 @@
     <string name="settings_controls">Керування</string>
     <string name="settings_launcher_compact">Відкривати з піктограми мале керування</string>
     <string name="settings_launcher_compact_hint">Дотик до Gloam відкриває лише повзунки замість усього застосунку. Повідомлення завжди відкриває мале керування.</string>
-    <string name="settings_controls_bubble">Залишати бульбашку після закриття керування</string>
-    <string name="settings_controls_bubble_hint">Під час затемнення дотик поза керуванням згортає його в маленьку бульбашку. Торкнися її, щоб повернути керування, або перетягни на ✕, щоб прибрати.</string>
+    <string name="settings_controls_bubble">Залишати бульбашку, що відкриває керування</string>
+    <string name="settings_controls_bubble_hint">Під час затемнення дотик поза керуванням згортає його в маленьку бульбашку, а увімкнення запони плиткою швидких налаштувань теж залишає бульбашку. Торкнися її, щоб відкрити керування, або перетягни на ✕, щоб прибрати.</string>
     <string name="bubble_open">Відкрити керування</string>
     <string name="bubble_remove">Прибрати бульбашку</string>
     <string name="bubble_prompt_title">Залишити бульбашку?</string>

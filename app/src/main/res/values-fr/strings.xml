@@ -80,8 +80,8 @@
     <string name="settings_controls">Commandes</string>
     <string name="settings_launcher_compact">Ouvrir les petites commandes depuis l\'icône</string>
     <string name="settings_launcher_compact_hint">Toucher Gloam ouvre seulement les curseurs au lieu de toute l\'application. La notification ouvre toujours les petites commandes.</string>
-    <string name="settings_controls_bubble">Laisser une bulle à la fermeture des commandes</string>
-    <string name="settings_controls_bubble_hint">Pendant l\'assombrissement, toucher en dehors des commandes les réduit à une petite bulle. Touchez-la pour les rouvrir, ou faites-la glisser sur le ✕ pour la retirer.</string>
+    <string name="settings_controls_bubble">Laisser une bulle qui ouvre les commandes</string>
+    <string name="settings_controls_bubble_hint">Pendant l\'assombrissement, toucher en dehors des commandes les réduit à une petite bulle, et activer le voile depuis la tuile des réglages rapides en laisse une aussi. Touchez-la pour ouvrir les commandes, ou faites-la glisser sur le ✕ pour la retirer.</string>
     <string name="bubble_open">Ouvrir les commandes</string>
     <string name="bubble_remove">Retirer la bulle</string>
     <string name="bubble_prompt_title">Garder la bulle ?</string>

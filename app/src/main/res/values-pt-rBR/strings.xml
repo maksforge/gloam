@@ -80,8 +80,8 @@
     <string name="settings_controls">Controles</string>
     <string name="settings_launcher_compact">Abrir os controles pequenos pelo ícone</string>
     <string name="settings_launcher_compact_hint">Tocar no Gloam abre só os controles em vez do aplicativo inteiro. A notificação sempre abre os controles pequenos.</string>
-    <string name="settings_controls_bubble">Deixar uma bolha ao fechar os controles</string>
-    <string name="settings_controls_bubble_hint">Enquanto escurece, tocar fora dos controles os reduz a uma bolha pequena. Toque nela para trazê-los de volta ou arraste-a até o ✕ para removê-la.</string>
+    <string name="settings_controls_bubble">Deixar uma bolha que abre os controles</string>
+    <string name="settings_controls_bubble_hint">Enquanto escurece, tocar fora dos controles os reduz a uma bolha pequena, e ligar a camada pelo bloco das configurações rápidas também deixa uma. Toque nela para abrir os controles ou arraste-a até o ✕ para removê-la.</string>
     <string name="bubble_open">Abrir os controles</string>
     <string name="bubble_remove">Remover a bolha</string>
     <string name="bubble_prompt_title">Manter a bolha?</string>
