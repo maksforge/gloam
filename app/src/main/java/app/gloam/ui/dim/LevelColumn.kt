@@ -293,9 +293,10 @@ fun WarmthColumn(
     warmthColor: Int,
     onWarmth: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    heightDp: Float = WARMTH_COLUMN_HEIGHT_DP,
 ) {
     val colors = columnColors()
-    val height = WARMTH_COLUMN_HEIGHT_DP.dp
+    val height = heightDp.dp
     val trackPx = with(LocalDensity.current) { height.toPx() }
     val label = stringResource(R.string.dim_warmth_label)
 

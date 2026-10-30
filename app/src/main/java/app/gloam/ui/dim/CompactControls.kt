@@ -190,7 +190,12 @@ fun CompactControls(
             ) {
                 when (section) {
                     CompactSection.Warmth ->
-                        WarmthSection(warmth = warmth, warmthColor = warmthColor, onWarmth = onWarmth)
+                        WarmthSection(
+                            warmth = warmth,
+                            warmthColor = warmthColor,
+                            barHeight = barHeight,
+                            onWarmth = onWarmth,
+                        )
                     CompactSection.Timer ->
                         TimerSection(autoOff = autoOff, barHeight = barHeight, onAutoOff = onAutoOff)
                     CompactSection.None -> Unit
@@ -465,12 +470,13 @@ private fun FootBand(
  *
  * **Strength only; the colour is not here.** It is set once in the full app, and what somebody changes
  * while reading is how much tint, not which one. The column is painted in the chosen colour, so this
- * surface still shows it.
+ * surface still shows it. Shorter beside a shrunk bar, by [warmthColumnHeightDp].
  */
 @Composable
 private fun WarmthSection(
     warmth: Int,
     warmthColor: Int,
+    barHeight: Dp,
     onWarmth: (Int) -> Unit,
 ) {
     Column(
@@ -482,7 +488,12 @@ private fun WarmthSection(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
-        WarmthColumn(warmth = warmth, warmthColor = warmthColor, onWarmth = onWarmth)
+        WarmthColumn(
+            warmth = warmth,
+            warmthColor = warmthColor,
+            onWarmth = onWarmth,
+            heightDp = warmthColumnHeightDp(barHeight.value),
+        )
     }
 }
 

@@ -95,6 +95,17 @@ const val WARMTH_COLUMN_WIDTH_DP = 60f
 const val WARMTH_COLUMN_HEIGHT_DP = 300f
 const val WARMTH_COLUMN_RADIUS_DP = 30f
 
+/** The number above the warmth column and the gap under it, at the default font scale. */
+const val WARMTH_LABEL_ROW_DP = 28f
+
+/**
+ * How tall the warmth column draws beside a bar [barHeightDp] tall: its full height when there is
+ * room, otherwise shrunk so the number and the column together stay within the bar. A drag control
+ * cannot scroll the way the timer chips do — the scroll would take the gesture — so it gives up
+ * height instead, and the row never grows past the bar to push the buttons off the surface.
+ */
+fun warmthColumnHeightDp(barHeightDp: Float): Float = minOf(WARMTH_COLUMN_HEIGHT_DP, barHeightDp - WARMTH_LABEL_ROW_DP)
+
 /**
  * Where the percentage sits relative to the shade edge, and the threshold at which it jumps.
  *
