@@ -127,3 +127,15 @@ to get it right. One key with a rule in front of it is the version a sweep can a
 - **What is still open** is not the rule but a taste inside it: whether a hand-started episode ending
   *inside* a window should spend that night. `DOD.md` carries it as a rule-5 question for the twelve
   testers, phrased as one question about both edges of an episode rather than two.
+
+Amendment, 2026-10-30. **A pause is not a writer, and ending one is not a start.** The snooze the
+Consequences named arrived as a pause: the shade cleared and the backlight released for a few
+minutes, then both restored. It answers the question above with *no* and so touches nothing here.
+Pausing writes neither `shade_running` nor `off_at_millis`, and ending a pause, by the clock or by
+*Resume now*, writes neither either: it re-applies the stored dim level to a service that never
+stopped. The deadline loop keeps running through the pause, so a deadline that falls inside one
+takes the shade down as it would have anyway, and nothing comes back. `pauseEnd` in
+`shade/Pause.kt` is the one place that compares the two, read by the service, the notification and
+the controls, and `PauseTest` sweeps every length against deadlines either side of the pause's end.
+The pause itself lives in the service's memory and never in DataStore, so ADR-0005's backup question
+does not arise: a ROM kill ends it early, which errs toward the shade, and a restore cannot carry one.
