@@ -39,7 +39,7 @@
     <string name="dim_pause_other">Інше…</string>
     <string name="dim_pause_custom_title">На скільки поставити на паузу?</string>
     <string name="dim_pause_minutes_label">Хвилини</string>
-    <string name="dim_pause_minutes_range">Від %1$d до %2$d хвилин</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Поставити на паузу</string>
     <string name="dim_pause_cancel">Скасувати</string>
     <string name="dim_paused_resumes_in">Пауза — затемнення продовжиться через %1$s</string>

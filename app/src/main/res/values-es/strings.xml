@@ -36,7 +36,7 @@
     <string name="dim_pause_other">Otro…</string>
     <string name="dim_pause_custom_title">¿Cuánto tiempo pausar?</string>
     <string name="dim_pause_minutes_label">Minutos</string>
-    <string name="dim_pause_minutes_range">De %1$d a %2$d minutos</string>
+    <string name="dim_pause_minutes_range">%1$d–%2$d</string>
     <string name="dim_pause_custom_confirm">Pausar</string>
     <string name="dim_pause_cancel">Cancelar</string>
     <string name="dim_paused_resumes_in">En pausa — la atenuación se reanuda en %1$s</string>
