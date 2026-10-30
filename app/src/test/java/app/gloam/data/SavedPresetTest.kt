@@ -21,6 +21,18 @@ class SavedPresetTest {
     }
 
     @Test
+    fun `an unreadable row loses only itself`() {
+        val text =
+            """[{"name":"Living room","dimLevel":50,"warmth":20,"warmthColor":30},
+            {"name":null,"dimLevel":1,"warmth":1,"warmthColor":1},
+            {"name":"x"},
+            null,
+            "oops",
+            {"name":"Bedroom","dimLevel":90,"warmth":70,"warmthColor":90}]"""
+        assertEquals(listOf(livingRoom, bedroom), decodeSavedPresets(text))
+    }
+
+    @Test
     fun `a field from a newer build is ignored rather than failing the read`() {
         val text = """[{"name":"Bedroom","dimLevel":90,"warmth":70,"warmthColor":90,"icon":"moon"}]"""
         assertEquals(listOf(bedroom), decodeSavedPresets(text))
