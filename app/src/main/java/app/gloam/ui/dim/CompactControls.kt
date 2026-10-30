@@ -514,14 +514,14 @@ private fun TimerSection(
     }
 }
 
+private const val PAUSE_RING_DP = 40
+
 /**
  * Pause, or while paused a play glyph inside a ring of the time left, which a tap resumes from.
  *
  * Disabled rather than hidden while the shade is down: the group is centred, and a button that came
  * and went with the shade would move the bar under the thumb at every start and stop.
  */
-private const val PAUSE_RING_DP = 40
-
 @Composable
 private fun PauseButton(
     running: Boolean,
