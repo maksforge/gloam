@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import app.gloam.MainApplication
 import app.gloam.data.AppPreferences
 import app.gloam.data.DEFAULT_WARMTH_COLOR
-import app.gloam.data.SavedPreset
+import app.gloam.data.StoredPreset
 import app.gloam.shade.AutoOff
 import app.gloam.shade.PauseLength
 import app.gloam.shade.PauseSpan
@@ -57,7 +57,7 @@ import java.time.LocalTime
  * @param onScreen whether the shade's window is up in this process — [shadeOnScreen], the live half
  *   that [running] deliberately is not.
  * @param tipAsk what the tip's one-time card is decided from; see [TipAskInputs].
- * @param savedPresets the presets the user named, after the built-in ones.
+ * @param presets every preset, built-in or the user's own, in chip order.
  * @param pauseSpan the pause under way, from [shadePause]: live state, like [onScreen].
  */
 data class DimUiState(
@@ -71,7 +71,7 @@ data class DimUiState(
     val schedule: Schedule = Schedule(enabled = false, onAt = LocalTime.MIDNIGHT, offAt = LocalTime.MIDNIGHT),
     val onScreen: Boolean = false,
     val tipAsk: TipAskInputs = TipAskInputs(),
-    val savedPresets: List<SavedPreset> = emptyList(),
+    val presets: List<StoredPreset> = emptyList(),
     val pauseLength: PauseLength = PauseLength.Default,
     val pauseSpan: PauseSpan? = null,
 ) {
@@ -141,16 +141,16 @@ class DimViewModel(
             // Paired with the tip's inputs only for the arity limit; they share no section.
             combine(preferences.lowerBacklight, tipAsk, preferences.pauseLength, ::Triple),
             // Kotlin note: `combine` is typed for two to five flows, so the rest ride together here
-            // only for the arity limit; saved presets share no section with auto-off and the
+            // only for the arity limit; presets share no section with auto-off and the
             // schedule. Nesting rather than the vararg overload, which hands back an `Array<Any?>`
             // and a cast per field — the type checker is doing real work here and is worth keeping.
-            combine(preferences.autoOff, preferences.schedule, preferences.savedPresets, ::Triple),
+            combine(preferences.autoOff, preferences.schedule, preferences.presets, ::Triple),
         ) {
             level,
             (warmth, warmthColor),
             (intent, up, paused),
             (lowerBacklight, tipAsk, pauseLength),
-            (autoOff, schedule, savedPresets),
+            (autoOff, schedule, presets),
             ->
             DimUiState(
                 dimLevel = level,
@@ -163,7 +163,7 @@ class DimViewModel(
                 schedule = schedule,
                 onScreen = up,
                 tipAsk = tipAsk,
-                savedPresets = savedPresets,
+                presets = presets,
                 pauseLength = pauseLength,
                 pauseSpan = paused,
             )
@@ -194,14 +194,7 @@ class DimViewModel(
     }
 
     /** Writes a preset's three values, and nothing else: a preset never starts the shade. */
-    fun applyPreset(preset: Preset) {
-        viewModelScope.launch {
-            preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
-        }
-    }
-
-    /** [applyPreset] for one the user saved. */
-    fun applySavedPreset(preset: SavedPreset) {
+    fun applyPreset(preset: StoredPreset) {
         viewModelScope.launch {
             preferences.setDimLevelAndWarmth(preset.dimLevel, preset.warmth, preset.warmthColor)
         }
@@ -212,14 +205,14 @@ class DimViewModel(
     }
 
     fun renamePreset(
-        from: String,
+        id: String,
         to: String,
     ) {
-        viewModelScope.launch { preferences.renamePreset(from, to) }
+        viewModelScope.launch { preferences.renamePreset(id, to) }
     }
 
-    fun deletePreset(name: String) {
-        viewModelScope.launch { preferences.deletePreset(name) }
+    fun deletePreset(id: String) {
+        viewModelScope.launch { preferences.deletePreset(id) }
     }
 
     /**

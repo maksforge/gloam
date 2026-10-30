@@ -1,5 +1,6 @@
 package app.gloam.ui.dim
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.waitForUpOrCancellation
@@ -35,56 +36,51 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import app.gloam.R
 import app.gloam.data.PRESET_NAME_MAX_LENGTH
-import app.gloam.data.SavedPreset
+import app.gloam.data.StoredPreset
+import app.gloam.data.matching
+import app.gloam.data.named
 import app.gloam.theme.Spacing
 
 /**
- * The built-in presets, then the user's own, as chips, and a **＋** chip after them that saves the
- * current values as a new preset — always there, whatever is lit, so saving is never hidden behind
- * moving a slider first. Under them, **one line saying what the lit one is for**, with *Edit* beside
- * it when one of the user's own is lit. A long press on one of the user's own opens the same rename/delete dialog
- * without applying it, so deleting a preset doesn't change the sliders on the way.
+ * Every preset as a chip — the built-ins and the user's own alike — and a **＋** chip after them that
+ * saves the current values as a new preset, always there whatever is lit. Under them, **one line
+ * saying what the lit one is for**, with *Edit* beside it whenever one is lit. A long press on any
+ * chip opens the same rename/delete dialog without applying it, so deleting a preset doesn't change
+ * the sliders on the way.
  *
  * Which chip is lit is derived from the values, never stored, so dragging any control off a preset's
- * numbers unlights its chip. Every chip carrying the current numbers lights, so a preset saved from a
- * lit one lights beside it; the hint is then the built-in's, and *Edit* opens the first lit one of the
- * user's own.
+ * numbers unlights its chip. Presets are unique in their values, so normally one chip lights; a list
+ * from before that rule may light two, and then the hint and *Edit* follow the first.
  */
 @Composable
 fun PresetRow(
     dimLevel: Int,
     warmth: Int,
     warmthColor: Int,
-    savedPresets: List<SavedPreset>,
-    onPreset: (Preset) -> Unit,
-    onSavedPreset: (SavedPreset) -> Unit,
+    presets: List<StoredPreset>,
+    onPreset: (StoredPreset) -> Unit,
     onSavePreset: (name: String) -> Unit,
-    onRenamePreset: (from: String, to: String) -> Unit,
-    onDeletePreset: (name: String) -> Unit,
+    onRenamePreset: (id: String, to: String) -> Unit,
+    onDeletePreset: (id: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val lit = LitPresets.of(dimLevel, warmth, warmthColor, savedPresets)
+    val labels = Preset.entries.associateWith { stringResource(it.label) }
+    val labelOf: (Preset) -> String = labels::getValue
+    val lit = presets.filter { it.matches(dimLevel, warmth, warmthColor) }
     // Kotlin note: `rememberSaveable` is `useState` that also survives rotation and process death,
     // so a half-typed name is still in the dialog when the user comes back to it.
     var saving by rememberSaveable { mutableStateOf(false) }
-    var editing by rememberSaveable { mutableStateOf<String?>(null) }
+    var editingId by rememberSaveable { mutableStateOf<String?>(null) }
     val editLabel = stringResource(R.string.preset_edit)
 
     Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(Spacing.hair)) {
         FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.tight)) {
-            Preset.entries.forEach { preset ->
+            presets.forEach { preset ->
                 FilterChip(
-                    selected = preset == lit.builtIn,
+                    selected = preset in lit,
                     onClick = { onPreset(preset) },
-                    label = { Text(stringResource(preset.label)) },
-                )
-            }
-            savedPresets.forEach { preset ->
-                FilterChip(
-                    selected = preset in lit.saved,
-                    onClick = { onSavedPreset(preset) },
-                    label = { Text(preset.name) },
-                    modifier = Modifier.onLongPress(preset.name, editLabel) { editing = preset.name },
+                    label = { Text(preset.displayName(labelOf)) },
+                    modifier = Modifier.onLongPress(preset.id, editLabel) { editingId = preset.id },
                 )
             }
             AssistChip(
@@ -94,18 +90,13 @@ fun PresetRow(
         }
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text =
-                    when {
-                        lit.builtIn != null -> stringResource(lit.builtIn.hint)
-                        lit.saved.isNotEmpty() -> stringResource(R.string.preset_saved_hint)
-                        else -> stringResource(R.string.presets_hint)
-                    },
+                text = stringResource(presetHint(lit.firstOrNull(), anyPresets = presets.isNotEmpty())),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.weight(1f),
             )
-            lit.saved.firstOrNull()?.let { preset ->
-                TextButton(onClick = { editing = preset.name }) { Text(stringResource(R.string.preset_edit)) }
+            lit.firstOrNull()?.let { preset ->
+                TextButton(onClick = { editingId = preset.id }) { Text(editLabel) }
             }
         }
     }
@@ -114,8 +105,9 @@ fun PresetRow(
         PresetNameDialog(
             title = stringResource(R.string.preset_save),
             initialName = "",
-            taken = { name -> savedPresets.any { it.isNamed(name) } },
+            taken = { name -> presets.named(name, labelOf) != null },
             takenMeansReplace = true,
+            sameSettingsAs = presets.matching(dimLevel, warmth, warmthColor)?.displayName(labelOf),
             onConfirm = { name ->
                 onSavePreset(name)
                 saving = false
@@ -124,51 +116,52 @@ fun PresetRow(
             onDismiss = { saving = false },
         )
     }
-    // Kotlin note: `?.let` runs the block only when `editing` is non-null, with `current` as the
-    // non-null value — `if (editing != null) { const current = editing; … }`.
-    editing?.let { current ->
+    // Kotlin note: `?.let` runs the block only when the lookup is non-null, with `preset` as the
+    // non-null value — `const preset = …; if (preset) { … }`. A preset deleted while its dialog was
+    // open simply closes it.
+    presets.firstOrNull { it.id == editingId }?.let { preset ->
         PresetNameDialog(
             title = stringResource(R.string.preset_edit_title),
-            initialName = current,
-            taken = { name -> savedPresets.any { it.isNamed(name) && !it.isNamed(current) } },
+            initialName = preset.displayName(labelOf),
+            taken = { name -> presets.named(name, labelOf, exceptId = preset.id) != null },
             takenMeansReplace = false,
+            sameSettingsAs = null,
             onConfirm = { name ->
-                onRenamePreset(current, name)
-                editing = null
+                onRenamePreset(preset.id, name)
+                editingId = null
             },
             onDelete = {
-                onDeletePreset(current)
-                editing = null
+                onDeletePreset(preset.id)
+                editingId = null
             },
-            onDismiss = { editing = null },
+            onDismiss = { editingId = null },
         )
     }
 }
 
-/** The chips the current values light: the built-in, if any, and every saved preset carrying them. */
-internal data class LitPresets(
-    val builtIn: Preset?,
-    val saved: List<SavedPreset>,
-) {
-    companion object {
-        fun of(
-            dimLevel: Int,
-            warmth: Int,
-            warmthColor: Int,
-            savedPresets: List<SavedPreset>,
-        ) = LitPresets(
-            builtIn = Preset.matching(dimLevel, warmth, warmthColor),
-            saved = savedPresets.filter { it.matches(dimLevel, warmth, warmthColor) },
-        )
+/**
+ * The line under the chips: a built-in's own hint while it still has its shipped values, whatever it
+ * is called; the saved-preset hint for anything else lit; and with nothing lit, how to use the row —
+ * or, once every preset is deleted, what the ＋ chip does.
+ */
+@StringRes
+internal fun presetHint(
+    lit: StoredPreset?,
+    anyPresets: Boolean,
+): Int =
+    when {
+        lit == null -> if (anyPresets) R.string.presets_hint else R.string.preset_save_body
+        lit.isAsShipped -> lit.builtIn?.hint ?: R.string.preset_saved_hint
+        else -> R.string.preset_saved_hint
     }
-}
 
 /**
  * One dialog for both saving and renaming, because both are "type a name".
  *
  * [taken] says whether another preset already has the typed name. Saving over it is allowed and is
  * how a preset's values get updated, so the confirm button says *Replace*; renaming onto it is not,
- * because two chips would answer to one name.
+ * because two chips would answer to one name. [sameSettingsAs] names the preset that already carries
+ * the current values, and while there is one nothing can be saved: two chips would do one thing.
  */
 @Composable
 private fun PresetNameDialog(
@@ -176,13 +169,14 @@ private fun PresetNameDialog(
     initialName: String,
     taken: (String) -> Boolean,
     takenMeansReplace: Boolean,
+    sameSettingsAs: String?,
     onConfirm: (String) -> Unit,
     onDelete: (() -> Unit)?,
     onDismiss: () -> Unit,
 ) {
     var name by rememberSaveable { mutableStateOf(initialName) }
     val isTaken = name.isNotBlank() && taken(name)
-    val canConfirm = name.isNotBlank() && (takenMeansReplace || !isTaken)
+    val canConfirm = sameSettingsAs == null && name.isNotBlank() && (takenMeansReplace || !isTaken)
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -191,6 +185,13 @@ private fun PresetNameDialog(
             Column(verticalArrangement = Arrangement.spacedBy(Spacing.tight)) {
                 if (onDelete == null) {
                     Text(stringResource(R.string.preset_save_body), style = MaterialTheme.typography.bodyMedium)
+                }
+                if (sameSettingsAs != null) {
+                    Text(
+                        stringResource(R.string.preset_same_settings, sameSettingsAs),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.error,
+                    )
                 }
                 OutlinedTextField(
                     value = name,

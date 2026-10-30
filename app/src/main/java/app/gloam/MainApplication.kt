@@ -99,7 +99,8 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        preferences = AppPreferences(preferencesStore, lentLocationStore)
+        // The application's resources follow the per-app language on API 33+, which is all of ours.
+        preferences = AppPreferences(preferencesStore, lentLocationStore, presetLabel = { getString(it.label) })
 
         // A blocking read, deliberately and exactly once. Everything else about DataStore is a Flow,
         // but this value has to be known before the first window is created — a Flow collected in a

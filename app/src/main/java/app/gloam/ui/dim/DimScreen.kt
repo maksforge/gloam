@@ -351,8 +351,7 @@ fun DimScreen(
                 // A preset only sets the sliders; Start is the one way to begin dimming. A shade that
                 // is already up follows the new values, because the service collects them.
                 onPreset = viewModel::applyPreset,
-                savedPresets = state.savedPresets,
-                onSavedPreset = viewModel::applySavedPreset,
+                presets = state.presets,
                 onSavePreset = viewModel::saveCurrentAsPreset,
                 onRenamePreset = viewModel::renamePreset,
                 onDeletePreset = viewModel::deletePreset,

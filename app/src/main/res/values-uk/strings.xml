@@ -95,7 +95,7 @@
     <string name="preset_in_bed_hint">Майже темно й насичено-червоний, для кімнати з вимкненим світлом.</string>
     <string name="presets_hint">Торкнися одного, щоб узяти з нього рівень затемнення, теплоту й відтінок, а потім налаштуй усе вище.</string>
 
-    <string name="preset_saved_hint">Твій власний набір. Утримуй будь-який зі своїх, щоб перейменувати чи видалити його.</string>
+    <string name="preset_saved_hint">Твій власний набір. Утримуй будь-який набір, щоб перейменувати чи видалити його.</string>
     <string name="preset_save">Зберегти як набір</string>
     <string name="preset_save_body">Зберігає поточний рівень затемнення, теплоту та відтінок під назвою, яку ти обереш.</string>
     <string name="preset_name_label">Назва</string>
@@ -103,6 +103,7 @@
     <string name="preset_replace">Замінити</string>
     <string name="preset_replace_note">Набір із такою назвою вже є. Його значення буде замінено.</string>
     <string name="preset_name_taken">Інший набір уже має таку назву.</string>
+    <string name="preset_same_settings">Такі самі налаштування, як у наборі «%1$s».</string>
     <string name="preset_edit">Редагувати</string>
     <string name="preset_edit_title">Редагувати набір</string>
     <string name="preset_delete">Видалити</string>
@@ -144,6 +145,7 @@
     <string name="settings_restart">Після перезавантаження</string>
     <string name="settings_restart_body">Gloam повертає запону, коли телефон перезавантажується. Цей телефон дозволяє застосунку працювати після запуску лише тоді, коли для нього ввімкнений автозапуск, а Gloam не має як перевірити, чи ввімкнений він — тож якщо запона не повернулася, це те налаштування, яке варто переглянути.</string>
     <string name="settings_restart_open">Відкрити налаштування автозапуску</string>
+
 
     <string name="settings_about">Про застосунок</string>
     <string name="settings_support">Довідка та відгуки</string>

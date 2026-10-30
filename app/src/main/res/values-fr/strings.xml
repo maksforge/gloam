@@ -92,7 +92,7 @@
     <string name="preset_in_bed_hint">Presque noir et rouge profond, pour une pièce où la lumière est éteinte.</string>
     <string name="presets_hint">Touchez-en un pour en reprendre le niveau d\'assombrissement, la chaleur et la couleur, puis ajustez ce que vous voulez au-dessus.</string>
 
-    <string name="preset_saved_hint">Votre propre préréglage. Appuyez de manière prolongée sur l\'un des vôtres pour le renommer ou le supprimer.</string>
+    <string name="preset_saved_hint">Votre propre préréglage. Appuyez de manière prolongée sur n\'importe quel préréglage pour le renommer ou le supprimer.</string>
     <string name="preset_save">Enregistrer comme préréglage</string>
     <string name="preset_save_body">Enregistre le niveau d\'assombrissement, la chaleur et la couleur actuels sous un nom de votre choix.</string>
     <string name="preset_name_label">Nom</string>
@@ -100,6 +100,7 @@
     <string name="preset_replace">Remplacer</string>
     <string name="preset_replace_note">Un préréglage porte déjà ce nom. Ses réglages seront remplacés.</string>
     <string name="preset_name_taken">Un autre préréglage porte déjà ce nom.</string>
+    <string name="preset_same_settings">Mêmes paramètres que le préréglage « %1$s ».</string>
     <string name="preset_edit">Modifier</string>
     <string name="preset_edit_title">Modifier le préréglage</string>
     <string name="preset_delete">Supprimer</string>
@@ -141,6 +142,7 @@
     <string name="settings_restart">Après un redémarrage</string>
     <string name="settings_restart_body">Gloam remet le voile quand votre téléphone redémarre. Ce téléphone ne laisse une application démarrer au lancement que si le démarrage automatique est activé pour elle, et Gloam n\'a aucun moyen de vérifier s\'il l\'est : donc si le voile ne revient pas, c\'est le paramètre à regarder.</string>
     <string name="settings_restart_open">Ouvrir les paramètres de démarrage automatique</string>
+
 
     <string name="settings_about">À propos</string>
     <string name="settings_support">Aide et commentaires</string>

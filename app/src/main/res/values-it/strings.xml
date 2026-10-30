@@ -89,7 +89,7 @@
     <string name="preset_in_bed_hint">Quasi buio e rosso intenso, per una stanza con la luce spenta.</string>
     <string name="presets_hint">Toccane uno per prenderne il livello di oscuramento, il calore e il colore, poi regola quello che vuoi qui sopra.</string>
 
-    <string name="preset_saved_hint">La tua preimpostazione. Tieni premuta una delle tue per rinominarla o eliminarla.</string>
+    <string name="preset_saved_hint">La tua preimpostazione. Tieni premuta una preimpostazione qualsiasi per rinominarla o eliminarla.</string>
     <string name="preset_save">Salva come preimpostazione</string>
     <string name="preset_save_body">Salva il livello di oscuramento, il calore e il colore attuali con un nome a tua scelta.</string>
     <string name="preset_name_label">Nome</string>
@@ -97,6 +97,7 @@
     <string name="preset_replace">Sostituisci</string>
     <string name="preset_replace_note">Esiste già una preimpostazione con questo nome. Le sue impostazioni verranno sostituite.</string>
     <string name="preset_name_taken">Un\'altra preimpostazione ha già questo nome.</string>
+    <string name="preset_same_settings">Stesse impostazioni della preimpostazione «%1$s».</string>
     <string name="preset_edit">Modifica</string>
     <string name="preset_edit_title">Modifica preimpostazione</string>
     <string name="preset_delete">Elimina</string>
@@ -138,6 +139,7 @@
     <string name="settings_restart">Dopo un riavvio</string>
     <string name="settings_restart_body">Gloam rimette il velo quando il telefono si riavvia. Questo telefono lascia partire un\'app all\'avvio solo se l\'avvio automatico è attivo per essa, e Gloam non ha modo di controllare se lo è: quindi, se il velo non torna, questa è l\'impostazione da guardare.</string>
     <string name="settings_restart_open">Apri le impostazioni di avvio automatico</string>
+
 
     <string name="settings_about">Informazioni</string>
     <string name="settings_support">Aiuto e commenti</string>

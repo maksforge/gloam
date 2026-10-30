@@ -61,7 +61,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import app.gloam.R
-import app.gloam.data.SavedPreset
+import app.gloam.data.StoredPreset
 import app.gloam.shade.AutoOff
 import app.gloam.shade.PauseLength
 import app.gloam.shade.Schedule
@@ -109,15 +109,14 @@ fun DimControls(
     onWarmth: (Int) -> Unit,
     onWarmthColor: (Int) -> Unit,
     onToggleRunning: () -> Unit,
-    savedPresets: List<SavedPreset>,
+    presets: List<StoredPreset>,
     onPause: (PauseLength) -> Unit,
     onPauseLength: (PauseLength) -> Unit,
     onResume: () -> Unit,
-    onPreset: (Preset) -> Unit,
-    onSavedPreset: (SavedPreset) -> Unit,
+    onPreset: (StoredPreset) -> Unit,
     onSavePreset: (name: String) -> Unit,
-    onRenamePreset: (from: String, to: String) -> Unit,
-    onDeletePreset: (name: String) -> Unit,
+    onRenamePreset: (id: String, to: String) -> Unit,
+    onDeletePreset: (id: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -168,9 +167,8 @@ fun DimControls(
             dimLevel = dimLevel,
             warmth = warmth,
             warmthColor = warmthColor,
-            savedPresets = savedPresets,
+            presets = presets,
             onPreset = onPreset,
-            onSavedPreset = onSavedPreset,
             onSavePreset = onSavePreset,
             onRenamePreset = onRenamePreset,
             onDeletePreset = onDeletePreset,
