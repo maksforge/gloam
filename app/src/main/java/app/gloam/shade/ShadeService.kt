@@ -290,15 +290,16 @@ class ShadeService : Service() {
     private var announced: NotificationFacts? = null
 
     /**
-     * The deadline [buildNotification] should name — the value, not the announcement.
+     * The deadline [buildNotification] should name and the bubble's pause ring drains to — the
+     * value, not the announcement.
      *
      * Kept beside the flow that owns it rather than read with `.first()` inside the builder, because
      * `buildNotification` is called from `onStartCommand` on the main thread and a suspending read
      * there is a start-up the foreground contract does not have time for.
      */
-    private var currentDeadline: Long? = null
+    private val currentDeadline = MutableStateFlow<Long?>(null)
 
-    /** The instant the current pause ends, or `null` when the shade is not paused. Mirrored into [shadePausedUntil]. */
+    /** The instant the current pause ends, or `null` when the shade is not paused. Mirrored into [shadePause]. */
     private var pausedUntil: Long? = null
 
     /** The wait for [pausedUntil], cancelled by anything that ends the pause first. */
@@ -555,7 +556,7 @@ class ShadeService : Service() {
                 .collectLatest { offAt ->
                     // The notification names this, so it is posted from the same emission that
                     // re-arms the loop — one place where the deadline moves, one place that says so.
-                    currentDeadline = offAt
+                    currentDeadline.value = offAt
                     syncNotificationText()
                     awaitDeadline(offAt)
                 }
@@ -1217,6 +1218,7 @@ class ShadeService : Service() {
                 leaving = bubbleLeaving,
                 tucked = bubbleTucked,
                 pause = shadePause,
+                deadline = currentDeadline,
             )
         }
         val params =
@@ -1624,7 +1626,7 @@ class ShadeService : Service() {
             if (remaining <= 0) break
             withTimeoutOrNull(min(remaining, DEADLINE_RECHECK_MS)) { screenOns.first() }
         }
-        if (!pauseEnd(until, currentDeadline).resumes) return
+        if (!pauseEnd(until, currentDeadline.value).resumes) return
         // Cleared first, so [endPause] does not cancel the coroutine calling it.
         pauseJob = null
         endPause()
@@ -1715,7 +1717,7 @@ class ShadeService : Service() {
      */
     private fun syncNotificationText() {
         if (stopping) return
-        val facts = NotificationFacts(backlightOverrideLive(), currentDeadline, pausedUntil)
+        val facts = NotificationFacts(backlightOverrideLive(), currentDeadline.value, pausedUntil)
         if (facts == announced) return
         announced = facts
         val manager = getSystemService(NotificationManager::class.java) ?: return
@@ -1803,7 +1805,7 @@ class ShadeService : Service() {
                 Intent(this, ShadeService::class.java).setAction(ACTION_STOP),
                 PendingIntent.FLAG_IMMUTABLE,
             )
-        val pause = pausedUntil?.let { pauseEnd(it, currentDeadline) }
+        val pause = pausedUntil?.let { pauseEnd(it, currentDeadline.value) }
         val builder =
             NotificationCompat
                 .Builder(this, AppChannel.Shade.id)
@@ -1843,7 +1845,11 @@ class ShadeService : Service() {
         // deadline; absent rather than empty when there is none.
         // Left off while a pause runs out on the deadline, because the content text already names it.
         if (pause == null || pause.resumes) {
-            currentDeadline?.let { builder.setSubText(getString(R.string.shade_notification_until, formatTime(it))) }
+            currentDeadline.value?.let {
+                builder.setSubText(
+                    getString(R.string.shade_notification_until, formatTime(it)),
+                )
+            }
         }
         return builder.build()
     }
