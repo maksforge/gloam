@@ -59,3 +59,21 @@ If the answer becomes yes, ADR-0001 is not superseded so much as *reactivated*: 
 reasoning, `scripts/schema-gate.py` is still in the repository, and the database returns at version 1
 with the full apparatus around it. That is the point of deleting now rather than hedging — the
 reasoning survives in these documents, and it is only the code that goes.
+
+## Amendment (2026-10-30): a list the user creates lives in a file, not a database
+
+The first list arrived: presets the user saves under their own names. **It is stored as JSON under one
+DataStore key (`saved_presets`), not in Room.** The bar for the database was set too high above. What
+ADR-0001 defends — migrations, a schema gate, WAL-aware backup — is worth its weight for records that
+are queried, related and numerous. A few named presets are none of those: they are read whole, written
+whole, and replaceable in a minute.
+
+- **The test moves from cardinality to shape.** A user-made list of small values that is read and
+  written whole goes in DataStore as serialised JSON. Room comes back only for something that needs
+  querying, relations or partial writes — and that still reactivates ADR-0001 in full.
+- **The migration story is the decoder's tolerance.** `ignoreUnknownKeys`, defaults on any field
+  added later, values coerced on read, and a file that will not parse reads as an empty list rather
+  than a crash. Nothing is migrated in place.
+- **It is backed up with the rest of the store**, which is what a preset is: a setting, welcome on
+  the user's next phone.
+- **Nothing online, ever.** No server, no account and no sync is still the product, not a phase.

@@ -586,15 +586,14 @@ the full description is a cut in four other languages.
 **No phase in this roadmap adds a database.** ADR-0007 removed Room and said the reasoning survives
 in the documents; this is the boundary that keeps it removed.
 
-The test that decides it is **cardinality, not subject matter**: a *fixed set* is not a *list*,
-however many members it has. Four schedule values are settings. Seven per-day windows would be
-fourteen settings — still DataStore, still nothing to migrate. What needs a table is the user
-creating rows nobody knew about at build time.
+The test that decides it is **shape, not subject matter** (ADR-0007's amendment). A fixed set is
+plain keys: seven per-day windows would be fourteen settings. A small list the user grows, read and
+written whole, is JSON under one key. What needs a table is querying, relations or partial writes.
 
 Out, and what each would cost if it ever came in:
 
-- **Saved presets** — a user-created list. Reactivates ADR-0001 in full: schema gate, exported
-  schemas, migration tests, the device-upgrade ritual parked in `DOD.md`.
+- ~~**Saved presets**~~ — shipped as JSON under one DataStore key, not a table; ADR-0007's
+  amendment says why that does not reopen ADR-0001.
 - **Per-app rules** — a table *and* knowing the foreground app, which means `PACKAGE_USAGE_STATS` or
   an accessibility service. The accessibility route is a well-known Play rejection risk for an app
   that is not an accessibility tool, and either way it is a fifth permission hand-off.
