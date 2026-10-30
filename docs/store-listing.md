@@ -1584,16 +1584,16 @@ about a preset leaves it.
 New: your own presets. Set the dim level, warmth and colour the way you like, tap Save as preset and give it a name, such as Living room or Bedroom. It sits beside Reading, Evening and In bed, one tap away. Touch and hold it to rename or delete it. Everything stays on your phone.
 ```
 
-**Polish** — 315/500:
+**Polish** — 324/500:
 
 ```
-Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień tak, jak lubisz, dotknij Zapisz jako zestaw i nadaj mu nazwę, na przykład Salon albo Sypialnia. Pojawi się obok Czytanie, Wieczór i W łóżku, o jedno dotknięcie. Przytrzymaj go, aby zmienić nazwę albo go usunąć. Wszystko zostaje w telefonie.
+Nowość: własne zestawy. Ustaw poziom przyciemnienia, ciepło barwy i odcień tak, jak lubisz, dotknij Zapisz jako zestaw i nadaj mu nazwę, na przykład Salon albo Sypialnia. Pojawi się obok zestawów Czytanie, Wieczór i W łóżku, o jedno dotknięcie. Przytrzymaj go, aby zmienić nazwę albo go usunąć. Wszystko zostaje w telefonie.
 ```
 
-**Czech** — 288/500:
+**Czech** — 298/500:
 
 ```
-Novinka: vlastní předvolby. Nastav si úroveň ztmavení, teplo barvy a odstín podle sebe, klepni na Uložit jako předvolbu a pojmenuj ji, třeba Obývák nebo Ložnice. Objeví se vedle Čtení, Večer a V posteli, na jedno klepnutí. Podržením ji přejmenuješ nebo smažeš. Všechno zůstává v telefonu.
+Novinka: vlastní předvolby. Nastav si úroveň ztmavení, teplo barvy a odstín podle sebe, klepni na Uložit jako předvolbu a pojmenuj ji, třeba Obývák nebo Ložnice. Objeví se vedle předvoleb Čtení, Večer a V posteli, na jedno klepnutí. Podržením ji přejmenuješ nebo smažeš. Všechno zůstává v telefonu.
 ```
 
 **German** — 330/500:
@@ -1608,10 +1608,10 @@ Neu: eigene Vorgaben. Stell Abdunklungsstufe, Wärme und Farbe so ein, wie du si
 Novedad: tus propios preajustes. Pon el nivel de atenuación, la calidez y el color a tu gusto, toca Guardar como preajuste y ponle un nombre, como Salón o Dormitorio. Aparece junto a Lectura, Noche y En la cama, a un toque. Mantenlo pulsado para cambiarle el nombre o eliminarlo. Todo se queda en tu teléfono.
 ```
 
-**French** — 364/500:
+**French** — 395/500:
 
 ```
-Nouveau : vos propres préréglages. Réglez le niveau d'assombrissement, la chaleur et la couleur à votre goût, touchez Enregistrer comme préréglage et donnez-lui un nom, par exemple Salon ou Chambre. Il s'affiche à côté de Lecture, Soirée et Au lit, à un toucher. Appuyez de manière prolongée dessus pour le renommer ou le supprimer. Tout reste sur votre téléphone.
+Nouveau : vos propres préréglages. Réglez le niveau d'assombrissement, la chaleur et la couleur à votre goût, touchez Enregistrer comme préréglage et donnez-lui un nom, par exemple Salon ou Chambre. Il s'affiche à côté des préréglages Lecture, Soirée et Au lit, accessible d'un simple toucher. Appuyez de manière prolongée dessus pour le renommer ou le supprimer. Tout reste sur votre téléphone.
 ```
 
 **Italian** — 326/500:
@@ -1626,8 +1626,8 @@ Novità: le tue preimpostazioni. Regola il livello di oscuramento, il calore e i
 Novidade: suas próprias predefinições. Ajuste o nível de escurecimento, a calidez e a cor do seu jeito, toque em Salvar como predefinição e dê um nome a ela, como Sala ou Quarto. Ela aparece ao lado de Leitura, Noite e Na cama, a um toque. Toque e segure para renomear ou excluir. Tudo fica no seu celular.
 ```
 
-**Ukrainian** — 327/500:
+**Ukrainian** — 336/500:
 
 ```
-Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок так, як тобі подобається, торкнися Зберегти як набір і дай йому назву, наприклад Вітальня чи Спальня. Він з'явиться поруч із Читання, Вечір і У ліжку, на відстані одного дотику. Утримуй його, щоб перейменувати чи видалити. Усе залишається на твоєму телефоні.
+Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок так, як тобі подобається, торкнися Зберегти як набір і дай йому назву, наприклад Вітальня чи Спальня. Він з'явиться поруч із наборами Читання, Вечір і У ліжку, на відстані одного дотику. Утримуй його, щоб перейменувати чи видалити. Усе залишається на твоєму телефоні.
 ```
