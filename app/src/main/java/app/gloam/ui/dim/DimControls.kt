@@ -25,6 +25,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.HorizontalDivider
@@ -463,6 +464,7 @@ fun AutoOffCard(
     modifier: Modifier = Modifier,
 ) {
     var expanded by rememberSaveable { mutableStateOf(true) }
+    var choosingLength by rememberSaveable { mutableStateOf(false) }
 
     Surface(
         color = MaterialTheme.colorScheme.surfaceContainer,
@@ -488,7 +490,7 @@ fun AutoOffCard(
                     modifier = Modifier.weight(1f),
                 )
                 Text(
-                    text = stringResource(autoOff.shortLabelRes()),
+                    text = autoOffLabel(autoOff),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(end = Spacing.tight),
@@ -511,13 +513,17 @@ fun AutoOffCard(
                         // `FlowRow` rather than `Row`: five chips do not fit one line on a narrow
                         // screen in every language, and a clipped safety control is worse than a
                         // wrapped one.
-                        for (choice in AutoOff.entries) {
+                        for (choice in AutoOff.choicesWith(autoOff)) {
                             FilterChip(
                                 selected = autoOff == choice,
                                 onClick = { onAutoOff(choice) },
-                                label = { Text(stringResource(choice.shortLabelRes())) },
+                                label = { Text(autoOffLabel(choice)) },
                             )
                         }
+                        AssistChip(
+                            onClick = { choosingLength = true },
+                            label = { Text(stringResource(R.string.dim_auto_off_other)) },
+                        )
                     }
                     Text(
                         text = stringResource(R.string.dim_auto_off_hint),
@@ -566,6 +572,19 @@ fun AutoOffCard(
                 onClick = onOpenSchedule,
             )
         }
+    }
+
+    // Confirming chooses the length the way a chip tap does, so a running shade's deadline is
+    // re-dated from now through the same path.
+    if (choosingLength) {
+        AutoOffLengthDialog(
+            initial = autoOff,
+            onConfirm = { length ->
+                choosingLength = false
+                onAutoOff(length)
+            },
+            onDismiss = { choosingLength = false },
+        )
     }
 }
 
@@ -721,24 +740,4 @@ internal fun rememberScheduleSummary(
                 title = stringResource(R.string.dim_schedule_row),
                 text = stringResource(R.string.dim_schedule_off),
             )
-    }
-
-/**
- * The auto-off labels — **one set, everywhere.**
- *
- * There used to be two: long ones for the full screen ("After 30 minutes") and short ones for the
- * compact surfaces. The redesign puts the same five chips in a card the width of a phone and in a
- * stack beside an 84dp bar, and the short labels fit both; a second set would be a second place for
- * a value added to [AutoOff] to be forgotten.
- *
- * Kotlin note: an extension on the enum rather than a field in it. The resource ids belong to the UI
- * layer and `AutoOff` has no Android in it at all — which is what lets `AutoOffTest` run on the JVM.
- */
-internal fun AutoOff.shortLabelRes(): Int =
-    when (this) {
-        AutoOff.Never -> R.string.compact_auto_off_never
-        AutoOff.Minutes30 -> R.string.compact_auto_off_30m
-        AutoOff.Hour1 -> R.string.compact_auto_off_1h
-        AutoOff.Hours2 -> R.string.compact_auto_off_2h
-        AutoOff.Hours4 -> R.string.compact_auto_off_4h
     }

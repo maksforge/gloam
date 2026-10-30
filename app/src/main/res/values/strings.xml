@@ -96,18 +96,31 @@
     <!-- %1$s is a time of day, formatted for the phone's own locale and 12/24-hour setting. -->
     <string name="dim_auto_off_at">Turns off at %1$s</string>
 
-    <!-- The auto-off chips, on every surface that has them (docs/phase-3.md §2). They keep their
-         compact_ names because the compact controls are where the short wording was decided: R5
-         read five chips saying "After 30 minutes" wrapping in a floating window, and the redesign
-         put the same five into a card on the full screen rather than a second, longer set. The duration carries no "+" because
+    <!-- The auto-off chips, on every surface that has them (docs/phase-3.md §2): Never, then each
+         length built from the three auto_off_length_ strings below — 30 min, 2 hours, 1 h 30 min —
+         short because R5 read "After 30 minutes" wrapping in a floating window. The duration carries no "+" because
          the same chip means two things — while the shade is up, tapping one re-dates the deadline
          from now ("two more hours"); while it is down, it sets what the next shade will get. The
          section header above them is dim_auto_off_label, which says which of the two is happening. -->
     <string name="compact_auto_off_never">Never</string>
-    <string name="compact_auto_off_30m">30 min</string>
-    <string name="compact_auto_off_1h">1 hour</string>
-    <string name="compact_auto_off_2h">2 hours</string>
-    <string name="compact_auto_off_4h">4 hours</string>
+    <string name="auto_off_length_minutes">%1$d min</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d hour</item>
+        <item quantity="other">%d hours</item>
+    </plurals>
+    <!-- A length with both parts, as 1 h 30 min: abbreviations, so neither number needs a plural. -->
+    <string name="auto_off_length_hours_minutes">%1$d h %2$d min</string>
+
+    <!-- The auto-off chips' last one, Other…, opens a dialog to type a length as hours and minutes.
+         Confirming chooses that length the way a chip tap does, so the button is "set", not "add". -->
+    <string name="dim_auto_off_other">Other…</string>
+    <string name="dim_auto_off_custom_title">Turn off after</string>
+    <string name="dim_auto_off_hours_label">Hours</string>
+    <string name="dim_auto_off_minutes_label">Minutes</string>
+    <!-- Under the two fields. %1$s and %2$s are lengths as the chips write them: 1 min and 12 hours. -->
+    <string name="dim_auto_off_custom_range">Between %1$s and %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Set</string>
+    <string name="dim_auto_off_cancel">Cancel</string>
 
     <!-- The warmth slider. "Warmth" per CONTEXT.md: not "night mode" — that is the app's own dark
          theme — and not any wording about filtering or cutting blue light, which an overlay cannot

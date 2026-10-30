@@ -52,10 +52,22 @@
     <string name="dim_auto_off_at">Wyłączy się o %1$s</string>
 
     <string name="compact_auto_off_never">Nigdy</string>
-    <string name="compact_auto_off_30m">30 min</string>
-    <string name="compact_auto_off_1h">1 godz.</string>
-    <string name="compact_auto_off_2h">2 godz.</string>
-    <string name="compact_auto_off_4h">4 godz.</string>
+    <string name="auto_off_length_minutes">%1$d min</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d godz.</item>
+        <item quantity="few">%d godz.</item>
+        <item quantity="many">%d godz.</item>
+        <item quantity="other">%d godz.</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d godz. %2$d min</string>
+
+    <string name="dim_auto_off_other">Inne…</string>
+    <string name="dim_auto_off_custom_title">Wyłącz po</string>
+    <string name="dim_auto_off_hours_label">Godziny</string>
+    <string name="dim_auto_off_minutes_label">Minuty</string>
+    <string name="dim_auto_off_custom_range">Od %1$s do %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Ustaw</string>
+    <string name="dim_auto_off_cancel">Anuluj</string>
 
     <string name="dim_warmth_label">Ciepło barwy</string>
     <string name="dim_warmth_color_label">Odcień</string>

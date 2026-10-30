@@ -33,6 +33,9 @@ class DeadlineTest {
     private val degenerate = Schedule(enabled = true, onAt = LocalTime.of(22, 0), offAt = LocalTime.of(22, 0))
     private val schedules = listOf(overnight, daytime, disabled, degenerate)
 
+    /** Every preset, and typed lengths at both limits and between two presets. */
+    private val autoOffs = AutoOff.Presets + listOf(1, 90, 720).map(AutoOff::ofMinutes)
+
     private fun at(
         date: String,
         time: String,
@@ -64,7 +67,7 @@ class DeadlineTest {
         for (zone in zones) {
             for (schedule in schedules) {
                 for (start in ShadeStart.entries) {
-                    for (autoOff in AutoOff.entries) {
+                    for (autoOff in autoOffs) {
                         val midnight = at("2026-06-15", "00:00", zone)
                         for (minute in 0 until 24 * 60) {
                             val now = midnight + minute * 60_000L
@@ -97,7 +100,7 @@ class DeadlineTest {
         for (zone in zones) {
             for (schedule in schedules) {
                 for (start in ShadeStart.entries) {
-                    for (autoOff in AutoOff.entries) {
+                    for (autoOff in autoOffs) {
                         val midnight = at("2026-06-15", "00:00", zone)
                         for (minute in 0 until 24 * 60 step 7) {
                             val now = midnight + minute * 60_000L
@@ -117,7 +120,7 @@ class DeadlineTest {
     fun `a scheduled start ignores auto-off, Never included`() {
         val insideTheWindow = at("2026-06-15", "23:00", warsaw)
         val end = overnight.windowEnd(insideTheWindow, warsaw)
-        for (autoOff in AutoOff.entries) {
+        for (autoOff in autoOffs) {
             assertEquals(
                 "auto-off $autoOff leaked into a scheduled episode",
                 end,
@@ -136,7 +139,7 @@ class DeadlineTest {
             val midnight = at("2026-06-15", "00:00", zone)
             for (minute in 0 until 24 * 60 step 13) {
                 val now = midnight + minute * 60_000L
-                for (autoOff in AutoOff.entries) {
+                for (autoOff in autoOffs) {
                     assertEquals(
                         "$zone $autoOff at $now",
                         autoOffDeadline(now, autoOff),
@@ -157,17 +160,25 @@ class DeadlineTest {
             autoOff: AutoOff,
         ) = deadlineFor(at("2026-06-15", time, zone), zone, ShadeStart.ByHand, autoOff, overnight)
 
-        assertEquals("21:00 is outside; auto-off alone", at("2026-06-15", "23:00", zone), hand("21:00", AutoOff.Hours2))
+        assertEquals(
+            "21:00 is outside; auto-off alone",
+            at("2026-06-15", "23:00", zone),
+            hand("21:00", AutoOff.ofMinutes(120)),
+        )
         assertEquals(
             "23:00 inside, but two hours is sooner",
             at("2026-06-16", "01:00", zone),
-            hand("23:00", AutoOff.Hours2),
+            hand("23:00", AutoOff.ofMinutes(120)),
         )
-        assertEquals("the row that earns the rule", at("2026-06-15", "07:00", zone), hand("06:00", AutoOff.Hours4))
+        assertEquals(
+            "the row that earns the rule",
+            at("2026-06-15", "07:00", zone),
+            hand("06:00", AutoOff.ofMinutes(240)),
+        )
         assertEquals(
             "13:00 is outside the window entirely",
             at("2026-06-15", "15:00", zone),
-            hand("13:00", AutoOff.Hours2),
+            hand("13:00", AutoOff.ofMinutes(120)),
         )
         assertNull("Never with no window is the unbounded one", hand("13:00", AutoOff.Never))
     }

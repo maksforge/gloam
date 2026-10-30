@@ -27,9 +27,11 @@ class AutoOffTest {
      */
     private val now = 1_756_756_800_000L
 
+    private val choices = AutoOff.Presets + listOf(1, 45, 90, 185, 720).map(AutoOff::ofMinutes)
+
     @Test
     fun `every choice but Never lands its own number of minutes ahead`() {
-        for (choice in AutoOff.entries) {
+        for (choice in choices) {
             val deadline = autoOffDeadline(now, choice)
             if (choice == AutoOff.Never) {
                 assertNull("Never has no deadline", deadline)
@@ -46,20 +48,21 @@ class AutoOffTest {
     /** The one case with no deadline is the one case the enum names, not a duration of zero. */
     @Test
     fun `Never is the only choice without a deadline`() {
-        assertEquals(listOf(AutoOff.Never), AutoOff.entries.filter { autoOffDeadline(now, it) == null })
+        assertEquals(listOf(AutoOff.Never), choices.filter { autoOffDeadline(now, it) == null })
     }
 
-    /** The span the product promises: half an hour to four hours, and nothing longer by accident. */
+    /** The presets span half an hour to four hours; a typed length can reach twelve, and no further. */
     @Test
-    fun `the longest choice is four hours and the default sits inside the span`() {
-        assertEquals(240, AutoOff.entries.maxOf { it.minutes })
-        assertEquals(AutoOff.Hours2, AutoOff.Default)
-        assertTrue(AutoOff.Default in AutoOff.entries)
+    fun `the presets end at four hours, a typed length at twelve, and the default is a preset`() {
+        assertEquals(240, AutoOff.Presets.maxOf { it.minutes })
+        assertEquals(720, choices.maxOf { it.minutes })
+        assertEquals(AutoOff.ofMinutes(120), AutoOff.Default)
+        assertTrue(AutoOff.Default in AutoOff.Presets)
     }
 
     @Test
     fun `a deadline is due at the instant and after it, not before`() {
-        val deadline = autoOffDeadline(now, AutoOff.Hours2)
+        val deadline = autoOffDeadline(now, AutoOff.ofMinutes(120))
         assertFalse("a millisecond early is not due", isDue(deadline!! - 1, deadline))
         assertTrue("exactly the deadline is due", isDue(deadline, deadline))
         assertTrue("a millisecond late is due", isDue(deadline + 1, deadline))
@@ -93,25 +96,35 @@ class AutoOffTest {
 
     @Test
     fun `a stored instant survives the round trip`() {
-        val deadline = autoOffDeadline(now, AutoOff.Minutes30)!!
+        val deadline = autoOffDeadline(now, AutoOff.ofMinutes(30))!!
         assertEquals(deadline, deadlineOrNull(deadline))
     }
 
     @Test
     fun `every choice round-trips through the minutes storage holds`() {
-        for (choice in AutoOff.entries) {
+        for (choice in choices) {
             assertEquals(choice, AutoOff.ofMinutes(choice.minutes))
         }
     }
 
     /**
-     * A number this build does not know is a later build's value — a *3 hours* that was added after
-     * this one shipped — and the answer is the default rather than an exception. A preference file
-     * survives a downgrade; a crash loop at startup is the worse outcome.
+     * Zero is *Never* and every other stored number is a length, kept rather than replaced by the
+     * default: a typed *3 hours* must read back as three hours. Out of range is clamped, which errs
+     * short, towards light — and a preference file from another build never crashes the read.
      */
     @Test
-    fun `an unrecognised number falls back to the default`() {
-        assertEquals(AutoOff.Default, AutoOff.ofMinutes(180))
-        assertEquals(AutoOff.Default, AutoOff.ofMinutes(-1))
+    fun `a stored number is Never at zero and otherwise a length, clamped`() {
+        assertEquals(AutoOff.Never, AutoOff.ofMinutes(0))
+        assertEquals(180, AutoOff.ofMinutes(180).minutes)
+        assertEquals(AutoOff.MAX_MINUTES, AutoOff.ofMinutes(5_000).minutes)
+        assertEquals(AutoOff.MIN_MINUTES, AutoOff.ofMinutes(-1).minutes)
+    }
+
+    @Test
+    fun `a typed length is offered after the presets, and a preset adds nothing`() {
+        assertEquals(AutoOff.Presets, AutoOff.choicesWith(AutoOff.ofMinutes(60)))
+        assertEquals(AutoOff.Presets, AutoOff.choicesWith(AutoOff.Never))
+        val typed = AutoOff.ofMinutes(90)
+        assertEquals(AutoOff.Presets + typed, AutoOff.choicesWith(typed))
     }
 }

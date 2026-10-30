@@ -185,8 +185,8 @@ class AppPreferences(
     /**
      * How long a hand-started shade stays up before Gloam takes it down (CONTEXT.md: **auto-off**).
      *
-     * Stored as **minutes rather than the enum's name**, which is the opposite of what [themeMode]
-     * does; `AutoOff.ofMinutes` carries the reason and the fallback. Defaults to `AutoOff.Default`
+     * Stored as **minutes**, `0` for *Never*, which is what let a typed length arrive without a
+     * migration; `AutoOff.ofMinutes` carries the clamp. Defaults to `AutoOff.Default`
      * — on rather than to `Never`, because until Phase 2b's tile ships this is the only way out of
      * the shade that needs no gesture at all.
      */

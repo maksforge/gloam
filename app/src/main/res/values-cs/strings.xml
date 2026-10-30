@@ -63,10 +63,22 @@
     <string name="dim_auto_off_at">Vypne se v %1$s</string>
 
     <string name="compact_auto_off_never">Nikdy</string>
-    <string name="compact_auto_off_30m">30 min</string>
-    <string name="compact_auto_off_1h">1 hod</string>
-    <string name="compact_auto_off_2h">2 hod</string>
-    <string name="compact_auto_off_4h">4 hod</string>
+    <string name="auto_off_length_minutes">%1$d min</string>
+    <plurals name="auto_off_length_hours">
+        <item quantity="one">%d hod</item>
+        <item quantity="few">%d hod</item>
+        <item quantity="many">%d hod</item>
+        <item quantity="other">%d hod</item>
+    </plurals>
+    <string name="auto_off_length_hours_minutes">%1$d hod %2$d min</string>
+
+    <string name="dim_auto_off_other">Jiné…</string>
+    <string name="dim_auto_off_custom_title">Vypnout po</string>
+    <string name="dim_auto_off_hours_label">Hodiny</string>
+    <string name="dim_auto_off_minutes_label">Minuty</string>
+    <string name="dim_auto_off_custom_range">Od %1$s do %2$s</string>
+    <string name="dim_auto_off_custom_confirm">Nastavit</string>
+    <string name="dim_auto_off_cancel">Zrušit</string>
 
     <string name="dim_warmth_label">Teplo barvy</string>
     <string name="dim_warmth_color_label">Odstín</string>
