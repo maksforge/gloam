@@ -203,6 +203,12 @@ fun barHeightDp(
 const val BAR_MIN_HEIGHT_DP = 200f
 
 /**
+ * The shortest the warmth column may get beside a bar at [BAR_MIN_HEIGHT_DP], at the largest font
+ * scale: still longer than the bar's own track at that floor, so it stays a control worth dragging.
+ */
+const val WARMTH_COLUMN_MIN_HEIGHT_DP = 150f
+
+/**
  * The bar's height and how many of the [buttons] wanted under it are drawn, on [availableHeightDp].
  *
  * **The last button is the panel's close, and it is never the one that goes** (ADR-0011): once the
