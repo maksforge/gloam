@@ -548,15 +548,18 @@ class ShadeService : Service() {
             .onEach { if (pausedUntil != null) endPause() }
             .launchIn(scope)
 
-        // Auto-off. `collectLatest` is `switchMap` rather than `forEach`: a new deadline cancels the
-        // wait still running for the old one, which is what re-arms the loop when the user taps a
-        // different chip while the shade is up, and when the boot receiver restores a deadline. The
-        // loop cannot capture the deadline once, because it moves for reasons other than starting.
+        // Its own collector, because a schedule re-adoption can re-stamp `beganAtMillis` without
+        // moving `offAtMillis`, and the deadline's `distinctUntilChanged` below would drop that.
         scope.launch {
             preferences.shadeIntent.map { it.beganAtMillis }.distinctUntilChanged().collect {
                 currentDeadlineFrom.value = it
             }
         }
+
+        // Auto-off. `collectLatest` is `switchMap` rather than `forEach`: a new deadline cancels the
+        // wait still running for the old one, which is what re-arms the loop when the user taps a
+        // different chip while the shade is up, and when the boot receiver restores a deadline. The
+        // loop cannot capture the deadline once, because it moves for reasons other than starting.
         scope.launch {
             preferences.shadeIntent
                 .map { it.offAtMillis }
