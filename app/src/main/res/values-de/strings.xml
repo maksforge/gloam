@@ -91,7 +91,7 @@
     <string name="preset_in_bed_hint">Fast dunkel und tiefrot, für einen Raum mit ausgeschaltetem Licht.</string>
     <string name="presets_hint">Tippe auf eine Vorgabe, um Abdunklungsstufe, Wärme und Farbe daraus zu übernehmen. Darüber kannst du danach alles anpassen.</string>
 
-    <string name="preset_saved_hint">Deine eigene Vorgabe. Halte eine deiner Vorgaben gedrückt, um sie umzubenennen oder zu löschen.</string>
+    <string name="preset_saved_hint">Deine eigene Vorgabe. Halte eine beliebige Vorgabe gedrückt, um sie umzubenennen oder zu löschen.</string>
     <string name="preset_save">Als Vorgabe speichern</string>
     <string name="preset_save_body">Speichert die aktuelle Abdunklungsstufe, Wärme und Farbe unter einem eigenen Namen.</string>
     <string name="preset_name_label">Name</string>
@@ -99,6 +99,7 @@
     <string name="preset_replace">Ersetzen</string>
     <string name="preset_replace_note">Eine Vorgabe mit diesem Namen gibt es schon. Ihre Einstellungen werden ersetzt.</string>
     <string name="preset_name_taken">Eine andere Vorgabe hat schon diesen Namen.</string>
+    <string name="preset_same_settings">Gleiche Einstellungen wie die Vorgabe „%1$s“.</string>
     <string name="preset_edit">Bearbeiten</string>
     <string name="preset_edit_title">Vorgabe bearbeiten</string>
     <string name="preset_delete">Löschen</string>
@@ -140,6 +141,7 @@
     <string name="settings_restart">Nach einem Neustart</string>
     <string name="settings_restart_body">Gloam legt die Schicht nach einem Neustart deines Telefons wieder an. Dieses Telefon lässt eine App nur beim Start laufen, wenn Autostart für sie eingeschaltet ist, und Gloam kann nicht nachsehen, ob er es ist — wenn die Schicht also nicht zurückkommt, ist das die Einstellung, in die du schauen solltest.</string>
     <string name="settings_restart_open">Autostart-Einstellungen öffnen</string>
+
 
     <string name="settings_about">Über die App</string>
     <string name="settings_support">Hilfe und Rückmeldung</string>

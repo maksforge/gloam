@@ -77,3 +77,10 @@ whole, and replaceable in a minute.
 - **It is backed up with the rest of the store**, which is what a preset is: a setting, welcome on
   the user's next phone.
 - **Nothing online, ever.** No server, no account and no sync is still the product, not a phase.
+
+Later the same day: **the built-ins joined the list.** All presets are one JSON list under `presets`,
+each with a stable id (`reading`, `evening`, `in_bed`, or a generated one) and a name that is `null`
+while a built-in keeps its translated label. An absent key reads as the three built-ins — the default
+in the read, so *Restore to default* is removing the key. Names and the three values are each unique,
+and the writes refuse a duplicate rather than trusting the screen. `saved_presets` never shipped; a
+development install's is read after the built-ins until `presets` is first written, which drops it.

@@ -17,11 +17,13 @@ import app.gloam.shade.ScheduleKind
 import app.gloam.shade.deadlineOrNull
 import app.gloam.shade.minutesOf
 import app.gloam.shade.timeOf
+import app.gloam.ui.dim.Preset
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import java.time.LocalTime
+import java.util.UUID
 import kotlin.math.roundToInt
 
 /**
@@ -80,6 +82,8 @@ class AppPreferences(
     private val store: DataStore<Preferences>,
     /** The lent location's own file, kept out of backup. See `lentLocationStore` for why it is separate. */
     private val lentLocationStore: DataStore<Preferences>,
+    /** A built-in preset's translated label, for the writes that keep names unique. */
+    private val presetLabel: (Preset) -> String,
 ) {
     private object LentKeys {
         // Tenths of a degree as whole numbers. The 0.1° rounding ADR-0013 §8 asks for is then what the
@@ -120,7 +124,10 @@ class AppPreferences(
         val SCHEDULE_KIND = stringPreferencesKey("schedule_kind")
         val SHADE_STARTS = intPreferencesKey("shade_starts")
         val TIP_ASKED = booleanPreferencesKey("tip_asked")
-        val SAVED_PRESETS = stringPreferencesKey("saved_presets")
+        val PRESETS = stringPreferencesKey("presets")
+
+        // Read only until PRESETS is first written, which removes it; see `decodePresets`.
+        val LEGACY_SAVED_PRESETS = stringPreferencesKey("saved_presets")
     }
 
     /**
@@ -243,8 +250,13 @@ class AppPreferences(
     val warmthColor: Flow<Int> =
         store.data.map { (it[Keys.WARMTH_COLOR] ?: DEFAULT_WARMTH_COLOR).coerceIn(0, 100) }
 
-    /** The presets the user named, in the order they were first saved. A setting: welcome on a new phone. */
-    val savedPresets: Flow<List<SavedPreset>> = store.data.map { decodeSavedPresets(it[Keys.SAVED_PRESETS]) }
+    /**
+     * Every preset, the three built-ins included, in chip order. Absent, it reads as the built-ins
+     * ([DEFAULT_PRESETS]). A setting: welcome on a new phone.
+     */
+    val presets: Flow<List<StoredPreset>> = store.data.map(::presetsOf)
+
+    private fun presetsOf(prefs: Preferences) = decodePresets(prefs[Keys.PRESETS], prefs[Keys.LEGACY_SAVED_PRESETS])
 
     /**
      * Whether a tap on the launcher icon opens the **compact controls** instead of the full app
@@ -522,36 +534,41 @@ class AppPreferences(
     }
 
     /**
-     * Saves the dim level, warmth and colour **as they are stored now** under [name], replacing a
-     * preset of that name if there is one. Read inside the same edit as the write, so the values
-     * saved are the ones the shade is showing rather than a screen's copy of them a frame old.
+     * Saves the dim level, warmth and colour **as they are stored now** under [name], into the preset
+     * already called that if there is one. Read inside the same edit as the write, so the values
+     * saved are the ones the shade is showing rather than a screen's copy of them a frame old — and
+     * so is the uniqueness check, which drops the write when another preset carries them already.
      */
     suspend fun saveCurrentAsPreset(name: String) {
-        store.edit {
-            val preset =
-                SavedPreset(
-                    name = name.trim().take(PRESET_NAME_MAX_LENGTH),
-                    dimLevel = (it[Keys.DIM_LEVEL] ?: DEFAULT_DIM_LEVEL).coerceIn(0, 100),
-                    warmth = (it[Keys.WARMTH] ?: 0).coerceIn(0, 100),
-                    warmthColor = (it[Keys.WARMTH_COLOR] ?: DEFAULT_WARMTH_COLOR).coerceIn(0, 100),
-                )
-            it[Keys.SAVED_PRESETS] = encodeSavedPresets(decodeSavedPresets(it[Keys.SAVED_PRESETS]).withSaved(preset))
+        editPresets { presets, prefs ->
+            presets.saving(
+                name = name,
+                dimLevel = (prefs[Keys.DIM_LEVEL] ?: DEFAULT_DIM_LEVEL).coerceIn(0, 100),
+                warmth = (prefs[Keys.WARMTH] ?: 0).coerceIn(0, 100),
+                warmthColor = (prefs[Keys.WARMTH_COLOR] ?: DEFAULT_WARMTH_COLOR).coerceIn(0, 100),
+                labelOf = presetLabel,
+                newId = { UUID.randomUUID().toString() },
+            )
         }
     }
 
     suspend fun renamePreset(
-        from: String,
+        id: String,
         to: String,
     ) {
-        store.edit {
-            val presets = decodeSavedPresets(it[Keys.SAVED_PRESETS])
-            it[Keys.SAVED_PRESETS] = encodeSavedPresets(presets.renamed(from, to.trim().take(PRESET_NAME_MAX_LENGTH)))
-        }
+        editPresets { presets, _ -> presets.renaming(id, to, presetLabel) }
     }
 
-    suspend fun deletePreset(name: String) {
-        store.edit {
-            it[Keys.SAVED_PRESETS] = encodeSavedPresets(decodeSavedPresets(it[Keys.SAVED_PRESETS]).without(name))
+    suspend fun deletePreset(id: String) {
+        editPresets { presets, _ -> presets.deleting(id) }
+    }
+
+    /** One edit around a list change; a `null` from [change] is a refused write and stores nothing. */
+    private suspend fun editPresets(change: (List<StoredPreset>, Preferences) -> List<StoredPreset>?) {
+        store.edit { prefs ->
+            val changed = change(presetsOf(prefs), prefs) ?: return@edit
+            prefs[Keys.PRESETS] = encodePresets(changed)
+            prefs.remove(Keys.LEGACY_SAVED_PRESETS)
         }
     }
 

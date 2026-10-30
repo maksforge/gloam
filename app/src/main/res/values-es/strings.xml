@@ -91,7 +91,7 @@
     <string name="preset_in_bed_hint">Casi a oscuras y en rojo intenso, para una habitación con la luz apagada.</string>
     <string name="presets_hint">Toca uno para tomar de él el nivel de atenuación, la calidez y el color, y luego ajusta lo que quieras arriba.</string>
 
-    <string name="preset_saved_hint">Tu propio preajuste. Mantén pulsado cualquiera de los tuyos para cambiarle el nombre o eliminarlo.</string>
+    <string name="preset_saved_hint">Tu propio preajuste. Mantén pulsado cualquier preajuste para cambiarle el nombre o eliminarlo.</string>
     <string name="preset_save">Guardar como preajuste</string>
     <string name="preset_save_body">Guarda el nivel de atenuación, la calidez y el color actuales con un nombre que tú elijas.</string>
     <string name="preset_name_label">Nombre</string>
@@ -99,6 +99,7 @@
     <string name="preset_replace">Reemplazar</string>
     <string name="preset_replace_note">Ya hay un preajuste con este nombre. Sus valores se reemplazarán.</string>
     <string name="preset_name_taken">Otro preajuste ya tiene este nombre.</string>
+    <string name="preset_same_settings">Los mismos ajustes que el preajuste «%1$s».</string>
     <string name="preset_edit">Editar</string>
     <string name="preset_edit_title">Editar preajuste</string>
     <string name="preset_delete">Eliminar</string>
@@ -140,6 +141,7 @@
     <string name="settings_restart">Después de reiniciar</string>
     <string name="settings_restart_body">Gloam vuelve a poner la capa cuando tu teléfono se reinicia. Este teléfono solo deja que una aplicación se ejecute al arrancar si tiene el inicio automático activado, y Gloam no tiene forma de comprobar si lo está: así que, si la capa no vuelve, este es el ajuste que conviene mirar.</string>
     <string name="settings_restart_open">Abrir ajustes de inicio automático</string>
+
 
     <string name="settings_about">Acerca de</string>
     <string name="settings_support">Ayuda y comentarios</string>

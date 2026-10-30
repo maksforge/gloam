@@ -80,7 +80,7 @@
     <string name="preset_in_bed_hint">Prawie ciemno i głęboka czerwień, do pokoju ze zgaszonym światłem.</string>
     <string name="presets_hint">Dotknij jednego, aby ustawić z niego poziom przyciemnienia, ciepło barwy i odcień, a potem dostosuj wszystko powyżej.</string>
 
-    <string name="preset_saved_hint">Twój własny zestaw. Przytrzymaj dowolny ze swoich, aby zmienić jego nazwę albo go usunąć.</string>
+    <string name="preset_saved_hint">Twój własny zestaw. Przytrzymaj dowolny zestaw, aby zmienić jego nazwę albo go usunąć.</string>
     <string name="preset_save">Zapisz jako zestaw</string>
     <string name="preset_save_body">Zapisuje obecny poziom przyciemnienia, ciepło barwy i odcień pod wybraną przez ciebie nazwą.</string>
     <string name="preset_name_label">Nazwa</string>
@@ -88,6 +88,7 @@
     <string name="preset_replace">Zastąp</string>
     <string name="preset_replace_note">Zestaw o tej nazwie już istnieje. Jego wartości zostaną zastąpione.</string>
     <string name="preset_name_taken">Inny zestaw ma już tę nazwę.</string>
+    <string name="preset_same_settings">Takie same ustawienia jak w zestawie „%1$s”.</string>
     <string name="preset_edit">Edytuj</string>
     <string name="preset_edit_title">Edytuj zestaw</string>
     <string name="preset_delete">Usuń</string>
@@ -129,6 +130,7 @@
     <string name="settings_restart">Po ponownym uruchomieniu</string>
     <string name="settings_restart_body">Gloam przywraca zasłonę po ponownym uruchomieniu telefonu. Ten telefon pozwala aplikacji działać po starcie tylko wtedy, gdy ma włączony autostart, a Gloam nie ma jak sprawdzić, czy jest włączony — więc jeśli zasłona nie wróci, to jest ustawienie, któremu warto się przyjrzeć.</string>
     <string name="settings_restart_open">Otwórz ustawienia autostartu</string>
+
 
     <string name="settings_about">O aplikacji</string>
     <string name="settings_support">Pomoc i opinie</string>

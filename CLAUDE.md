@@ -60,8 +60,9 @@ let us do otherwise".
   next phone with no code of ours involved in the write. Ask what it means there: a setting is
   welcome, live state is not, and live state is judged **at the read** ([ADR-0005](docs/adr/0005-backup-is-automatic-for-the-database-and-manual-for-media.md)'s
   amendments, and `shade_began_at` is what that cost once).
-  **A list the user creates is still not a database.** Saved presets are JSON under one key
-  (`data/SavedPreset.kt`) — read whole, written whole, decoded tolerantly. Room comes back only for
+  **A list the user creates is still not a database.** Presets, the three built-ins included, are
+  JSON under one key (`data/StoredPreset.kt`) — read whole, written whole, decoded tolerantly, the
+  built-ins as the default in the read. Room comes back only for
   something that needs querying, relations or partial writes, and then ADR-0001 comes with it
   ([ADR-0007](docs/adr/0007-gloam-stores-settings-not-records-so-it-has-no-database.md)'s amendment).
   Nothing online, ever.
@@ -141,8 +142,8 @@ app/src/main/java/<namespace>/
                the app shell and Nav3 wiring stay at the package root, not under ui/ — they describe
                how the app hangs together rather than any one screen. ControlsActivity is the
                compact controls' host: a second host for the same shell, which is why it is here
-  data/        AppPreferences.kt — the DataStore keys and their defaults; SavedPreset.kt — the
-               user's own presets, JSON under one of those keys. No database
+  data/        AppPreferences.kt — the DataStore keys and their defaults; StoredPreset.kt — every
+               preset, built-ins included, JSON under one of those keys. No database
   shade/       ShadeService.kt, the overlay window and the foreground service that owns it;
                PanelWindow.kt, the *second* window — its flags, its size bound and the Compose host
                it needs because there is no Activity under it;

@@ -1,37 +1,46 @@
 package app.gloam.ui.dim
 
+import app.gloam.R
+import app.gloam.data.DEFAULT_PRESETS
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Test
 
-/**
- * Which chip is lit is worked out from the stored values rather than stored itself, so the two ways
- * that can go wrong are both here: a preset that does not recognise its own values, and a chip that
- * stays lit after the user has moved off it.
- */
 class PresetTest {
     @Test
-    fun `every preset is recognised from its own values`() {
-        for (preset in Preset.entries) {
-            assertEquals(preset, Preset.matching(preset.dimLevel, preset.warmth, preset.warmthColor))
-        }
-    }
-
-    @Test
-    fun `a value nudged by one unlights the chip`() {
-        for (p in Preset.entries) {
-            assertNull("$p dim level", Preset.matching(p.dimLevel + 1, p.warmth, p.warmthColor))
-            assertNull("$p warmth", Preset.matching(p.dimLevel, p.warmth - 1, p.warmthColor))
-            assertNull("$p colour", Preset.matching(p.dimLevel, p.warmth, p.warmthColor + 1))
-        }
-    }
-
-    @Test
-    fun `no two presets share all three values, and all are in range`() {
+    fun `no two built-ins share an id or all three values, and all are in range`() {
+        assertEquals(
+            Preset.entries.size,
+            Preset.entries
+                .map { it.id }
+                .toSet()
+                .size,
+        )
         val triples = Preset.entries.map { Triple(it.dimLevel, it.warmth, it.warmthColor) }
         assertEquals(triples.size, triples.toSet().size)
         for (p in Preset.entries) {
             for (v in listOf(p.dimLevel, p.warmth, p.warmthColor)) assert(v in 0..100) { "$p: $v" }
         }
+    }
+
+    @Test
+    fun `a built-in at its shipped values keeps its own hint, whatever it is called`() {
+        for (stored in DEFAULT_PRESETS) {
+            val hint = stored.builtIn!!.hint
+            assertEquals(hint, presetHint(stored, anyPresets = true))
+            assertEquals(hint, presetHint(stored.copy(name = "Mine"), anyPresets = true))
+        }
+    }
+
+    @Test
+    fun `a built-in given new values, or one the user saved, gets the saved hint`() {
+        val reading = DEFAULT_PRESETS.first()
+        assertEquals(R.string.preset_saved_hint, presetHint(reading.copy(dimLevel = 1), anyPresets = true))
+        assertEquals(R.string.preset_saved_hint, presetHint(reading.copy(id = "abc", name = "Mine"), anyPresets = true))
+    }
+
+    @Test
+    fun `nothing lit explains the row, or the ＋ chip once there is no preset left`() {
+        assertEquals(R.string.presets_hint, presetHint(null, anyPresets = true))
+        assertEquals(R.string.preset_save_body, presetHint(null, anyPresets = false))
     }
 }
