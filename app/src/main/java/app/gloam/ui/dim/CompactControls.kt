@@ -542,7 +542,7 @@ private fun PauseButton(
     CompactIconButton(onClick = onResume, selected = true) {
         Box(contentAlignment = Alignment.Center) {
             pause.from?.let { from ->
-                PauseRing(
+                TimeLeftRing(
                     from = from,
                     end = end.atMillis,
                     color = MaterialTheme.colorScheme.primary,

@@ -56,11 +56,11 @@ class PauseTest {
     @Test
     fun `the ring is full at the start, empty at the end, and never outside either`() {
         val end = now + 5 * minute
-        assertEquals(1f, pauseLeft(now, now, end), 0f)
-        assertEquals(0.5f, pauseLeft(now + 150_000L, now, end), 1e-6f)
-        assertEquals(0f, pauseLeft(end, now, end), 0f)
-        assertEquals(0f, pauseLeft(end + minute, now, end), 0f)
-        assertEquals(1f, pauseLeft(now - minute, now, end), 0f)
-        assertEquals(0f, pauseLeft(now, now, now), 0f)
+        assertEquals(1f, fractionLeft(now, now, end), 0f)
+        assertEquals(0.5f, fractionLeft(now + 150_000L, now, end), 1e-6f)
+        assertEquals(0f, fractionLeft(end, now, end), 0f)
+        assertEquals(0f, fractionLeft(end + minute, now, end), 0f)
+        assertEquals(1f, fractionLeft(now - minute, now, end), 0f)
+        assertEquals(0f, fractionLeft(now, now, now), 0f)
     }
 }

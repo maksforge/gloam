@@ -299,6 +299,9 @@ class ShadeService : Service() {
      */
     private val currentDeadline = MutableStateFlow<Long?>(null)
 
+    /** When [currentDeadline] was set, so the bubble's ring can show how much of it is left. */
+    private val currentDeadlineFrom = MutableStateFlow<Long?>(null)
+
     /** The instant the current pause ends, or `null` when the shade is not paused. Mirrored into [shadePause]. */
     private var pausedUntil: Long? = null
 
@@ -549,6 +552,11 @@ class ShadeService : Service() {
         // wait still running for the old one, which is what re-arms the loop when the user taps a
         // different chip while the shade is up, and when the boot receiver restores a deadline. The
         // loop cannot capture the deadline once, because it moves for reasons other than starting.
+        scope.launch {
+            preferences.shadeIntent.map { it.beganAtMillis }.distinctUntilChanged().collect {
+                currentDeadlineFrom.value = it
+            }
+        }
         scope.launch {
             preferences.shadeIntent
                 .map { it.offAtMillis }
@@ -1219,6 +1227,7 @@ class ShadeService : Service() {
                 tucked = bubbleTucked,
                 pause = shadePause,
                 deadline = currentDeadline,
+                deadlineFrom = currentDeadlineFrom,
             )
         }
         val params =

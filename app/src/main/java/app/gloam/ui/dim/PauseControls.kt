@@ -52,8 +52,8 @@ import app.gloam.R
 import app.gloam.shade.PauseEnd
 import app.gloam.shade.PauseLength
 import app.gloam.shade.PauseSpan
+import app.gloam.shade.fractionLeft
 import app.gloam.shade.pauseEnd
-import app.gloam.shade.pauseLeft
 import app.gloam.theme.Spacing
 import kotlinx.coroutines.delay
 
@@ -278,27 +278,27 @@ internal fun pauseLengthLabel(length: PauseLength): String =
     stringResource(R.string.pause_length_minutes, length.minutes)
 
 /**
- * The share of a pause still left, as a ring that empties clockwise from the top — the bubble's and
- * the compact button's way of saying "paused, and about this much to go" with no digits to read.
+ * The share of a pause or a deadline still left, as a ring that empties clockwise from the top —
+ * the bubble's and the compact button's way of saying "about this much to go" with no digits.
  *
  * A faint full circle under the arc, so a nearly empty ring still reads as a ring rather than as a
  * stray mark. The gap opens at the top and grows clockwise. The loop ticks about once per degree of
- * the whole pause, never faster than a frame, so a long pause redraws rarely and a one-minute one
+ * the whole span, never faster than a frame, so a long one redraws rarely and a one-minute pause
  * still moves smoothly.
  */
 @Composable
-internal fun PauseRing(
+internal fun TimeLeftRing(
     from: Long,
     end: Long,
     color: Color,
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 3.dp,
 ) {
-    val left by produceState(pauseLeft(System.currentTimeMillis(), from, end), from, end) {
+    val left by produceState(fractionLeft(System.currentTimeMillis(), from, end), from, end) {
         val tick = ((end - from) / 360).coerceAtLeast(16L)
         while (value > 0f) {
             delay(tick)
-            value = pauseLeft(System.currentTimeMillis(), from, end)
+            value = fractionLeft(System.currentTimeMillis(), from, end)
         }
     }
     Canvas(modifier) {
