@@ -82,4 +82,7 @@ Amendment, 2026-10-30. **A start from the Quick Settings tile leaves the bubble 
 the shade on with nothing of Gloam's on screen, so the user had to find the notification to reach the
 controls. That is the same problem this ADR solved for closing the controls. Starting from the app
 and from the schedule still leave no bubble: the app is already in front, and a scheduled start
-happens while nobody is looking.
+happens while nobody is looking. A tile tap with Gloam itself under Quick Settings leaves none either,
+for the app's reason: a bubble beside the controls would be the second copy `ControlsActivity`
+dismisses on opening. The tile asks `ProcessLifecycleOwner` whether an Activity is started, which
+pulling Quick Settings down does not change.
