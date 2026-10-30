@@ -109,6 +109,8 @@ fun PresetRow(
             onDismiss = { saving = false },
         )
     }
+    // Kotlin note: `?.let` runs the block only when `editing` is non-null, with `current` as the
+    // non-null value — `if (editing != null) { const current = editing; … }`.
     editing?.let { current ->
         PresetNameDialog(
             title = stringResource(R.string.preset_edit_title),

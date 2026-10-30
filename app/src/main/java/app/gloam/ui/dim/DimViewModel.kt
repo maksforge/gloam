@@ -130,10 +130,10 @@ class DimViewModel(
             combine(preferences.shadeIntent, onScreen, ::Pair),
             // Paired with the tip's inputs only for the arity limit; they share no section.
             combine(preferences.lowerBacklight, tipAsk, ::Pair),
-            // Kotlin note: `combine` is typed for two to five flows and the schedule is the sixth,
-            // so the ones that already belong to one section of the screen are grouped first. Nesting
-            // rather than the vararg overload, which hands back an `Array<Any?>` and a cast per
-            // field — the type checker is doing real work here and is worth keeping.
+            // Kotlin note: `combine` is typed for two to five flows, so the rest ride together here
+            // only for the arity limit; saved presets share no section with auto-off and the
+            // schedule. Nesting rather than the vararg overload, which hands back an `Array<Any?>`
+            // and a cast per field — the type checker is doing real work here and is worth keeping.
             combine(preferences.autoOff, preferences.schedule, preferences.savedPresets, ::Triple),
         ) { level, (warmth, warmthColor), (intent, up), (lowerBacklight, tipAsk), (autoOff, schedule, savedPresets) ->
             DimUiState(
