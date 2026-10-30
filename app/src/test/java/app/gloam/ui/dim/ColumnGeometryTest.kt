@@ -179,13 +179,6 @@ class ColumnGeometryTest {
                     "The timer section may grow to ${sectionMaxHeightDp(bar)}dp beside a ${bar}dp bar",
                     sectionMaxHeightDp(bar) <= bar,
                 )
-                assertTrue(
-                    "The warmth section needs ${warmthColumnHeightDp(
-                        bar,
-                    ) + WARMTH_LABEL_ROW_DP}dp beside a ${bar}dp bar",
-                    warmthColumnHeightDp(bar) + WARMTH_LABEL_ROW_DP <= bar + 0.001f,
-                )
-                assertTrue("The warmth column is too short to drag at ${bar}dp", warmthColumnHeightDp(bar) >= 150f)
                 available += 1f
             }
         }

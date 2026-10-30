@@ -470,7 +470,12 @@ private fun FootBand(
  *
  * **Strength only; the colour is not here.** It is set once in the full app, and what somebody changes
  * while reading is how much tint, not which one. The column is painted in the chosen colour, so this
- * surface still shows it. Shorter beside a shrunk bar, by [warmthColumnHeightDp].
+ * surface still shows it.
+ *
+ * **Never taller than the bar.** A section that outgrows the bar pushes the buttons under it, the
+ * close among them, off the surface (ADR-0011). The timer chips scroll to stay inside it; a drag
+ * control cannot, because the scroll would take the gesture, so the column gives up the height the
+ * number leaves it instead — measured, so a large font scale takes its share too.
  */
 @Composable
 private fun WarmthSection(
@@ -480,6 +485,7 @@ private fun WarmthSection(
     onWarmth: (Int) -> Unit,
 ) {
     Column(
+        modifier = Modifier.heightIn(max = barHeight),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(Spacing.hair),
     ) {
@@ -488,11 +494,14 @@ private fun WarmthSection(
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
+        // Kotlin note: `weight` is a `ColumnScope` extension, so it only exists inside a `Column`'s
+        // lambda — the closest JS analogue is `flex: 1 1 auto`. `fill = false` lets the column stay
+        // shorter than the room left, so it gets whatever the number has not taken, up to its own 300dp.
         WarmthColumn(
             warmth = warmth,
             warmthColor = warmthColor,
             onWarmth = onWarmth,
-            heightDp = warmthColumnHeightDp(barHeight.value),
+            modifier = Modifier.weight(1f, fill = false),
         )
     }
 }
