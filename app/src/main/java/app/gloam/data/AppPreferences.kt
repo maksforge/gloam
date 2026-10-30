@@ -74,7 +74,8 @@ enum class ThemeMode {
  *
  * ## Adding a preference
  *
- * A key, a `Flow` that reads it with a default, and a `suspend` setter. Keep the default in the
+ * A key, listed in `Keys.SETTINGS` or `Keys.KEPT`, a `Flow` that reads it with a default, and a
+ * `suspend` setter. Keep the default in the
  * `Flow` rather than writing it on first launch — a default that has been written to disk cannot be
  * changed in a later version without a migration, and a default that has not can.
  */
@@ -93,7 +94,7 @@ class AppPreferences(
         val ZONE_ID = stringPreferencesKey("zone_id")
     }
 
-    private object Keys {
+    internal object Keys {
         val THEME_MODE = stringPreferencesKey("theme_mode")
 
         // Retired, never reuse: `material_you` was a boolean until the toggle was removed (ADR-0006's
@@ -126,13 +127,13 @@ class AppPreferences(
         val TIP_ASKED = booleanPreferencesKey("tip_asked")
         val PRESETS = stringPreferencesKey("presets")
 
-        // Read only until PRESETS is first written, which removes it; see `decodePresets`.
-        val LEGACY_SAVED_PRESETS = stringPreferencesKey("saved_presets")
+        // Retired, never reuse: unreleased development builds stored presets here. Nothing reads it,
+        // and it is in SETTINGS so that *Restore to default* clears a leftover.
+        val SAVED_PRESETS = stringPreferencesKey("saved_presets")
 
         /**
-         * What *Restore to default* removes: every setting, so each reads its default again. Not the
-         * live state (running, deadline, began-at, the honoured night), not the counters and one-time
-         * asks, and not the lent location, which is another file. A new setting key belongs here.
+         * What *Restore to default* removes: every setting, so each reads its default again. The lent
+         * location is not here either, because it is another file.
          */
         val SETTINGS: List<Preferences.Key<*>> =
             listOf(
@@ -150,7 +151,19 @@ class AppPreferences(
                 LAUNCHER_COMPACT,
                 CONTROLS_BUBBLE,
                 PRESETS,
-                LEGACY_SAVED_PRESETS,
+                SAVED_PRESETS,
+            )
+
+        /** What *Restore to default* leaves alone: live state, counters and one-time asks. */
+        val KEPT: List<Preferences.Key<*>> =
+            listOf(
+                SHADE_RUNNING,
+                OFF_AT_MILLIS,
+                SHADE_BEGAN_AT,
+                SCHEDULE_HONOURED_AT,
+                SHADE_STARTS,
+                BUBBLE_ASKED,
+                TIP_ASKED,
             )
     }
 
@@ -280,7 +293,7 @@ class AppPreferences(
      */
     val presets: Flow<List<StoredPreset>> = store.data.map(::presetsOf)
 
-    private fun presetsOf(prefs: Preferences) = decodePresets(prefs[Keys.PRESETS], prefs[Keys.LEGACY_SAVED_PRESETS])
+    private fun presetsOf(prefs: Preferences) = decodePresets(prefs[Keys.PRESETS])
 
     /**
      * Whether a tap on the launcher icon opens the **compact controls** instead of the full app
@@ -592,14 +605,15 @@ class AppPreferences(
         store.edit { prefs ->
             val changed = change(presetsOf(prefs), prefs) ?: return@edit
             prefs[Keys.PRESETS] = encodePresets(changed)
-            prefs.remove(Keys.LEGACY_SAVED_PRESETS)
         }
     }
 
     /**
      * Every setting back to how the app came, in one edit: the keys are removed rather than written,
      * so each reads its default again and stays free to change in a later version. A running shade
-     * keeps running and follows the defaults, because the service collects these same keys.
+     * keeps running and follows the defaults, because the service collects these same keys. Its
+     * deadline is untouched, because a restore is not a start (ADR-0012): the default auto-off
+     * applies from the next start.
      */
     suspend fun restoreDefaults() {
         store.edit { prefs -> Keys.SETTINGS.forEach { prefs.remove(it) } }

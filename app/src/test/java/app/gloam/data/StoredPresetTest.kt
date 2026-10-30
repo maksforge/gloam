@@ -22,22 +22,20 @@ class StoredPresetTest {
 
     @Test
     fun `nothing stored reads as the three built-ins`() {
-        assertEquals(DEFAULT_PRESETS, decodePresets(null, legacy = null))
-        assertEquals(Preset.entries.map { it.id }, DEFAULT_PRESETS.map { it.id })
-        assertEquals(listOf(null, null, null), DEFAULT_PRESETS.map { it.name })
+        assertEquals(DEFAULT_PRESETS, decodePresets(null))
     }
 
     @Test
     fun `a list survives the round trip, and an empty one stays empty`() {
         val list = listOf(evening.copy(name = "Late"), livingRoom, bedroom)
-        assertEquals(list, decodePresets(encodePresets(list), legacy = null))
-        assertEquals(emptyList<StoredPreset>(), decodePresets("[]", legacy = null))
+        assertEquals(list, decodePresets(encodePresets(list)))
+        assertEquals(emptyList<StoredPreset>(), decodePresets("[]"))
     }
 
     @Test
     fun `an unreadable list reads as absent rather than deleting every preset`() {
         for (text in listOf("", "not json", "{}")) {
-            assertEquals(text, DEFAULT_PRESETS, decodePresets(text, legacy = null))
+            assertEquals(text, DEFAULT_PRESETS, decodePresets(text))
         }
     }
 
@@ -51,32 +49,13 @@ class StoredPresetTest {
             null, "oops",
             {"id":"a","name":" Living room ","dimLevel":50,"warmth":20,"warmthColor":30,"icon":"moon"},
             {"id":"a","name":"Twice","dimLevel":1,"warmth":1,"warmthColor":1}]"""
-        assertEquals(listOf(reading, livingRoom), decodePresets(text, legacy = null))
+        assertEquals(listOf(reading, livingRoom), decodePresets(text))
     }
 
     @Test
     fun `values are coerced on read`() {
         val text = """[{"id":"h","name":"Hot","dimLevel":150,"warmth":-5,"warmthColor":101}]"""
-        assertEquals(listOf(StoredPreset("h", "Hot", 100, 0, 100)), decodePresets(text, legacy = null))
-    }
-
-    @Test
-    fun `the old key is read after the built-ins until the new one exists, with stable ids`() {
-        val legacy =
-            """[{"name":"Living room","dimLevel":50,"warmth":20,"warmthColor":30},
-            {"name":"x"},
-            {"name":"Bedroom","dimLevel":90,"warmth":70,"warmthColor":90}]"""
-        val read = decodePresets(null, legacy)
-        assertEquals(DEFAULT_PRESETS + livingRoom.copy(id = "legacy-0") + bedroom.copy(id = "legacy-2"), read)
-        assertEquals(read, decodePresets(null, legacy))
-        assertEquals(listOf(livingRoom), decodePresets(encodePresets(listOf(livingRoom)), legacy))
-    }
-
-    @Test
-    fun `old duplicates still read, and a built-in saved under another name lights beside it`() {
-        val legacy = """[{"name":"Mine","dimLevel":70,"warmth":15,"warmthColor":50}]"""
-        val read = decodePresets(null, legacy)
-        assertEquals(listOf("reading", "legacy-0"), read.filter { it.matches(70, 15, 50) }.map { it.id })
+        assertEquals(listOf(StoredPreset("h", "Hot", 100, 0, 100)), decodePresets(text))
     }
 
     @Test
@@ -97,6 +76,12 @@ class StoredPresetTest {
             presets.save("living ROOM", 10),
         )
         assertEquals(reading.copy(dimLevel = 10, warmth = 0, warmthColor = 0), presets.save("reading", 10)!!.first())
+    }
+
+    @Test
+    fun `saving under a renamed built-in's original label adds a new preset rather than replacing it`() {
+        val renamed = presets.renaming("reading", "Book", labelOf)!!
+        assertEquals(renamed + StoredPreset("new", "Reading", 10, 0, 0), renamed.save("Reading", 10))
     }
 
     @Test

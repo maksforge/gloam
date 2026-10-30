@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import app.gloam.MainApplication
 import app.gloam.data.AppPreferences
+import app.gloam.data.DEFAULT_PRESETS
 import app.gloam.data.DEFAULT_WARMTH_COLOR
 import app.gloam.data.StoredPreset
 import app.gloam.shade.AutoOff
@@ -71,7 +72,7 @@ data class DimUiState(
     val schedule: Schedule = Schedule(enabled = false, onAt = LocalTime.MIDNIGHT, offAt = LocalTime.MIDNIGHT),
     val onScreen: Boolean = false,
     val tipAsk: TipAskInputs = TipAskInputs(),
-    val presets: List<StoredPreset> = emptyList(),
+    val presets: List<StoredPreset> = DEFAULT_PRESETS,
     val pauseLength: PauseLength = PauseLength.Default,
     val pauseSpan: PauseSpan? = null,
 ) {
