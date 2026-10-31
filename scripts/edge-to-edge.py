@@ -588,11 +588,8 @@ def read_insets() -> dict[str, Rect]:
     the largest is taken. An invisible source contributes nothing — a hidden navigation bar is not
     an area anything can be wrongly drawn under.
     """
-    dump = shell("dumpsys window displays")
-    if "InsetsSource" not in dump:
-        return read_bar_windows()
     found: dict[str, Rect] = {}
-    for match in INSET_RE.finditer(dump):
+    for match in INSET_RE.finditer(shell("dumpsys window displays")):
         kind, left, top, right, bottom, visible = match.groups()
         kind = LEGACY_INSET_TYPES.get(kind, kind)
         if kind not in INSET_TYPES or visible != "true":
@@ -600,15 +597,17 @@ def read_insets() -> dict[str, Rect]:
         rect = Rect(int(left), int(top), int(right), int(bottom))
         if kind not in found or rect.area > found[kind].area:
             found[kind] = rect
-    return found
+    return found or read_bar_windows()
 
 
-# **Before the platform printed inset sources** (measured on API 26: not one `InsetsSource` line), the
-# bars are still windows of their own, titled `StatusBar` and `NavigationBar`, with a frame and a
-# surface that is or is not shown. That is the same rectangle and the same visibility, read one level
-# down. No cutout: API 26 has no cutout API to report one.
+# **When the inset sources say nothing this driver can use** — API 26 prints not one `InsetsSource`
+# line, and API 29 prints them under names (`TYPE_TOP_BAR`, `TYPE_SIDE_BAR_1`) the map above does not
+# know — the bars are still windows of their own, titled `StatusBar` and `NavigationBar` (with a
+# display number, `NavigationBar0`, from API 30), with a frame and a surface that is or is not shown.
+# That is the same rectangle and the same visibility, read one level down. No cutout: API 26 has no
+# cutout API to report one.
 BAR_WINDOWS = {"StatusBar": "statusBars", "NavigationBar": "navigationBars"}
-BAR_WINDOW_RE = re.compile(r"Window #\d+ Window\{\w+ u0 (\w+)\}:")
+BAR_WINDOW_RE = re.compile(r"Window #\d+ Window\{[^}]* u0 (StatusBar|NavigationBar)\d*\}:")
 MFRAME_RE = re.compile(r"mFrame=\[(-?\d+),(-?\d+)\]\[(-?\d+),(-?\d+)\]")
 
 
