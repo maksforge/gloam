@@ -41,7 +41,7 @@ internal object OverlayDump {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             "fillxfill"
         } else {
-            val side = manager.shadeSidePx()
-            "(${side}x$side)"
+            val params = WindowManager.LayoutParams().apply { fillDisplay(manager) }
+            "(${params.width}x${params.height})"
         }
 }

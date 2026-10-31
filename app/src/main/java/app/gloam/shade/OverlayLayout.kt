@@ -5,7 +5,6 @@ import android.content.res.Resources
 import android.graphics.Point
 import android.graphics.Rect
 import android.os.Build
-import android.view.Surface
 import android.view.View
 import android.view.WindowInsets
 import android.view.WindowManager
@@ -32,12 +31,16 @@ fun WindowManager.displayBounds(): Rect =
     }
 
 /**
- * The app's area of the display, in display pixels: the bounds minus the system bars and the cutout.
+ * The app's area of the display, in the overlay windows' own `x`/`y`: the bounds minus the system
+ * bars and the cutout.
  *
  * Below Android 11 `Display.getSize` is the display minus the navigation bar only, so the status bar
- * comes off separately, and a navigation bar on the left is the one rotation where the area does not
- * start at `x = 0`. Approximate around a cutout on 9 and 10, which is the safe direction: the area is
- * always inside the display, and the bubble is clamped to it.
+ * comes off separately. **And the origin is not the display's there**: the platform places an
+ * overlay's `x` from the edge of the area it keeps clear of the navigation bar, so with the bar on
+ * the left (`ROTATION_270`) window `x = 0` is already the bar's right edge, and the area starts at 0
+ * in every rotation — measured on the API-26 emulator, where a bar-width `left` pushed a right-tucked
+ * bubble off the display. Approximate around a cutout on 9 and 10, which is the safe direction: the
+ * area is always inside the display, and the bubble is clamped to it.
  */
 fun WindowManager.appArea(): Rect {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -50,17 +53,14 @@ fun WindowManager.appArea(): Rect {
         return Rect(insets.left, insets.top, bounds.width() - insets.right, bounds.height() - insets.bottom)
     }
     @Suppress("DEPRECATION")
-    val display = defaultDisplay
-    val real = Point().also { display.getRealSize(it) }
-    val app = Point().also { display.getSize(it) }
-    val left = if (display.rotation == Surface.ROTATION_270) real.x - app.x else 0
-    return Rect(left, statusBarHeightPx(), left + app.x, app.y)
+    val app = Point().also { defaultDisplay.getSize(it) }
+    return Rect(0, systemDimenPx("status_bar_height"), app.x, app.y)
 }
 
 @SuppressLint("DiscouragedApi", "InternalInsetResource")
-private fun statusBarHeightPx(): Int {
+private fun systemDimenPx(name: String): Int {
     val resources = Resources.getSystem()
-    val id = resources.getIdentifier("status_bar_height", "dimen", "android")
+    val id = resources.getIdentifier(name, "dimen", "android")
     return if (id == 0) 0 else resources.getDimensionPixelSize(id)
 }
 
@@ -73,21 +73,40 @@ private fun statusBarHeightPx(): Int {
  * clipped to the display frame, which `FLAG_LAYOUT_NO_LIMITS` lifts, so it reaches the bottom edge.
  * A square on the longest edge covers either rotation without a resize; the shade is untouchable,
  * so the part past the display costs nothing.
+ *
+ * **The same parent frame moves the origin when the bar is on the left** (`ROTATION_270`): `x = 0`
+ * is the bar's right edge, and the strip under the bar stayed bright (measured: a frame from 126).
+ * So the square starts a bar's thickness to the left and is that much wider. Rotation-independent on
+ * purpose, because the shade is not laid out again on a rotation (`ShadeThread`).
  */
 fun WindowManager.LayoutParams.fillDisplay(manager: WindowManager) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         width = WindowManager.LayoutParams.MATCH_PARENT
         height = WindowManager.LayoutParams.MATCH_PARENT
     } else {
-        val side = manager.shadeSidePx()
-        width = side
+        val side = manager.displayBounds().let { max(it.width(), it.height()) }
+        val bar = manager.navigationBarThicknessPx()
+        x = -bar
+        width = side + bar
         height = side
     }
     useDisplayFrame()
 }
 
-/** The pre-Android-11 shade's side, from [fillDisplay]. */
-fun WindowManager.shadeSidePx(): Int = displayBounds().let { max(it.width(), it.height()) }
+/** The widest the navigation bar can be in any rotation, for [fillDisplay]. */
+private fun WindowManager.navigationBarThicknessPx(): Int {
+    val bounds = displayBounds()
+
+    @Suppress("DEPRECATION")
+    val app = Point().also { defaultDisplay.getSize(it) }
+    return maxOf(
+        bounds.width() - app.x,
+        bounds.height() - app.y,
+        systemDimenPx("navigation_bar_width"),
+        systemDimenPx("navigation_bar_height"),
+        systemDimenPx("navigation_bar_height_landscape"),
+    )
+}
 
 /**
  * Lay the window out in display pixels, system bars and cutout included — the shade, and the

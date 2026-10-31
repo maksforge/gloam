@@ -8,6 +8,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import org.junit.After
 import org.junit.Assert.assertTrue
+import org.junit.Assume.assumeTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -192,6 +193,46 @@ class ShadeWindowTest {
             "The shade's frame ${window?.let(::frameOf)} never covered the display $display within " +
                 "${TIMEOUT_MS}ms — a strip of the screen is left undimmed. Window was:\n$window",
         )
+    }
+
+    /**
+     * **The same, with the navigation bar on the left.** Below Android 11 that is the one rotation
+     * where the platform moves an overlay's origin off the display's, and the strip under the bar
+     * stayed bright while portrait passed. Settings is put in front because it follows the rotation
+     * and this app's own screen does not; a device that will not turn skips rather than passes.
+     */
+    @Test
+    fun theShadeCoversTheWholeDisplayInSeascape() {
+        val autoRotate = shell("settings get system accelerometer_rotation").trim()
+        val userRotation = shell("settings get system user_rotation").trim()
+        try {
+            shell("settings put system accelerometer_rotation 0")
+            shell("settings put system user_rotation 3")
+            shell("am start -W -a android.settings.SETTINGS")
+            val manager = context.getSystemService(WindowManager::class.java)
+            val deadline = System.currentTimeMillis() + TIMEOUT_MS
+            while (manager.displayBounds().let { it.width() < it.height() } &&
+                System.currentTimeMillis() < deadline
+            ) {
+                Thread.sleep(POLL_MS)
+            }
+            assumeTrue(
+                "The display never turned to seascape.",
+                manager.displayBounds().let { it.width() > it.height() },
+            )
+            theShadeCoversTheWholeDisplay()
+        } finally {
+            shell("input keyevent KEYCODE_HOME")
+            restoreSetting("user_rotation", userRotation)
+            restoreSetting("accelerometer_rotation", autoRotate)
+        }
+    }
+
+    private fun restoreSetting(
+        key: String,
+        value: String,
+    ) {
+        shell(if (value == "null") "settings delete system $key" else "settings put system $key $value")
     }
 
     private fun frameOf(window: String): Rect? =
