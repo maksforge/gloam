@@ -24,10 +24,34 @@ import kotlin.math.pow
  */
 class ShadeRampTest {
     /**
-     * The tops worth sweeping: the user at their own maximum, exactly at our floor, **below** our
-     * floor — a user already darker than Gloam would set them — and no usable reading at all.
+     * The three platforms `minSdk` 26 reaches, as the service hands them to the ramp: the window alpha
+     * clamp from Android 12, a float override from 11, and an integer one below it.
      */
-    private val tops = listOf(1.0f, MIN_BACKLIGHT, MIN_BACKLIGHT / 2f, null)
+    private data class Platform(
+        val name: String,
+        val clamp: Float,
+        val floor: Float,
+    ) {
+        /**
+         * The tops worth sweeping: the user at their own maximum, exactly at the floor, **below** it
+         * — a user already darker than Gloam would set them — and no usable reading at all.
+         */
+        val tops = listOf(1.0f, floor, floor / 2f, null)
+
+        fun values(
+            settings: DimSettings,
+            top: Float?,
+        ) = shadeValuesFor(settings, top, floor, clamp)
+
+        override fun toString() = name
+    }
+
+    private val platforms =
+        listOf(
+            Platform("12+", WINDOW_ALPHA_CLAMP, MIN_BACKLIGHT),
+            Platform("11", 1f, MIN_BACKLIGHT),
+            Platform("8-10", 1f, MIN_INT_BACKLIGHT),
+        )
 
     private val levels = 0..100
     private val warmths = listOf(0, 1, 25, 50, 75, 99, 100)
@@ -39,19 +63,19 @@ class ShadeRampTest {
      * to spend* — and the tests below have to agree with the ramp about which case they are in
      * without simply calling the ramp to find out.
      */
-    private fun effectiveTop(
+    private fun Platform.effectiveTop(
         top: Float?,
         lowerBacklight: Boolean,
-    ): Float? = top?.takeIf { lowerBacklight && it >= MIN_BACKLIGHT && it <= 1f }
+    ): Float? = top?.takeIf { lowerBacklight && it >= floor && it <= 1f }
 
     /** The whole ramp's fall, end to end: `ratio × span`. */
-    private fun fall(
+    private fun Platform.fall(
         top: Float?,
         lowerBacklight: Boolean,
     ): Float {
         val effective = effectiveTop(top, lowerBacklight)
-        val ratio = if (effective == null) 1f else effective / MIN_BACKLIGHT
-        return ratio * (1f / shadeTransmission(MAX_SHADE_ALPHA))
+        val ratio = if (effective == null) 1f else effective / floor
+        return ratio * (1f / shadeTransmission(MAX_SHADE_ALPHA, clamp))
     }
 
     /**
@@ -62,21 +86,23 @@ class ShadeRampTest {
      * [shadeTransmission] rather than `1 - shadeAlpha`: an alpha is not a share of the light on this
      * platform, and `the shade model is anchored to the phone` below is what ties the model to a reading.
      */
-    private fun light(
+    private fun Platform.light(
         values: ShadeValues,
         effectiveTop: Float?,
     ): Float {
         val top = effectiveTop ?: 1f
-        return (values.backlight ?: top) / top * shadeTransmission(values.shadeAlpha)
+        return (values.backlight ?: top) / top * shadeTransmission(values.shadeAlpha, clamp)
     }
 
-    private fun sweep(body: (DimSettings, Float?, ShadeValues) -> Unit) {
-        for (top in tops) {
-            for (lower in listOf(true, false)) {
-                for (level in levels) {
-                    for (warmth in warmths) {
-                        val settings = DimSettings(level, warmth, lower)
-                        body(settings, top, shadeValuesFor(settings, top))
+    private fun sweep(body: Platform.(DimSettings, Float?, ShadeValues) -> Unit) {
+        for (platform in platforms) {
+            for (top in platform.tops) {
+                for (lower in listOf(true, false)) {
+                    for (level in levels) {
+                        for (warmth in warmths) {
+                            val settings = DimSettings(level, warmth, lower)
+                            platform.body(settings, top, platform.values(settings, top))
+                        }
                     }
                 }
             }
@@ -88,11 +114,14 @@ class ShadeRampTest {
         sweep { settings, top, values ->
             val backlight = values.backlight ?: return@sweep
             // `0.0f` is BRIGHTNESS_OVERRIDE_OFF — the backlight *off*, over a live touchscreen.
-            assertNotEquals("$settings top=$top asked for BRIGHTNESS_OVERRIDE_OFF", 0f, backlight)
+            assertNotEquals("$this $settings top=$top asked for BRIGHTNESS_OVERRIDE_OFF", 0f, backlight)
             assertTrue(
-                "$settings top=$top emitted $backlight, below MIN_BACKLIGHT",
-                backlight >= MIN_BACKLIGHT,
+                "$this $settings top=$top emitted $backlight, below the floor $floor",
+                backlight >= floor,
             )
+            if (floor == MIN_INT_BACKLIGHT) {
+                assertTrue("$this $settings top=$top truncates to 0", (backlight * 255).toInt() >= 1)
+            }
         }
     }
 
@@ -101,9 +130,9 @@ class ShadeRampTest {
         sweep { settings, top, values ->
             val backlight = values.backlight ?: return@sweep
             val ceiling = effectiveTop(top, settings.lowerBacklight)
-            assertTrue("$settings top=$top emitted $backlight with no top to spend", ceiling != null)
+            assertTrue("$this $settings top=$top emitted $backlight with no top to spend", ceiling != null)
             assertTrue(
-                "$settings top=$top emitted $backlight, above the captured top $ceiling",
+                "$this $settings top=$top emitted $backlight, above the captured top $ceiling",
                 backlight <= ceiling!! + EPSILON,
             )
         }
@@ -113,7 +142,7 @@ class ShadeRampTest {
     fun `the shade alpha stays inside its cap`() {
         sweep { settings, top, values ->
             assertTrue(
-                "$settings top=$top emitted shadeAlpha ${values.shadeAlpha}",
+                "$this $settings top=$top emitted shadeAlpha ${values.shadeAlpha}",
                 values.shadeAlpha in 0f..MAX_SHADE_ALPHA,
             )
         }
@@ -123,7 +152,7 @@ class ShadeRampTest {
     fun `the warmth alpha stays inside its cap`() {
         sweep { settings, top, values ->
             assertTrue(
-                "$settings top=$top emitted warmthAlpha ${values.warmthAlpha}",
+                "$this $settings top=$top emitted warmthAlpha ${values.warmthAlpha}",
                 values.warmthAlpha in 0f..MAX_WARMTH_ALPHA,
             )
         }
@@ -142,7 +171,7 @@ class ShadeRampTest {
         sweep { settings, top, values ->
             val signal = (1f - values.shadeAlpha) * (1f - values.warmthAlpha)
             assertTrue(
-                "$settings top=$top left $signal of the content, under ${1f - MAX_SHADE_ALPHA}",
+                "$this $settings top=$top left $signal of the content, under ${1f - MAX_SHADE_ALPHA}",
                 signal >= 1f - MAX_SHADE_ALPHA - EPSILON,
             )
         }
@@ -154,26 +183,32 @@ class ShadeRampTest {
      */
     @Test
     fun `a higher dim level never emits more light`() {
-        for (top in tops) {
-            for (lower in listOf(true, false)) {
-                var previousBacklight: Float? = null
-                var previousAlpha = -1f
-                for (level in levels) {
-                    val values = shadeValuesFor(DimSettings(level, 0, lower), top)
-                    val backlight = values.backlight
-                    if (backlight != null && previousBacklight != null) {
-                        assertTrue(
-                            "top=$top lower=$lower: backlight rose at $level",
-                            backlight <= previousBacklight + EPSILON,
-                        )
-                    }
+        forEachRamp { platform, top, lower ->
+            var previousBacklight: Float? = null
+            var previousAlpha = -1f
+            for (level in levels) {
+                val values = platform.values(DimSettings(level, 0, lower), top)
+                val backlight = values.backlight
+                if (backlight != null && previousBacklight != null) {
                     assertTrue(
-                        "top=$top lower=$lower: shadeAlpha fell at $level",
-                        values.shadeAlpha >= previousAlpha - EPSILON,
+                        "$platform top=$top lower=$lower: backlight rose at $level",
+                        backlight <= previousBacklight + EPSILON,
                     )
-                    previousBacklight = backlight
-                    previousAlpha = values.shadeAlpha
                 }
+                assertTrue(
+                    "$platform top=$top lower=$lower: shadeAlpha fell at $level",
+                    values.shadeAlpha >= previousAlpha - EPSILON,
+                )
+                previousBacklight = backlight
+                previousAlpha = values.shadeAlpha
+            }
+        }
+    }
+
+    private fun forEachRamp(body: (Platform, Float?, Boolean) -> Unit) {
+        for (platform in platforms) {
+            for (top in platform.tops) {
+                for (lower in listOf(true, false)) body(platform, top, lower)
             }
         }
     }
@@ -191,25 +226,28 @@ class ShadeRampTest {
      */
     @Test
     fun `nothing jumps where the backlight runs out`() {
-        for (top in listOf(1.0f, 0.5f, 0.1f, 0.02f, MIN_BACKLIGHT)) {
-            for (lower in listOf(true, false)) {
-                val fall = fall(top, lower)
-                val alphaStep = ln(fall) * (1.055f / 2.4f) / WINDOW_ALPHA_CLAMP / 100f * 1.05f
-                val backlightStep = fall.pow(1f / 100f) * 1.001f
-                for (level in 1..100) {
-                    val before = shadeValuesFor(DimSettings(level - 1, 0, lower), top)
-                    val after = shadeValuesFor(DimSettings(level, 0, lower), top)
-                    assertTrue(
-                        "top=$top lower=$lower: shadeAlpha jumped ${after.shadeAlpha - before.shadeAlpha} at $level",
-                        after.shadeAlpha - before.shadeAlpha <= alphaStep,
-                    )
-                    val a = before.backlight
-                    val b = after.backlight
-                    if (a != null && b != null) {
+        for (platform in platforms) {
+            for (top in listOf(1.0f, 0.5f, 0.1f, 0.02f, platform.floor)) {
+                for (lower in listOf(true, false)) {
+                    val fall = platform.fall(top, lower)
+                    val alphaStep = ln(fall) * (1.055f / 2.4f) / platform.clamp / 100f * 1.05f
+                    val backlightStep = fall.pow(1f / 100f) * 1.001f
+                    for (level in 1..100) {
+                        val before = platform.values(DimSettings(level - 1, 0, lower), top)
+                        val after = platform.values(DimSettings(level, 0, lower), top)
                         assertTrue(
-                            "top=$top lower=$lower: backlight jumped from $a to $b at $level",
-                            a / b <= backlightStep,
+                            "$platform top=$top lower=$lower: shadeAlpha jumped " +
+                                "${after.shadeAlpha - before.shadeAlpha} at $level",
+                            after.shadeAlpha - before.shadeAlpha <= alphaStep,
                         )
+                        val a = before.backlight
+                        val b = after.backlight
+                        if (a != null && b != null) {
+                            assertTrue(
+                                "$platform top=$top lower=$lower: backlight jumped from $a to $b at $level",
+                                a / b <= backlightStep,
+                            )
+                        }
                     }
                 }
             }
@@ -222,21 +260,19 @@ class ShadeRampTest {
      */
     @Test
     fun `the rate is constant end to end`() {
-        for (top in tops) {
-            for (lower in listOf(true, false)) {
-                val effective = effectiveTop(top, lower)
-                val fall = fall(top, lower)
-                for (level in levels) {
-                    val values = shadeValuesFor(DimSettings(level, 0, lower), top)
-                    val expected = fall.pow(-level / 100f)
-                    val actual = light(values, effective)
-                    assertEquals(
-                        "top=$top lower=$lower level=$level: light was $actual, not $expected",
-                        expected.toDouble(),
-                        actual.toDouble(),
-                        RATE_EPSILON.toDouble(),
-                    )
-                }
+        forEachRamp { platform, top, lower ->
+            val effective = platform.effectiveTop(top, lower)
+            val fall = platform.fall(top, lower)
+            for (level in levels) {
+                val values = platform.values(DimSettings(level, 0, lower), top)
+                val expected = fall.pow(-level / 100f)
+                val actual = platform.light(values, effective)
+                assertEquals(
+                    "$platform top=$top lower=$lower level=$level: light was $actual, not $expected",
+                    expected.toDouble(),
+                    actual.toDouble(),
+                    RATE_EPSILON.toDouble(),
+                )
             }
         }
     }
@@ -247,12 +283,10 @@ class ShadeRampTest {
      */
     @Test
     fun `dim level zero releases the override and draws nothing`() {
-        for (top in tops) {
-            for (lower in listOf(true, false)) {
-                val values = shadeValuesFor(DimSettings(0, 0, lower), top)
-                assertNull("top=$top lower=$lower held an override at dim 0", values.backlight)
-                assertEquals("top=$top lower=$lower drew a shade at dim 0", 0f, values.shadeAlpha, EPSILON)
-            }
+        forEachRamp { platform, top, lower ->
+            val values = platform.values(DimSettings(0, 0, lower), top)
+            assertNull("$platform top=$top lower=$lower held an override at dim 0", values.backlight)
+            assertEquals("$platform top=$top lower=$lower drew a shade at dim 0", 0f, values.shadeAlpha, EPSILON)
         }
     }
 
@@ -262,11 +296,13 @@ class ShadeRampTest {
      */
     @Test
     fun `no reading and the toggle off produce identical output`() {
-        for (level in levels) {
-            for (warmth in warmths) {
-                val off = shadeValuesFor(DimSettings(level, warmth, lowerBacklight = false), 1.0f)
-                val unread = shadeValuesFor(DimSettings(level, warmth, lowerBacklight = true), null)
-                assertEquals("level=$level warmth=$warmth", off, unread)
+        for (platform in platforms) {
+            for (level in levels) {
+                for (warmth in warmths) {
+                    val off = platform.values(DimSettings(level, warmth, lowerBacklight = false), 1.0f)
+                    val unread = platform.values(DimSettings(level, warmth, lowerBacklight = true), null)
+                    assertEquals("$platform level=$level warmth=$warmth", off, unread)
+                }
             }
         }
     }
@@ -274,10 +310,12 @@ class ShadeRampTest {
     /** A top the user is already below is not a top: there is nothing to spend and no override. */
     @Test
     fun `a top below our own floor is spent as if there were none`() {
-        for (level in levels) {
-            val below = shadeValuesFor(DimSettings(level, 0, lowerBacklight = true), MIN_BACKLIGHT / 2f)
-            val unread = shadeValuesFor(DimSettings(level, 0, lowerBacklight = true), null)
-            assertEquals("level=$level", unread, below)
+        for (platform in platforms) {
+            for (level in levels) {
+                val below = platform.values(DimSettings(level, 0, lowerBacklight = true), platform.floor / 2f)
+                val unread = platform.values(DimSettings(level, 0, lowerBacklight = true), null)
+                assertEquals("$platform level=$level", unread, below)
+            }
         }
     }
 
@@ -311,6 +349,12 @@ class ShadeRampTest {
         assertEquals("R3 and R6 read 0.2393-0.2411 at the cap", 0.240f, storedAtCap, 0.002f)
         assertEquals("light at the cap", 0.047f, shadeTransmission(MAX_SHADE_ALPHA), 0.001f)
         assertEquals("a transparent shade", 1f, shadeTransmission(0f), EPSILON)
+        assertEquals(
+            "light at the cap with no clamp, below Android 12",
+            0.0039f,
+            shadeTransmission(MAX_SHADE_ALPHA, 1f),
+            0.0001f,
+        )
     }
 
     /**

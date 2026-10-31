@@ -12,13 +12,21 @@ import androidx.core.view.doOnPreDraw
 import kotlin.math.max
 
 /*
- * The overlay windows' geometry on every level `minSdk` 26 reaches (ADR-0008's amendment).
+ * The overlay windows' geometry, and the two numbers the platform changes under the shade's window,
+ * on every level `minSdk` 26 reaches (ADR-0008's amendment).
  *
  * **The branches are the platform's, not ours.** Android 11 replaced how a window learns where the
  * system bars are — `WindowMetrics` for reading them, `fitInsetsTypes` for laying out around them —
  * and below it only the older `Display` reads and layout flags exist. Each function here answers one
  * question in both vocabularies, so the windows themselves carry no `SDK_INT` checks.
  */
+
+/** [WINDOW_ALPHA_CLAMP] from Android 12, where the platform writes it into the shade window; `1f` below. */
+fun platformWindowAlphaClamp(): Float = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WINDOW_ALPHA_CLAMP else 1f
+
+/** [requested], raised to [MIN_INT_BACKLIGHT] below Android 11, where the override is an integer. */
+fun platformMinBacklight(requested: Float): Float =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) requested else maxOf(requested, MIN_INT_BACKLIGHT)
 
 /** The whole display in its current rotation, nothing taken off for the system bars. */
 fun WindowManager.displayBounds(): Rect =

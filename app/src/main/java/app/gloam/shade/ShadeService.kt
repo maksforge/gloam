@@ -1666,7 +1666,13 @@ class ShadeService : Service() {
             backlightTop = null
         }
 
-        val values = shadeValuesFor(settings, backlightTop, appliedMinBacklight)
+        val values =
+            shadeValuesFor(
+                settings,
+                backlightTop,
+                platformMinBacklight(appliedMinBacklight),
+                platformWindowAlphaClamp(),
+            )
         // A view property, unlike the backlight below: `alpha` takes effect on its own, where
         // `params.screenBrightness` does nothing until the window layout is handed back. Set on the
         // shade's thread, which owns the views, and skipped outright when there is no window.
