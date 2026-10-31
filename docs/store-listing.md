@@ -1644,3 +1644,64 @@ Novidade: suas predefinições. Ajuste o nível de escurecimento, a calidez e a 
 ```
 Нове: власні набори. Налаштуй рівень затемнення, теплоту та відтінок, торкнися ＋ і дай назву. Утримуй будь-який набір, навіть вбудований, щоб перейменувати чи видалити його. Дотик до набору більше не вмикає затемнення. А ще пауза: у розділі Пауза торкнися 1, 5 або 15 хв, і запона відступить, а потім повернеться сама; кільце на бульбашці показує, скільки лишилося. Інше… додає власну тривалість, а для вимкнення задає до 12 год. Налаштування → Відновити типові.
 ```
+
+### 1.6.0 — older phones
+
+**One change, and it is the floor.** `minSdk` went from 33 to 26 (ADR-0008's amendment), so the
+note says who can now install and the one thing they do differently. The tile wording is the app's
+own `settings_tile_unavailable`, so the note and the Settings row agree. The notch strip on Android 8
+and the below-13 notification language are left to the ADR: neither fits a note a user reads once.
+
+**English** — 228/500:
+
+```
+Gloam now installs on Android 8 and later, not only Android 13 and up. Older phones get the same app, apart from what their Android cannot do: below Android 13 you add the Quick Settings tile yourself, by editing Quick Settings.
+```
+
+**Polish** — 236/500:
+
+```
+Gloam działa teraz na Androidzie 8 i nowszym, a nie tylko od Androida 13. Starsze telefony dostają tę samą aplikację, poza tym, czego nie potrafi ich Android: przed Androidem 13 kafelek trzeba dodać ręcznie, edytując szybkie ustawienia.
+```
+
+**Czech** — 217/500:
+
+```
+Gloam teď běží na Androidu 8 a novějším, ne jen od Androidu 13. Starší telefony dostanou stejnou aplikaci, kromě toho, co jejich Android neumí: před Androidem 13 si dlaždici přidáš ručně v úpravách Rychlého nastavení.
+```
+
+**German** — 238/500:
+
+```
+Gloam läuft jetzt ab Android 8, nicht mehr erst ab Android 13. Ältere Telefone bekommen dieselbe App, bis auf das, was ihr Android nicht kann: Vor Android 13 fügst du die Kachel selbst hinzu, indem du die Schnelleinstellungen bearbeitest.
+```
+
+**Spanish** — 236/500:
+
+```
+Gloam ahora funciona en Android 8 y posteriores, no solo desde Android 13. Los teléfonos más antiguos tienen la misma app, salvo lo que su Android no permite: antes de Android 13, el mosaico se añade a mano editando los ajustes rápidos.
+```
+
+**French** — 247/500:
+
+```
+Gloam fonctionne désormais à partir d'Android 8, et plus seulement d'Android 13. Les téléphones plus anciens ont la même app, sauf ce que leur Android ne permet pas : avant Android 13, la tuile s'ajoute à la main en modifiant les réglages rapides.
+```
+
+**Italian** — 238/500:
+
+```
+Gloam ora funziona da Android 8 in poi, non solo da Android 13. I telefoni più vecchi hanno la stessa app, tranne ciò che il loro Android non consente: prima di Android 13 il riquadro si aggiunge a mano modificando le impostazioni rapide.
+```
+
+**Brazilian Portuguese** — 256/500:
+
+```
+O Gloam agora funciona no Android 8 ou mais recente, e não só a partir do Android 13. Celulares mais antigos têm o mesmo app, exceto o que o Android deles não permite: antes do Android 13, o bloco é adicionado manualmente editando as configurações rápidas.
+```
+
+**Ukrainian** — 234/500:
+
+```
+Gloam тепер працює на Android 8 і новіших, а не лише від Android 13. Старші телефони отримують той самий застосунок, окрім того, чого не вміє їхній Android: до Android 13 плитку треба додати вручну, відредагувавши швидкі налаштування.
+```
