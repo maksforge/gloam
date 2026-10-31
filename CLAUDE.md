@@ -40,7 +40,7 @@ let us do otherwise".
 
 | Choice | Note |
 | --- | --- |
-| Kotlin, Jetpack Compose, Material 3 | Android only, `minSdk` 33 (ADR-0008) |
+| Kotlin, Jetpack Compose, Material 3 | Android only, `minSdk` 26 (ADR-0008); below-11 window geometry is `shade/OverlayLayout.kt` |
 | **Navigation 3** (`androidx.navigation3`) | Replaces Navigation Compose 2.x — don't reintroduce the old one |
 | **DataStore only — there is no database** | Gloam stores settings, not records. See *Storage* below |
 | Manual DI via `AppContainer`, **not Hilt** | Constructor injection is clearer at this size and easy to migrate later |
@@ -170,7 +170,7 @@ art/             mark.py is the identity; both generators derive from it
 ## Versions
 
 Pinned in `gradle/libs.versions.toml`: **AGP 9.0.1, Kotlin 2.3.20, Gradle 9.1.0, Compose BOM
-2026.03.01**. `compileSdk`/`targetSdk` 36, `minSdk` 33, JDK 21 toolchain.
+2026.03.01**. `compileSdk`/`targetSdk` 36, `minSdk` 26, JDK 21 toolchain.
 
 `compileSdk` stays at **36**: it is the combination AGP 9.0.1 validates against. Bump deliberately,
 with a build to prove it.

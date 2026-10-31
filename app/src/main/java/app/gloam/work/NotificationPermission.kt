@@ -117,11 +117,11 @@ fun Context.notificationsAllowed(): Boolean = NotificationManagerCompat.from(thi
  * `Activity?` because a composable can in principle be hosted outside one, and an extension on a
  * nullable type turns that into an answer (`false`) instead of a null check at every call.
  *
- * `minSdk` is 33 (ADR-0008), so `POST_NOTIFICATIONS` is a runtime permission on every device this
- * app reaches and there is no version branch to write.
+ * Below Android 13 there is no dialog to spend, so the answer there is always false.
  */
 fun Activity?.notificationRationaleAvailable(): Boolean =
     this != null &&
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
         ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.POST_NOTIFICATIONS)
 
 /**

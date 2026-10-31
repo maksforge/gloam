@@ -99,7 +99,8 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        // The application's resources follow the per-app language on API 33+, which is all of ours.
+        // The application's resources follow the per-app language on API 33+ only; below it AppCompat
+        // reaches activities alone, so these labels are in the system language (ADR-0004).
         preferences = AppPreferences(preferencesStore, lentLocationStore, presetLabel = { getString(it.label) })
 
         // A blocking read, deliberately and exactly once. Everything else about DataStore is a Flow,

@@ -14,7 +14,6 @@ import android.os.IBinder
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.WindowInsets
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.compose.animation.core.Animatable
@@ -24,6 +23,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import app.gloam.MainActivity
 import app.gloam.MainApplication
@@ -150,7 +150,7 @@ const val SHADE_WINDOW_FLAGS =
  * neither child past its own limit, so the bound belongs to the composite. [shadeValuesFor] is
  * where that is enforced, and it is proven on the JVM rather than by looking at a screen.
  *
- * `MATCH_PARENT`, the two layout flags, the cutout mode and `fitInsetsTypes = 0` are what carry it
+ * The two layout flags and [fillDisplay] are what carry it
  * over the status and navigation bars. Each covers a different edge — the flags alone left the
  * navigation bar's strip bright — and without all of them a system bar stays at full brightness,
  * which reads as a bug rather than as a design. `ShadeWindowTest` reads the frame back off the
@@ -577,7 +577,12 @@ class ShadeService : Service() {
         // deadline is live, because the registration is one binder call for the life of a service
         // that exists only while the shade is up, and a filter that came and went with the deadline
         // would be a second thing to keep in step with it.
-        registerReceiver(screenOnReceiver, IntentFilter(Intent.ACTION_SCREEN_ON), RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(
+            this,
+            screenOnReceiver,
+            IntentFilter(Intent.ACTION_SCREEN_ON),
+            ContextCompat.RECEIVER_NOT_EXPORTED,
+        )
     }
 
     /**
@@ -733,11 +738,6 @@ class ShadeService : Service() {
                     // across the top, which reads as a bug rather than as a design. The system's own
                     // overlays carry this attribute and ours did not.
                     //
-                    // ALWAYS needs API 30 and `minSdk` is 33 (ADR-0008), so this is unconditional.
-                    // It used to branch three ways; two of those branches could never run on a
-                    // device this app ships to, and one of them had never executed anywhere.
-                    layoutInDisplayCutoutMode =
-                        WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
                     // **The bottom strip, and the flags above do not reach it.** Since Android 11 a
                     // window is laid out clear of every system bar in `fitInsetsTypes`, and the
                     // default is all of them. `FLAG_LAYOUT_IN_SCREEN` takes only the *status* bar
@@ -747,7 +747,7 @@ class ShadeService : Service() {
                     // the inset the frame was measured inside. The strip was undimmed wherever the
                     // navigation bar is showing, and gone in an immersive reader that hides it,
                     // which is why it looked like a per-app bug. Zero asks for the whole display.
-                    fitInsetsTypes = 0
+                    windowManager?.let { fillDisplay(it) }
                 }
 
         // On [shadeThread], and that is what binds the window to it. The views were built on main and
@@ -886,7 +886,7 @@ class ShadeService : Service() {
      * compact controls' dialog is centred in.** The two hosts draw the same bar and replace each other
      * (one edge bar at a time, [panelOnScreen]), so a bar that moves when one takes over from the other
      * shows the user a seam they have no reason to know about. The group centres between the bars
-     * with no inset arithmetic here, because `fitInsetsTypes` does it: see the params below.
+     * with no inset arithmetic here, because [fitSystemBars] does it: see the params below.
      *
      * **This paragraph used to say the frame already stopped short of both bars, and it did not.**
      * `FLAG_LAYOUT_IN_SCREEN` takes the status bar out of the default fit types, so the panel was
@@ -962,7 +962,7 @@ class ShadeService : Service() {
                     // the same pixels. Setting this also marks the fit types as the app's own choice,
                     // which is what stops the platform's compatibility pass from dropping the status
                     // bar out of them for `FLAG_LAYOUT_IN_SCREEN`.
-                    fitInsetsTypes = WindowInsets.Type.systemBars()
+                    fitSystemBars()
                     // No `y`. Under `CENTER_VERTICAL` it would be an offset *from the centre*, which
                     // is not a thing this layout wants — so the bottom margin that used to live here
                     // is gone, constant and all, rather than left at zero for a later reader to
@@ -981,7 +981,7 @@ class ShadeService : Service() {
                 // between the two, which read as the panel jumping in. A frame-commit callback runs
                 // once, after the frame it follows has reached the surface, so the compact controls
                 // now go only when the panel is there to take their place.
-                host.view.viewTreeObserver.registerFrameCommitCallback { reportPanelOnScreen(panelView != null) }
+                host.view.doOnFrameShown { reportPanelOnScreen(panelView != null) }
                 // **`RESUMED` is not a formality.** Below `STARTED` the `Recomposer` stops applying
                 // recompositions, and the window draws its first frame correctly and then never
                 // changes again — a slider that will not move under a finger, with nothing in
@@ -994,7 +994,7 @@ class ShadeService : Service() {
     /** The panel's width for the display as it is *now*, and for whatever the panel currently shows. */
     private fun currentPanelWidth(manager: WindowManager): Int =
         panelWidthPx(
-            displayWidthPx = manager.currentWindowMetrics.bounds.width(),
+            displayWidthPx = manager.displayBounds().width(),
             density = resources.displayMetrics.density,
             sectionOpen = panelSectionOpen,
         )
@@ -1060,7 +1060,7 @@ class ShadeService : Service() {
     }
 
     private fun currentPromptWidth(manager: WindowManager): Int =
-        promptWidthPx(manager.currentWindowMetrics.bounds.width(), resources.displayMetrics.density)
+        promptWidthPx(manager.displayBounds().width(), resources.displayMetrics.density)
 
     /** Back into the side it rested on, at once: a rotation moves the display, not the user's choice. */
     private fun retuckBubble() {
@@ -1153,22 +1153,12 @@ class ShadeService : Service() {
 
     /** The app's area of the display: the bounds minus the system bars and the cutout. */
     private fun bubbleArea(manager: WindowManager): BubbleArea {
-        val metrics = manager.currentWindowMetrics
-        val insets =
-            metrics.windowInsets.getInsetsIgnoringVisibility(
-                WindowInsets.Type.systemBars() or WindowInsets.Type.displayCutout(),
-            )
-        val bounds = metrics.bounds
-        return BubbleArea(
-            left = insets.left,
-            top = insets.top,
-            right = bounds.width() - insets.right,
-            bottom = bounds.height() - insets.bottom,
-        )
+        val area = manager.appArea()
+        return BubbleArea(left = area.left, top = area.top, right = area.right, bottom = area.bottom)
     }
 
     private fun bubbleSizePx(manager: WindowManager): Int {
-        val bounds = manager.currentWindowMetrics.bounds
+        val bounds = manager.displayBounds()
         return bubbleSidePx(BUBBLE_SIZE_DP, resources.displayMetrics.density, min(bounds.width(), bounds.height()))
     }
 
@@ -1176,7 +1166,7 @@ class ShadeService : Service() {
 
     /**
      * The bubble's three windows share a coordinate system: the whole display, origin top-left.
-     * `fitInsetsTypes = 0` is what makes `x`/`y` display pixels, the same frame `MotionEvent.rawX`
+     * [useDisplayFrame] is what makes `x`/`y` display pixels, the same frame `MotionEvent.rawX`
      * reports in — see [BubbleTouchLayout].
      */
     private fun displayFrameParams(
@@ -1192,8 +1182,7 @@ class ShadeService : Service() {
             PixelFormat.TRANSLUCENT,
         ).apply {
             gravity = Gravity.TOP or Gravity.START
-            fitInsetsTypes = 0
-            layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS
+            useDisplayFrame()
         }
 
     private fun addBubbleWindow(theme: ThemeMode) {
@@ -1524,7 +1513,7 @@ class ShadeService : Service() {
                 ).apply {
                     gravity = Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL
                     y = (DISMISS_TARGET_BOTTOM_DP * density).toInt()
-                    fitInsetsTypes = WindowInsets.Type.systemBars()
+                    fitSystemBars()
                 }
         runCatching { manager.addView(host.view, params) }
             .onSuccess {

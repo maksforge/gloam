@@ -40,6 +40,7 @@ class PanelWindowTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
     private val packageName: String = context.packageName
+    private val shadeLayout = OverlayDump.shadeLayout(context.getSystemService(WindowManager::class.java))
 
     private val preferences get() = (context.applicationContext as MainApplication).preferences
 
@@ -142,7 +143,7 @@ class PanelWindowTest {
         val displayWidth =
             context
                 .getSystemService(WindowManager::class.java)
-                .currentWindowMetrics.bounds
+                .displayBounds()
                 .width()
         // Non-null by the predicate that found this window: one without a requested width never
         // satisfied `awaitWindow`, so reaching here with null is impossible rather than merely
@@ -227,11 +228,11 @@ class PanelWindowTest {
     }
 
     /** One `Window #N` block of `dumpsys window windows`, with the questions it can answer. */
-    private class OverlayWindow(
+    private inner class OverlayWindow(
         val text: String,
     ) {
-        /** `MATCH_PARENT` x `MATCH_PARENT` prints as `fill`, which only the shade asks for. */
-        val isShade: Boolean get() = "fillxfill" in text
+        /** The shade's requested size, [OverlayDump.shadeLayout], which only the shade asks for. */
+        val isShade: Boolean get() = shadeLayout in text
 
         /** `WRAP_CONTENT` height over an explicit pixel width, which only the panel asks for. */
         val isPanel: Boolean get() = "xwrap)" in text
@@ -241,8 +242,9 @@ class PanelWindowTest {
          *
          * `mRequestedWidth` rather than the `mAttrs` width that [isPanel] reads: the two agree once
          * the window is up, but this one is the number the platform has actually taken, and it
-         * prints as `-1` beforehand — which makes reading it a readiness check as well as a
-         * measurement. The regex takes digits only, so `-1` is a miss, and a miss is `null`.
+         * prints as `-1` beforehand on the emulators and `0` on the phone — which makes reading it a
+         * readiness check as well as a measurement. Neither is a width a panel can have, so both
+         * are a miss, and a miss is `null`.
          */
         val requestedWidth: Int?
             get() =
@@ -251,6 +253,7 @@ class PanelWindowTest {
                     ?.groupValues
                     ?.get(1)
                     ?.toInt()
+                    ?.takeIf { it > 0 }
     }
 
     /**
@@ -278,7 +281,7 @@ class PanelWindowTest {
     private fun ourOverlayWindows(): List<OverlayWindow> =
         shell("dumpsys window windows")
             .split("Window #")
-            .filter { packageName in it && "ty=APPLICATION_OVERLAY" in it }
+            .filter { OverlayDump.isOurOverlay(it, packageName) }
             .map { OverlayWindow(it) }
 
     private fun shell(command: String): String =

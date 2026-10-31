@@ -72,11 +72,9 @@ fun currentAppLanguage(): AppLanguage? {
  * app arranges. Nothing else has to be told: `MainActivity` is rebuilt and every `stringResource`
  * resolves against the new configuration.
  *
- * Persistence is the framework's rather than ours: on 13+ the system stores the per-app locale
- * itself, so there is nothing here to write and nothing to read back. AppCompat's own store for
- * older devices was a manifest entry and left with the below-13 backport (ADR-0004's 2026-09-02
- * amendment). A DataStore key would be read asynchronously and let the app draw a frame in the
- * wrong language.
+ * Persistence is never ours: on 13+ the system stores the per-app locale itself, and below it
+ * AppCompat does, through the `autoStoreLocales` manifest entry (ADR-0004's second amendment). A
+ * DataStore key would be read asynchronously and let the app draw a frame in the wrong language.
  */
 fun setAppLanguage(language: AppLanguage?) {
     AppCompatDelegate.setApplicationLocales(

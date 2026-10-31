@@ -26,4 +26,11 @@ class BackupRulesTest {
             assertEquals("$section excludes", listOf(expected), excluded.toList())
         }
     }
+
+    @Test
+    fun `the pre-Android-12 rules exclude the same file`() {
+        val rules = File("src/main/res/xml/backup_rules.xml").readText()
+        val excluded = Regex("""<exclude domain="file" path="([^"]+)"""").findAll(rules).map { it.groupValues[1] }
+        assertEquals(listOf("datastore/$LENT_LOCATION_STORE.preferences_pb"), excluded.toList())
+    }
 }

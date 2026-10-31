@@ -20,9 +20,8 @@ import kotlin.math.roundToLong
  * fourteen settings by that test and still no database; what keeps them out is size rather than
  * storage, and `docs/phase-4.md` says so where a future reader will look for it.
  *
- * Kotlin note: `java.time` is available unconditionally at `minSdk` 33 — it desugars from API 26 and
- * Gloam ships to nothing below 33 (ADR-0008) — so there is no `ThreeTenABP`, no desugaring flag and
- * no `Calendar` anywhere in this file. [LocalTime] is a wall-clock time with **no date and no zone**:
+ * Kotlin note: `java.time` is in the platform from API 26, which is `minSdk` (ADR-0008), so there is
+ * no `ThreeTenABP`, no desugaring flag and no `Calendar` anywhere in this file. [LocalTime] is a wall-clock time with **no date and no zone**:
  * exactly the thing the user set, and deliberately not something you can subtract from an instant.
  */
 data class Schedule(

@@ -74,7 +74,7 @@ phones, four things stop being free to change:
 | Frozen at the door | Why | State |
 | --- | --- | --- |
 | `applicationId` | Registration is keyed to the signing key and cannot be re-pointed | Ratified; **Phase P landed 2026-08-30** — registered and married to the upload key |
-| `minSdk` | Raising it strands existing installs on the last build that fitted them (ADR-0008) | Settled at 33 |
+| `minSdk` | Raising it strands existing installs on the last build that fitted them (ADR-0008) | 26 since 1.6.0, lowered from 33 (ADR-0008's amendment) |
 | Every DataStore key **that has been written** | A key on a real phone cannot be renamed or removed without consequence | Closed: `onboardingDone` was **deleted** rather than used (`DOD.md`), and no key has been added since |
 | The escape-hatch inventory | It was ultra dark's gate; ultra dark is cancelled, but the inventory is what 2b's tile is *for* | Phase 2 |
 

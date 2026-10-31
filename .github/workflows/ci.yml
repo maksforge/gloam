@@ -137,16 +137,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # The `minSdk` floor (ADR-0008), and the reason this leg is 33 rather than the
-          # 26 it used to be: the three SDK_INT branches that justified 26 — the pre-S
-          # path into system backup settings, the pre-R agent branch and the pre-S theme
-          # — went with the database (ADR-0007), and AppCompat's pre-13 locale backport
-          # went with `minSdk` 33 (ADR-0004's amendment). The leg was arguing for
-          # coverage of code that no longer exists, on a level this app cannot install
-          # on. `aosp_atd` is the slim image and enough here: reading a window's flags
-          # out of dumpsys needs no SystemUI.
-          - api-level: 33
-            target: aosp_atd
+          # The `minSdk` floor (ADR-0008's amendment). The only place the pre-11 window
+          # geometry in `shade/OverlayLayout.kt` runs at all — the phone is API 36. `default`
+          # rather than `aosp_atd`, which starts at API 30.
+          - api-level: 26
+            target: default
           # `targetSdk`. Where the platform applies its newest behaviour changes to us
           # rather than grandfathering them.
           - api-level: 36

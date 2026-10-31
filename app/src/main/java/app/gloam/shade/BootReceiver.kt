@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.util.Log
 import app.gloam.MainApplication
 import app.gloam.work.armScheduleAlarm
@@ -196,5 +197,10 @@ internal fun startedThisInstall(
  */
 private fun Context.firstInstallMillis(): Long =
     runCatching {
-        packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).firstInstallTime
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).firstInstallTime
+        } else {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0).firstInstallTime
+        }
     }.getOrDefault(Long.MAX_VALUE)
