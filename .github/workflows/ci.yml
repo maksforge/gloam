@@ -10,7 +10,8 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
-  # For `edge-to-edge` alone — see the `if:` on that job. Off the hour because GitHub's scheduler
+  # The whole workflow on `main` once a night, with no PR open: emulator images and runner tools move
+  # under a green branch, and this is where that shows first. Off the hour because GitHub's scheduler
   # queues everything cron-ed to :00 together.
   #
   # **The time here is a request, not a promise, and on a public repository it is a loose one.** The
@@ -222,13 +223,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # `default`, not `aosp_atd`, and API 36 next door keeps ATD deliberately. This is the
-          # lesson the API 34 leg cost: its ATD image ships no `com.android.internal.systemui.navbar.*`
-          # overlays and no readable `secure navigation_mode`, so every cell on it was a
-          # configuration nothing could confirm the device was in — four red jobs saying exactly
-          # that. ATD strips SystemUI pieces to run faster and how much it strips varies by level;
-          # a full AOSP image has the overlays at every level, which is why the lower cells take one
-          # rather than betting that 33's ATD is the 36 kind.
+          # **`default` everywhere, never `aosp_atd`.** ATD strips SystemUI to run faster: the
+          # API 34 leg's image had no navbar overlays to set a mode with, and the API 36 one draws no
+          # system bars at all — its cells read `insets={}` and reported clean every night from
+          # 2026-09-07 to 2026-10-31, having checked nothing. A full AOSP image has the bars and the
+          # overlays at every level.
           - api-level: 26
             target: default
             config: portrait-threebutton
@@ -239,10 +238,10 @@ jobs:
             target: default
             config: portrait-threebutton
           - api-level: 36
-            target: aosp_atd
+            target: default
             config: portrait-gesture
           - api-level: 36
-            target: aosp_atd
+            target: default
             config: portrait-threebutton
     steps:
       - uses: actions/checkout@v7
@@ -269,6 +268,10 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: ${{ matrix.target }}
           arch: x86_64
+          # **A phone's profile, not the runner's default device.** With none, the AVD is a bare
+          # 320x640 device with hardware keys and so no navigation bar, and every cell read the
+          # status bar alone — the bottom edge, the one edge-to-edge is about, was never checked.
+          profile: pixel_6
           # Animation scale changes transitions, not final layout, and every scene is captured
           # after a `settle()` — so this costs the evidence nothing and removes a whole class of
           # mid-transition screenshot from the flakiest part of this job.
