@@ -7,7 +7,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
-import android.os.Build
 import android.os.CancellationSignal
 import android.provider.Settings
 import android.util.Log
@@ -131,7 +130,7 @@ private suspend fun windowOpen(
 
 /**
  * One fresh position from `LocationManager`, or `null`. **No Play services**: the fused provider here
- * is the platform's own (API 31+), and the network provider is the fallback. GPS is never asked for.
+ * is the platform's own, and the network provider is the fallback. GPS is never asked for.
  * With a coarse grant it would give a coarsened answer anyway, after a longer wait and more battery.
  *
  * Kotlin note: `suspendCancellableCoroutine` is `new Promise((resolve) => …)` around a callback API,
@@ -142,15 +141,11 @@ private suspend fun windowOpen(
 private suspend fun Context.readApproximateLocation(): Coordinates? {
     val manager = getSystemService(LocationManager::class.java) ?: return null
     if (!LocationManagerCompat.isLocationEnabled(manager)) return null
-    // The fused provider is public from Android 12; below it, the network provider is the coarse one.
-    val candidates =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            listOf(LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
-        } else {
-            listOf(LocationManager.NETWORK_PROVIDER)
-        }
+    // "fused" spelled out: the constant is Android 12, the provider is older. Android 8 reports it
+    // disabled to apps (measured on the API-26 emulator), and the network provider takes over there.
     val provider =
-        candidates.firstOrNull { LocationManagerCompat.hasProvider(manager, it) && manager.isProviderEnabled(it) }
+        listOf("fused", LocationManager.NETWORK_PROVIDER)
+            .firstOrNull { LocationManagerCompat.hasProvider(manager, it) && manager.isProviderEnabled(it) }
             ?: return null
 
     return try {
