@@ -192,8 +192,9 @@ jobs:
   # user setting rather than by platform release, and the phone is one device in one configuration;
   # an emulator observes the others. The floor is back at API 26 with `minSdk` (ADR-0008's
   # amendment), where every claim about drawing under the system bars is otherwise argued from theme
-  # XML. Gesture navigation is Android 10, so the floor has one cell, three-button, and gesture's
-  # oldest cell stays on API 33.
+  # XML. Gesture navigation is Android 10, so the floor has one cell, three-button. API 33 keeps both
+  # modes: it is the only level between "not forced edge-to-edge" (26) and "forced" (36), and the only
+  # one whose bars are read through the `ITYPE_*` names.
   #
   # **Portrait only since 2026-09-13.** `MainActivity` is locked to portrait and every scene starts
   # from it, so the landscape cells would have captured portrait under a landscape name. They are
@@ -203,7 +204,7 @@ jobs:
   # It was nightly-only while `settle()`'s timings, tuned to real hardware, were unproven on
   # emulators; the API 33 and 36 cells then ran green every night from 2026-09-07. The API 26 cell
   # joined the same day it went onto PRs, so a red there is as likely the driver as the app — read
-  # the report before re-running. ~40 minutes per cell, in parallel.
+  # the report before re-running. ~40 minutes per cell, five cells in parallel.
   edge-to-edge:
     name: Edge-to-edge (API ${{ matrix.api-level }}, ${{ matrix.config }})
     runs-on: ubuntu-latest
@@ -234,6 +235,9 @@ jobs:
           - api-level: 33
             target: default
             config: portrait-gesture
+          - api-level: 33
+            target: default
+            config: portrait-threebutton
           - api-level: 36
             target: aosp_atd
             config: portrait-gesture
