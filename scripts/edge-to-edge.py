@@ -589,6 +589,8 @@ def read_insets() -> dict[str, Rect]:
     an area anything can be wrongly drawn under.
     """
     dump = shell("dumpsys window displays")
+    if "InsetsSource" not in dump:
+        return read_bar_windows()
     found: dict[str, Rect] = {}
     for match in INSET_RE.finditer(dump):
         kind, left, top, right, bottom, visible = match.groups()
@@ -597,6 +599,29 @@ def read_insets() -> dict[str, Rect]:
             continue
         rect = Rect(int(left), int(top), int(right), int(bottom))
         if kind not in found or rect.area > found[kind].area:
+            found[kind] = rect
+    return found
+
+
+# **Before the platform printed inset sources** (measured on API 26: not one `InsetsSource` line), the
+# bars are still windows of their own, titled `StatusBar` and `NavigationBar`, with a frame and a
+# surface that is or is not shown. That is the same rectangle and the same visibility, read one level
+# down. No cutout: API 26 has no cutout API to report one.
+BAR_WINDOWS = {"StatusBar": "statusBars", "NavigationBar": "navigationBars"}
+BAR_WINDOW_RE = re.compile(r"Window #\d+ Window\{\w+ u0 (\w+)\}:")
+MFRAME_RE = re.compile(r"mFrame=\[(-?\d+),(-?\d+)\]\[(-?\d+),(-?\d+)\]")
+
+
+def read_bar_windows() -> dict[str, Rect]:
+    found: dict[str, Rect] = {}
+    for block in shell("dumpsys window windows").split("  Window #")[1:]:
+        title = BAR_WINDOW_RE.match("Window #" + block)
+        kind = BAR_WINDOWS.get(title.group(1)) if title else None
+        frame = MFRAME_RE.search(block)
+        if kind is None or frame is None or "Surface: shown=true" not in block:
+            continue
+        rect = Rect(*(int(v) for v in frame.groups()))
+        if rect.area > 0:
             found[kind] = rect
     return found
 
@@ -1918,6 +1943,11 @@ def run_scene(scene: Scene, config: Config, out_dir: Path, retries: int = 0) -> 
     shot.write_bytes(adb("exec-out", "screencap", "-p", binary=True))
 
     insets = read_insets()
+    # A screen with no system bar at all is not one this app draws, so an empty read is the driver
+    # failing to see the bars, and every scene would otherwise pass for having been checked against
+    # nothing — the failure INSET_RE's comment names, now refused rather than only warned about.
+    if not insets:
+        return {"scene": scene.name, "family": scene.family, "error": "no system insets could be read"}
     findings = check(dump_ui(), insets)
     result = {
         "scene": scene.name,
