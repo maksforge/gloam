@@ -137,6 +137,9 @@ ADR-0008's amendment. CI runs the window tests on API 26 and the phone on 36; wh
 - [ ] **The bubble on Android 8–10, by hand**: drag it to every edge and rotate. Its area comes from
       `Display` reads below 11 (`appArea()`), and no test drags it.
 - [ ] **Release notes for 1.6.0 name the new floor**, in every locale, before the release PR merges.
+- [ ] **Edge-to-edge on pull requests** once its API 26 cell has a week of green nightlies; the API 33
+      and 36 cells were green from 2026-09-07 to 2026-10-31. Move it onto `pull_request` in
+      `ci.yml` and into the required gate.
 - [ ] **Below-13 language in the notification and tile** is the system's, not the app's
       (ADR-0004's second amendment). Accepted; reopen if a user reports it.
 

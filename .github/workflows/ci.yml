@@ -188,12 +188,12 @@ jobs:
 
   # The edge-to-edge matrix, on emulators rather than on the one physical phone.
   #
-  # **The prize is the configuration grid, not the API floor.** It used to be API 26-28, on the
-  # argument that every claim about drawing under the system bars below API 29 was argued from theme
-  # XML and never observed — true until `minSdk` 33 put those levels out of reach entirely. What is
-  # left is the axis that still varies on devices this app ships to: navigation mode varies by device
-  # and by user setting rather than by platform release, and the phone is one device in one
-  # configuration. An emulator observes the others.
+  # **Two axes: the configuration grid and the API floor.** Navigation mode varies by device and by
+  # user setting rather than by platform release, and the phone is one device in one configuration;
+  # an emulator observes the others. The floor is back at API 26 with `minSdk` (ADR-0008's
+  # amendment), where every claim about drawing under the system bars is otherwise argued from theme
+  # XML. Gesture navigation is Android 10, so the floor has one cell, three-button, and gesture's
+  # oldest cell stays on API 33.
   #
   # **Portrait only since 2026-09-13.** `MainActivity` is locked to portrait and every scene starts
   # from it, so the landscape cells would have captured portrait under a landscape name. They are
@@ -204,7 +204,8 @@ jobs:
   # timings are tuned to real hardware — an emulator is where they go flaky rather than fail. A
   # flaky check on every PR is a check people learn to re-run without reading, which is worse than
   # no check. Nightly plus the Run workflow button keeps the coverage and keeps the merge path
-  # honest. Promote it to `pull_request` once a few weeks of nightlies have shown it steady.
+  # honest. The nightlies at API 33 and 36 ran green from 2026-09-07 to 2026-10-31; promote it to
+  # `pull_request` once the API 26 cell has a week of green nightlies too (`DOD.md`).
   edge-to-edge:
     name: Edge-to-edge (API ${{ matrix.api-level }}, ${{ matrix.config }})
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -222,20 +223,26 @@ jobs:
       # these cells are now siblings rather than steps inside one job.
       fail-fast: false
       matrix:
-        api-level: [33, 36]
-        config: [portrait-gesture, portrait-threebutton]
         include:
           # `default`, not `aosp_atd`, and API 36 next door keeps ATD deliberately. This is the
           # lesson the API 34 leg cost: its ATD image ships no `com.android.internal.systemui.navbar.*`
           # overlays and no readable `secure navigation_mode`, so every cell on it was a
           # configuration nothing could confirm the device was in — four red jobs saying exactly
           # that. ATD strips SystemUI pieces to run faster and how much it strips varies by level;
-          # a full AOSP image has the overlays at every level, which is why the floor takes one
+          # a full AOSP image has the overlays at every level, which is why the lower cells take one
           # rather than betting that 33's ATD is the 36 kind.
+          - api-level: 26
+            target: default
+            config: portrait-threebutton
           - api-level: 33
             target: default
+            config: portrait-gesture
           - api-level: 36
             target: aosp_atd
+            config: portrait-gesture
+          - api-level: 36
+            target: aosp_atd
+            config: portrait-threebutton
     steps:
       - uses: actions/checkout@v7
 
