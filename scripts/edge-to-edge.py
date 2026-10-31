@@ -198,6 +198,11 @@ GESTURE_MIN_API = 29
 # run died here on API 26, one minute in.
 POST_NOTIFICATIONS_MIN_API = 33
 
+# Per-app languages are Android 13, and so is `cmd locale set-app-locales`. Below it there is no
+# per-app locale to hand back, and `shell()` raising on the missing command would kill `--restore`
+# before it put rotation and Do Not Disturb back.
+APP_LOCALES_MIN_API = 33
+
 # The AOSP navigation-mode overlays, all declaring `android:category="…systemui.navbar"`, which is
 # what makes `enable-exclusive --category` a single call rather than an enable plus N disables.
 NAVBAR_OVERLAYS = {
@@ -2016,7 +2021,8 @@ def main() -> int:
     select_build(args.build)
 
     if args.restore:
-        set_locale(None)
+        if api_level() >= APP_LOCALES_MIN_API:
+            set_locale(None)
         restore_device()
         print("rotation, navigation mode and Do Not Disturb handed back to the phone")
         return 0
@@ -2065,6 +2071,11 @@ def main() -> int:
     # Before anything touches the phone: a needle that names two strings, or none, is worth knowing
     # about now rather than 40 seconds into a cell (see [resolve_needles]).
     if args.locale:
+        if api_level() < APP_LOCALES_MIN_API:
+            parser.error(
+                f"--locale needs per-app languages, API {APP_LOCALES_MIN_API}+; "
+                f"this is API {api_level()}"
+            )
         resolve_needles(args.locale)
         set_locale(args.locale)
 
