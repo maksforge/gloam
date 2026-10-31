@@ -84,7 +84,7 @@ android {
         minSdk = 26
         targetSdk = 36
         versionCode = gitVersionCode
-        versionName = "1.5.0" // x-release-please-version
+        versionName = "1.6.0" // x-release-please-version
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

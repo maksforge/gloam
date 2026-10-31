@@ -1,5 +1,21 @@
 # Changelog
 
+## [1.6.0](https://github.com/maksforge/gloam/compare/v1.5.0...v1.6.0) (2026-10-31)
+
+
+### Features
+
+* install on Android 8 and later, with newer-only features off below their level ([7852ca2](https://github.com/maksforge/gloam/commit/7852ca24c17a59261f9dda27b091b6a4049d01a7))
+
+
+### Bug Fixes
+
+* ask for the fused location provider on every level ([6fc3774](https://github.com/maksforge/gloam/commit/6fc37741ab2c818be410d52cb38b11c97695d947))
+* dim the left navigation bar and keep the bubble on the display in seascape below Android 11 ([539dfaf](https://github.com/maksforge/gloam/commit/539dfaf576c0ea021b3f0ad2a88ef6ac474fc113))
+* give the shade window the 0.8 alpha itself below Android 12 so it is no darker than on 12+ ([dc4a2be](https://github.com/maksforge/gloam/commit/dc4a2befd4bc92768ed83e481e9b005aa0010379))
+* pick up the overlay grant on Android 8 without leaving the app ([d9c3e7e](https://github.com/maksforge/gloam/commit/d9c3e7e326fe3f02edcdd42d21fde779ef08a7ad))
+* shape the ramp without the window alpha clamp below Android 12 and keep the backlight override above zero below 11 ([0a310dc](https://github.com/maksforge/gloam/commit/0a310dc22096b4df4c215d1d17486ec8078566df))
+
 ## [1.5.0](https://github.com/maksforge/gloam/compare/v1.4.0...v1.5.0) (2026-10-30)
 
 
