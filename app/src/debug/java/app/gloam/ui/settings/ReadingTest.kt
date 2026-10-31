@@ -53,6 +53,8 @@ import app.gloam.data.AppPreferences
 import app.gloam.shade.DebugMinBacklight
 import app.gloam.shade.DimSettings
 import app.gloam.shade.canDrawShade
+import app.gloam.shade.platformMinBacklight
+import app.gloam.shade.platformWindowAlphaClamp
 import app.gloam.shade.readBacklightTop
 import app.gloam.shade.shadeOnScreen
 import app.gloam.shade.shadeValuesFor
@@ -344,8 +346,14 @@ private suspend fun runSession(
     // A fresh read of the top rather than the service's captured one; they agree unless the user moved
     // their brightness while the shade was already up.
     val top = readBacklightTop(context)
-    val minBacklight = DebugMinBacklight.value.value
-    val ramp = shadeValuesFor(DimSettings(config.dimLevel, WARMTH, lowerBacklight = true), top, minBacklight)
+    val minBacklight = platformMinBacklight(DebugMinBacklight.value.value)
+    val ramp =
+        shadeValuesFor(
+            DimSettings(config.dimLevel, WARMTH, lowerBacklight = true),
+            top,
+            minBacklight,
+            platformWindowAlphaClamp(),
+        )
     Log.i(TAG, "session $session: $config top=$top min=$minBacklight ramp=$ramp order=$order")
 
     val up = withTimeoutOrNull(5_000) { shadeOnScreen.first { it } }
