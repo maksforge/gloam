@@ -66,9 +66,9 @@ const val MAX_SHADE_ALPHA = 0.95f
  * are uneven, and the child still stops at [MAX_SHADE_ALPHA] exactly as it did before this constant
  * existed.
  *
- * **Below Android 12 there is no clamp**: the window keeps alpha 1 (measured on the API-26 emulator),
- * so the service hands the ramp `1f` there instead, and the cap leaves ≈ 0.4% of a white page's light
- * rather than ≈ 4.7%. Both invariants are stated over the children's alphas, so neither moves.
+ * **Below Android 12 there is no clamp** (the window kept alpha 1 on the API-26 emulator), so the
+ * shade window carries this alpha itself ([fillDisplay]) and every platform composites the same. The
+ * uncut alternative left ≈ 0.4% of a white page's light at the cap, past ADR-0015's ceiling.
  */
 const val WINDOW_ALPHA_CLAMP = 0.8f
 
@@ -239,10 +239,7 @@ private fun encode(light: Float): Float =
  * Stated for a white page, the brightest thing the shade covers. Near black the sRGB curve turns
  * straight, so dark content keeps a larger share — of very little light.
  */
-fun shadeTransmission(
-    shadeAlpha: Float,
-    windowAlphaClamp: Float = WINDOW_ALPHA_CLAMP,
-): Float = linearise(1f - windowAlphaClamp * shadeAlpha)
+fun shadeTransmission(shadeAlpha: Float): Float = linearise(1f - WINDOW_ALPHA_CLAMP * shadeAlpha)
 
 /**
  * One dim level, one ramp, in a fixed order (ADR-0010): spend the **backlight** first, then draw the
@@ -359,13 +356,11 @@ fun shadeTransmission(
  * @param minBacklight the lowest override the ramp may ask for. Always [MIN_BACKLIGHT] in a release
  *   build; a parameter only so the debug build can switch back up to the previous `0.01f` on a real
  *   page (`src/debug/.../shade/MinBacklight.kt`), and [MIN_INT_BACKLIGHT] below Android 11.
- * @param windowAlphaClamp [WINDOW_ALPHA_CLAMP] from Android 12, `1f` below it.
  */
 fun shadeValuesFor(
     settings: DimSettings,
     backlightTop: Float?,
     minBacklight: Float = MIN_BACKLIGHT,
-    windowAlphaClamp: Float = WINDOW_ALPHA_CLAMP,
 ): ShadeValues {
     val t = settings.dimLevel.coerceIn(0, 100) / 100f
 
@@ -377,7 +372,7 @@ fun shadeValuesFor(
             ?.takeIf { settings.lowerBacklight && it >= minBacklight && it <= 1f }
 
     val ratio = if (top == null) 1f else top / minBacklight
-    val span = 1f / shadeTransmission(MAX_SHADE_ALPHA, windowAlphaClamp)
+    val span = 1f / shadeTransmission(MAX_SHADE_ALPHA)
     val light = (ratio * span).pow(-t)
 
     // Dim level 0 is the one special case, and it is one line: the override is *released* rather
@@ -389,7 +384,7 @@ fun shadeValuesFor(
     // The light left for the shade to take, then [shadeTransmission] run backwards. At dim 100 this
     // lands on `MAX_SHADE_ALPHA` by construction, give or take a float's last bit, which the clamp eats.
     val shadeLight = minOf(1f, light * ratio)
-    val shadeAlpha = ((1f - encode(shadeLight)) / windowAlphaClamp).coerceIn(0f, MAX_SHADE_ALPHA)
+    val shadeAlpha = ((1f - encode(shadeLight)) / WINDOW_ALPHA_CLAMP).coerceIn(0f, MAX_SHADE_ALPHA)
 
     // Something has to give at the very top, and it cannot be the dim level — that is the one value
     // the product is about. So the applied warmth is the user's warmth scaled by the headroom the

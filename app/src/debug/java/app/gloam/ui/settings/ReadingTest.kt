@@ -54,7 +54,6 @@ import app.gloam.shade.DebugMinBacklight
 import app.gloam.shade.DimSettings
 import app.gloam.shade.canDrawShade
 import app.gloam.shade.platformMinBacklight
-import app.gloam.shade.platformWindowAlphaClamp
 import app.gloam.shade.readBacklightTop
 import app.gloam.shade.shadeOnScreen
 import app.gloam.shade.shadeValuesFor
@@ -352,7 +351,6 @@ private suspend fun runSession(
             DimSettings(config.dimLevel, WARMTH, lowerBacklight = true),
             top,
             minBacklight,
-            platformWindowAlphaClamp(),
         )
     Log.i(TAG, "session $session: $config top=$top min=$minBacklight ramp=$ramp order=$order")
 

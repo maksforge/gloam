@@ -24,12 +24,12 @@ import kotlin.math.pow
  */
 class ShadeRampTest {
     /**
-     * The three platforms `minSdk` 26 reaches, as the service hands them to the ramp: the window alpha
-     * clamp from Android 12, a float override from 11, and an integer one below it.
+     * The two backlight floors `minSdk` 26 reaches, as the service hands them to the ramp: a float
+     * override from Android 11 and an integer one below it. The window alpha is the same on every
+     * level, because below 12 the shade window sets it itself.
      */
     private data class Platform(
         val name: String,
-        val clamp: Float,
         val floor: Float,
     ) {
         /**
@@ -41,16 +41,15 @@ class ShadeRampTest {
         fun values(
             settings: DimSettings,
             top: Float?,
-        ) = shadeValuesFor(settings, top, floor, clamp)
+        ) = shadeValuesFor(settings, top, floor)
 
         override fun toString() = name
     }
 
     private val platforms =
         listOf(
-            Platform("12+", WINDOW_ALPHA_CLAMP, MIN_BACKLIGHT),
-            Platform("11", 1f, MIN_BACKLIGHT),
-            Platform("8-10", 1f, MIN_INT_BACKLIGHT),
+            Platform("11+", MIN_BACKLIGHT),
+            Platform("8-10", MIN_INT_BACKLIGHT),
         )
 
     private val levels = 0..100
@@ -75,7 +74,7 @@ class ShadeRampTest {
     ): Float {
         val effective = effectiveTop(top, lowerBacklight)
         val ratio = if (effective == null) 1f else effective / floor
-        return ratio * (1f / shadeTransmission(MAX_SHADE_ALPHA, clamp))
+        return ratio * (1f / shadeTransmission(MAX_SHADE_ALPHA))
     }
 
     /**
@@ -91,7 +90,7 @@ class ShadeRampTest {
         effectiveTop: Float?,
     ): Float {
         val top = effectiveTop ?: 1f
-        return (values.backlight ?: top) / top * shadeTransmission(values.shadeAlpha, clamp)
+        return (values.backlight ?: top) / top * shadeTransmission(values.shadeAlpha)
     }
 
     private fun sweep(body: Platform.(DimSettings, Float?, ShadeValues) -> Unit) {
@@ -230,7 +229,7 @@ class ShadeRampTest {
             for (top in listOf(1.0f, 0.5f, 0.1f, 0.02f, platform.floor)) {
                 for (lower in listOf(true, false)) {
                     val fall = platform.fall(top, lower)
-                    val alphaStep = ln(fall) * (1.055f / 2.4f) / platform.clamp / 100f * 1.05f
+                    val alphaStep = ln(fall) * (1.055f / 2.4f) / WINDOW_ALPHA_CLAMP / 100f * 1.05f
                     val backlightStep = fall.pow(1f / 100f) * 1.001f
                     for (level in 1..100) {
                         val before = platform.values(DimSettings(level - 1, 0, lower), top)
@@ -349,12 +348,6 @@ class ShadeRampTest {
         assertEquals("R3 and R6 read 0.2393-0.2411 at the cap", 0.240f, storedAtCap, 0.002f)
         assertEquals("light at the cap", 0.047f, shadeTransmission(MAX_SHADE_ALPHA), 0.001f)
         assertEquals("a transparent shade", 1f, shadeTransmission(0f), EPSILON)
-        assertEquals(
-            "light at the cap with no clamp, below Android 12",
-            0.0039f,
-            shadeTransmission(MAX_SHADE_ALPHA, 1f),
-            0.0001f,
-        )
     }
 
     /**

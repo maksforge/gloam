@@ -21,9 +21,6 @@ import kotlin.math.max
  * question in both vocabularies, so the windows themselves carry no `SDK_INT` checks.
  */
 
-/** [WINDOW_ALPHA_CLAMP] from Android 12, where the platform writes it into the shade window; `1f` below. */
-fun platformWindowAlphaClamp(): Float = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) WINDOW_ALPHA_CLAMP else 1f
-
 /** [requested], raised to [MIN_INT_BACKLIGHT] below Android 11, where the override is an integer. */
 fun platformMinBacklight(requested: Float): Float =
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) requested else maxOf(requested, MIN_INT_BACKLIGHT)
@@ -86,8 +83,13 @@ private fun systemDimenPx(name: String): Int {
  * is the bar's right edge, and the strip under the bar stayed bright (measured: a frame from 126).
  * So the square starts a bar's thickness to the left and is that much wider. Rotation-independent on
  * purpose, because the shade is not laid out again on a rotation (`ShadeThread`).
+ *
+ * **The window alpha is [WINDOW_ALPHA_CLAMP] on every level.** From Android 12 the platform writes it
+ * into any window touches pass through; below 12 nothing does, so the shade asks for it itself. The
+ * ramp is shaped for that composite, and ADR-0015's ceiling holds on every phone.
  */
 fun WindowManager.LayoutParams.fillDisplay(manager: WindowManager) {
+    alpha = WINDOW_ALPHA_CLAMP
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         width = WindowManager.LayoutParams.MATCH_PARENT
         height = WindowManager.LayoutParams.MATCH_PARENT
