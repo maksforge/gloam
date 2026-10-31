@@ -199,16 +199,13 @@ jobs:
   # from it, so the landscape cells would have captured portrait under a landscape name. They are
   # gone rather than kept green. `scripts/edge-to-edge.py`'s `CONFIGS` says how to bring them back.
   #
-  # Deliberately NOT on `pull_request`, and deliberately not part of `instrumented-gate`:
-  # `edge-to-edge.py` walks ~75 scenes per cell by driving uiautomator taps, and its `settle()`
-  # timings are tuned to real hardware — an emulator is where they go flaky rather than fail. A
-  # flaky check on every PR is a check people learn to re-run without reading, which is worse than
-  # no check. Nightly plus the Run workflow button keeps the coverage and keeps the merge path
-  # honest. The nightlies at API 33 and 36 ran green from 2026-09-07 to 2026-10-31; promote it to
-  # `pull_request` once the API 26 cell has a week of green nightlies too (`DOD.md`).
+  # **On every pull request, and part of `instrumented-gate`**, since 2026-10-31 at the owner's call.
+  # It was nightly-only while `settle()`'s timings, tuned to real hardware, were unproven on
+  # emulators; the API 33 and 36 cells then ran green every night from 2026-09-07. The API 26 cell
+  # joined the same day it went onto PRs, so a red there is as likely the driver as the app — read
+  # the report before re-running. ~40 minutes per cell, in parallel.
   edge-to-edge:
     name: Edge-to-edge (API ${{ matrix.api-level }}, ${{ matrix.config }})
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     # One configuration per job, so ~75 scenes rather than the ~300 a whole leg used to walk in one
     # go. The old shape put all four configurations of API 36 in a single job that was still going
@@ -304,7 +301,7 @@ jobs:
   # settings to match.
   instrumented-gate:
     name: Instrumented tests
-    needs: [instrumented]
+    needs: [instrumented, edge-to-edge]
     # Without `always()` this is skipped when a leg fails, and a skipped required check
     # is one that never reports — the exact hang it exists to prevent, arriving by a
     # different road.
@@ -319,4 +316,9 @@ jobs:
         if: needs.instrumented.result != 'success'
         run: |
           echo "instrumented matrix result: ${{ needs.instrumented.result }}"
+          exit 1
+      - name: Fail unless every edge-to-edge cell succeeded
+        if: needs.edge-to-edge.result != 'success'
+        run: |
+          echo "edge-to-edge matrix result: ${{ needs.edge-to-edge.result }}"
           exit 1
