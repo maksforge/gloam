@@ -1,5 +1,6 @@
 package app.gloam.ui.dim
 
+import android.os.Build
 import androidx.activity.compose.LocalActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.gloam.R
 import app.gloam.shade.ShadeEnd
@@ -56,6 +58,7 @@ import app.gloam.work.notificationsAllowed
 import app.gloam.work.openAppNotificationSettings
 import app.gloam.work.openChannelNotificationSettings
 import app.gloam.work.rememberNotificationPermissionAsk
+import kotlinx.coroutines.delay
 
 /**
  * **Which button the escape-hatch warning carries.** Whether it is shown at all is
@@ -205,6 +208,17 @@ fun DimScreen(
             }
         lifecycleOwner.lifecycle.addObserver(observer)
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
+
+    // Android 8 answers the overlay read stale for up to a second after coming back from the grant —
+    // `canDrawOverlays` and the appop alike, measured on the API-26 emulator — so the resume above
+    // still sees `false`. Re-reading while the ask is on screen is what picks the grant up.
+    LaunchedEffect(lifecycleOwner, canDraw) {
+        if (canDraw || Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) return@LaunchedEffect
+        lifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+            while (!context.canDrawShade()) delay(OREO_OVERLAY_RECHECK_MS)
+            reread()
+        }
     }
 
     // The system reports no result for this screen, so the contract is only how we learn the user
@@ -486,3 +500,5 @@ private fun PermissionExplainer(onGrant: () -> Unit) {
         }
     }
 }
+
+private const val OREO_OVERLAY_RECHECK_MS = 250L
