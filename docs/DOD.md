@@ -130,6 +130,16 @@ rebuilt from those rather than read off the log. **And its closing guard counts 
 the package**, so the schedule re-arming itself for the next night reads as *"the run is not over"*
 the morning after a run that finished perfectly — read *which* alarm is pending before believing it.
 
+## `minSdk` 26 — open until a release has run on an old phone
+
+ADR-0008's amendment. CI runs the window tests on API 26 and the phone on 36; what neither covers:
+
+- [ ] **The bubble on Android 8–10, by hand**: drag it to every edge and rotate. Its area comes from
+      `Display` reads below 11 (`appArea()`), and no test drags it.
+- [ ] **Release notes for 1.6.0 name the new floor**, in every locale, before the release PR merges.
+- [ ] **Below-13 language in the notification and tile** is the system's, not the app's
+      (ADR-0004's second amendment). Accepted; reopen if a user reports it.
+
 ## The support address — open until the new route has carried a real report
 
 `gloam.support@maksforge.com` replaces `gloam.dimmer@gmail.com` from 1.3.1. Why both stay alive for

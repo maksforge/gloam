@@ -3,6 +3,7 @@ package app.gloam.shade
 import android.content.Context
 import android.content.res.Resources
 import android.provider.Settings
+import android.util.TypedValue
 
 /**
  * Everything the app can learn about the user's own backlight, and the one number it computes from
@@ -155,13 +156,19 @@ private fun frameworkInt(name: String): Int? {
 
 /**
  * The two float configs are `dimen` resources declared with `format="float"`, which is why this
- * reads them with [Resources.getFloat] rather than `getDimension`. A negative value is AOSP's
+ * reads them as a float [TypedValue] rather than with `getDimension` — `Resources.getFloat`, which
+ * does the same, is Android 10. The configs themselves are Android 9 and later, so on 8 this answers
+ * null, which is the same as a ROM that leaves them unset. A negative value is AOSP's
  * "not configured" sentinel — it ships as `-2` — and is reported here as absent, which it is.
  */
 private fun frameworkFloat(name: String): Float? {
     val resources = Resources.getSystem()
     val id = resources.getIdentifier(name, "dimen", "android")
     if (id == 0) return null
-    val value = runCatching { resources.getFloat(id) }.getOrNull() ?: return null
+    val value =
+        runCatching { TypedValue().also { resources.getValue(id, it, true) } }
+            .getOrNull()
+            ?.takeIf { it.type == TypedValue.TYPE_FLOAT }
+            ?.float ?: return null
     return value.takeIf { it >= 0f }
 }

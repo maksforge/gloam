@@ -10,6 +10,7 @@ import android.graphics.drawable.Icon
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ProcessLifecycleOwner
@@ -178,8 +179,8 @@ class ShadeTile : TileService() {
      *
      * `startActivityAndCollapse(Intent)` is how this worked through API 33. API 34 deprecated it and
      * made it *throw* `UnsupportedOperationException` — not a warning, a crash — replacing it with a
-     * `PendingIntent` overload that did not exist before. `minSdk` is 33 and `targetSdk` is 36, so
-     * this app is the one window where both spellings are reachable and neither alone is enough.
+     * `PendingIntent` overload that did not exist before. `minSdk` is below 34 and `targetSdk` is 36,
+     * so both spellings are reachable and neither alone is enough.
      *
      * **`ControlsActivity`, not `MainActivity`, and the choice is `docs/phase-3.md` §3's rather than
      * this file's.** That section reserved the tile for 2b and left one integration behind so 2b
@@ -195,8 +196,8 @@ class ShadeTile : TileService() {
      * targeting UpsideDownCake and higher"* — reads `targetSdk` alone, and by that reading this app
      * throws everywhere. The throw is a `CompatChanges` gate in the **platform's** copy of
      * `TileService`, and Android 13 has no such gate to run: an API-33 device executes the old body
-     * whatever the app targets, and the `PendingIntent` overload it would be told to use does not
-     * exist there to call. So the branch is on `SDK_INT` — the device — and the suppression is
+     * whatever the app targets, as does everything below it, and the `PendingIntent` overload it
+     * would be told to use does not exist there to call. So the branch is on `SDK_INT` — the device — and the suppression is
      * scoped to the one call lint cannot see the guard around.
      *
      * ⚠ **Reasoned from the platform sources, not measured.** The dev phone is well past 33 and
@@ -224,13 +225,15 @@ class ShadeTile : TileService() {
     }
 }
 
+/** Whether [requestAddShadeTile] exists on this device. The tile itself works from Android 7. */
+val canRequestAddShadeTile: Boolean get() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+
 /**
  * **Ask the system to put the tile in Quick Settings, rather than hoping the user finds the tile
  * editor.**
  *
- * `minSdk` 33 is exactly the level this became possible at, which is why `PLAN.md` names it inside
- * Phase 2b rather than as a later nicety: below 33 there is no call, and an app can only describe
- * the tile editor in words.
+ * Android 13 is the level this became possible at: below it there is no call, [canRequestAddShadeTile]
+ * is false, and the row can only describe the tile editor in words.
  *
  * **What the platform does with this.** It shows *its own* dialog — Gloam draws nothing and cannot
  * style it — carrying the label and icon passed here, and answers on [onResult] exactly once. The
@@ -268,6 +271,7 @@ class ShadeTile : TileService() {
  * because the result drives Compose state, and Compose state must be written on the main thread —
  * the platform makes no promise about which thread it answers on.
  */
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 fun Context.requestAddShadeTile(onResult: (Int) -> Unit) {
     val statusBar = getSystemService(StatusBarManager::class.java)
     if (statusBar == null) {

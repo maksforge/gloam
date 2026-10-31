@@ -38,6 +38,7 @@ class ShadeWindowTest {
     private val instrumentation = InstrumentationRegistry.getInstrumentation()
     private val context = instrumentation.targetContext
     private val packageName: String = context.packageName
+    private val shadeLayout = OverlayDump.shadeLayout(context.getSystemService(WindowManager::class.java))
 
     /**
      * Whether this device already had the overlay grant before the test touched it.
@@ -101,7 +102,7 @@ class ShadeWindowTest {
             val ours =
                 shell("dumpsys window windows")
                     .split("Window #")
-                    .any { packageName in it && "ty=APPLICATION_OVERLAY" in it }
+                    .any { OverlayDump.isOurOverlay(it, packageName) }
             if (!ours) return
             Thread.sleep(POLL_MS)
         }
@@ -114,7 +115,7 @@ class ShadeWindowTest {
         val window =
             awaitShadeWindow()
                 ?: throw AssertionError(
-                    "No full-screen ($SHADE_LAYOUT) APPLICATION_OVERLAY window for $packageName " +
+                    "No full-screen ($shadeLayout) APPLICATION_OVERLAY window for $packageName " +
                         "appeared within ${TIMEOUT_MS}ms of startShade(). The service never added " +
                         "its view, the shade stopped asking for MATCH_PARENT, or dumpsys no longer " +
                         "prints windows the way this test reads them.",
@@ -123,12 +124,12 @@ class ShadeWindowTest {
         assertTrue(
             "The shade's window is missing NOT_TOUCHABLE — every touch on this screen would be " +
                 "swallowed by a window the user cannot see. Window was:\n$window",
-            "NOT_TOUCHABLE" in window,
+            OverlayDump.hasFlag(window, "NOT_TOUCHABLE", WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE),
         )
         assertTrue(
             "The shade's window is missing NOT_FOCUSABLE — key events would go to the shade " +
                 "instead of the app underneath it. Window was:\n$window",
-            "NOT_FOCUSABLE" in window,
+            OverlayDump.hasFlag(window, "NOT_FOCUSABLE", WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE),
         )
     }
 
@@ -166,8 +167,8 @@ class ShadeWindowTest {
      * edge on the phone — a bright strip under every app that shows the bar. The requested size never
      * changed, so only the frame it was given can catch that.
      *
-     * Compared against `maximumWindowMetrics`, which is the display in its current rotation with no
-     * inset taken off — the frame the shade should have.
+     * Compared against [displayBounds], which is the display in its current rotation with no inset
+     * taken off — the frame the shade should have.
      *
      * **Polled, and a single read did flake on the phone.** A window is in the dump from the moment it
      * is added, but its frame is assigned at its first relayout, which a cold process reaches later:
@@ -178,7 +179,7 @@ class ShadeWindowTest {
     @Test
     fun theShadeCoversTheWholeDisplay() {
         context.startShade()
-        val display = context.getSystemService(WindowManager::class.java).maximumWindowMetrics.bounds
+        val display = context.getSystemService(WindowManager::class.java).displayBounds()
 
         var window: String? = null
         val deadline = System.currentTimeMillis() + TIMEOUT_MS
@@ -194,7 +195,7 @@ class ShadeWindowTest {
     }
 
     private fun frameOf(window: String): Rect? =
-        FRAME.find(window)?.destructured?.let { (left, top, right, bottom) ->
+        OverlayDump.FRAME.find(window)?.destructured?.let { (left, top, right, bottom) ->
             Rect(left.toInt(), top.toInt(), right.toInt(), bottom.toInt())
         }
 
@@ -233,14 +234,15 @@ class ShadeWindowTest {
      * happened on a CI leg: `PanelWindowTest` sorts first, its teardown does not wait for the
      * window manager to finish removing what it put up, and this test matched the outgoing panel.
      *
-     * `fillxfill` is `MATCH_PARENT` x `MATCH_PARENT`, which only the shade asks for — the same
+     * [shadeLayout] — `MATCH_PARENT` x `MATCH_PARENT`, or below Android 11 a square past the
+     * display ([fillDisplay]) — is a size only the shade asks for — the same
      * discrimination `PanelWindowTest.OverlayWindow` already makes, and the reason a
      * `MATCH_PARENT` in the panel's `LayoutParams` is a bug rather than a simplification.
      */
     private fun shadeWindowBlock(): String? =
         shell("dumpsys window windows")
             .split("Window #")
-            .firstOrNull { packageName in it && "ty=APPLICATION_OVERLAY" in it && SHADE_LAYOUT in it }
+            .firstOrNull { OverlayDump.isOurOverlay(it, packageName) && shadeLayout in it }
 
     /**
      * Run a shell command as the shell user and return everything it printed.
@@ -258,14 +260,5 @@ class ShadeWindowTest {
     private companion object {
         const val TIMEOUT_MS = 15_000L
         const val POLL_MS = 250L
-
-        /** `MATCH_PARENT` x `MATCH_PARENT` as `dumpsys` prints it. Only the shade asks for it. */
-        const val SHADE_LAYOUT = "fillxfill"
-
-        /**
-         * The `frame=[l,t][r,b]` on the window's `Frames:` line. The leading space keeps it off
-         * `parent=` and `display=`, which sit on the same line and end in the same shape.
-         */
-        val FRAME = Regex(""" frame=\[(-?\d+),(-?\d+)]\[(-?\d+),(-?\d+)]""")
     }
 }

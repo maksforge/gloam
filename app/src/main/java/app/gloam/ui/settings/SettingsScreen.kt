@@ -33,6 +33,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import app.gloam.R
 import app.gloam.data.ThemeMode
+import app.gloam.shade.canRequestAddShadeTile
 import app.gloam.shade.requestAddShadeTile
 import app.gloam.theme.Spacing
 import app.gloam.ui.appViewModelExtras
@@ -231,6 +232,15 @@ private fun QuickTileRow() {
         color = MaterialTheme.colorScheme.onSurfaceVariant,
         modifier = Modifier.padding(horizontal = Spacing.base),
     )
+    if (!canRequestAddShadeTile) {
+        Text(
+            text = stringResource(R.string.settings_tile_unavailable),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = Spacing.base, vertical = Spacing.snug),
+        )
+        return
+    }
     Button(
         onClick = { context.requestAddShadeTile { result = it } },
         modifier = Modifier.padding(horizontal = Spacing.base, vertical = Spacing.snug),

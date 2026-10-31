@@ -72,3 +72,11 @@ Context above is what it was answering.
 on 13+ is a thin pass-through to the framework's `LocaleManager`. Confirmed on the phone rather than
 argued (`phase-2.md` R12): tapping *Polski* leaves `cmd locale get-app-locales` reporting `[pl]`,
 and a force-stopped app comes back up Polish. Everything else in this decision is unchanged.
+
+Second amendment, 2026-10-31: **the below-13 half of persistence is back**, because `minSdk` is 26
+again (ADR-0008's amendment). The disabled `AppLocalesMetadataHolderService` entry with
+`autoStoreLocales` is restored, so AppCompat keeps the choice on devices with no per-app locale
+store. **Known limit below 13:** AppCompat applies the locale to activities, not to the application
+or a service, so the shade's notification, the tile's label and the built-in preset names follow the
+system language there. Accepted rather than worked around — the screens are right, nothing traps
+the user, and the fix is a per-process locale override on shared resources.

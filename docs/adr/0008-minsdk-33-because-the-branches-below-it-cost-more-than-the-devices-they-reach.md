@@ -60,3 +60,31 @@ because the branch that matters is the notification permission, and 30 leaves th
   `DOD.md` so it cannot be forgotten.
 - AppCompat itself stays regardless: ADR-0006 needs `setDefaultNightMode` to move the *configuration*
   so the window background and the system bars agree.
+
+## Amendment, 2026-10-31: `minSdk` is 26 again
+
+**The owner's call, on reach**: roughly 30% of phones could not install a free app whose whole
+mechanism is one overlay window. Lowering is the cheap direction this ADR named — nothing installed
+is stranded — so the question was only whether the branches below 33 could be made testable, and
+they now can be:
+
+- **The CI floor leg is API 26** (`default` image; `aosp_atd` starts at 30), so the instrumented
+  window tests run on the oldest platform the app ships to on every pull request, and an API-26 AVD
+  boots locally where the API-33 one segfaults.
+- **The branches are gathered rather than scattered.** Every window-geometry difference below
+  Android 11 lives in `shade/OverlayLayout.kt`, one function per question; the windows carry no
+  `SDK_INT` checks of their own. Lint's `NewApi` at `minSdk` 26 found everything else, and each is a
+  one-line fallback beside its call.
+
+What older phones get, by level — **the platform's limits rather than choices of ours**:
+
+| Below | What is different |
+| --- | --- |
+| 13 | No *Add the tile* button — `requestAddTileService` does not exist; the row says to use the tile editor. The language choice is kept by AppCompat (ADR-0004), and reaches activities only, so the notification and tile follow the system language. `POST_NOTIFICATIONS` is install-granted |
+| 12 | Location comes from the network provider; the fused one is not public |
+| 11 | The shade is an explicit square on the display's longest edge rather than `MATCH_PARENT`, which the platform keeps clear of the navigation bar for an overlay (measured: 1794 of 1920 px). The panel and prompt drop `FLAG_LAYOUT_IN_SCREEN` to sit clear of the bars. Display size and the bubble's area come from `Display` reads. Backup reads `@xml/backup_rules`, the twin of the extraction rules |
+| 10 | The panel reports itself on screen from a post after pre-draw, which can be one frame early |
+| 9 | No cutout API: a notch strip may stay undimmed. The backlight floor configs do not exist, so the floor is read as unset |
+
+The table in *Context* is kept as the record of the argument it was; the cost it priced was
+untestability, and that is what changed.

@@ -91,25 +91,19 @@
     </queries>
 
     <!--
-        `android:localeConfig` is read by Android 13+ only, which is every device this app ships to
-        now that `minSdk` is 33 (ADR-0008) — so it no longer needs a tools:targetApi to silence
-        lint's "unused below minSdk" note. It is the one declaration of the shipped languages that
-        the framework reads (ADR-0004); `AppLanguage` and `TranslationTest` are the other two, and
-        the test is what holds all three to the same claim.
+        `android:localeConfig` is read by Android 13+ only, hence the `tools:targetApi`. It is the one
+        declaration of the shipped languages that the framework reads (ADR-0004); `AppLanguage` and
+        `TranslationTest` are the other two, and the test is what holds all three to the same claim.
 
-        **AppCompat's below-13 locale backport was here and is gone** — a disabled
-        `AppLocalesMetadataHolderService` entry carrying `autoStoreLocales`, which existed so
-        AppCompat could persist a language choice on devices with no per-app locale store of their
-        own. `minSdk` 33 means the app ships to none of them, so on every device it reaches the
-        framework persists the choice and the entry was ignored. Removed as a dated amendment on
-        ADR-0004, not as a tidy-up. **AppCompat itself stays**: ADR-0006 needs `setDefaultNightMode`,
-        and ADR-0004's switcher is `AppCompatDelegate.setApplicationLocales`.
+        **Below 13 there is no per-app locale store**, so AppCompat keeps the choice itself: the
+        disabled `AppLocalesMetadataHolderService` entry below, carrying `autoStoreLocales`. On 13+
+        the framework persists the choice and the entry is ignored. ADR-0004's second amendment.
 
-        Auto Backup is the platform's default here, with no agent, and **one rules XML that excludes
-        one settings file**: the lent location (ADR-0013 §8), which is kept on the phone and not in
-        the user's Google backup. `@xml/data_extraction_rules` says why device transfer excludes it
-        too. `dataExtractionRules` alone is enough, because `fullBackupContent` is read only below
-        API 31 and `minSdk` is 33.
+        Auto Backup is the platform's default here, with no agent, and **one rule that excludes one
+        settings file**: the lent location (ADR-0013 §8), which is kept on the phone and not in the
+        user's Google backup. `@xml/data_extraction_rules` says why device transfer excludes it too.
+        It is written twice because the platform reads two formats: `dataExtractionRules` on
+        Android 12+, `fullBackupContent` below it, and `BackupRulesTest` holds both to the same path.
 
         The template shipped an `AppBackupAgent` because static include/exclude XML cannot checkpoint
         a database's write-ahead log, and without that the platform is eligible to copy the live
@@ -122,13 +116,15 @@
         android:name=".MainApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:windowSoftInputMode="adjustResize"
-        android:theme="@style/Theme.App">
+        android:theme="@style/Theme.App"
+        tools:targetApi="33">
         <!--
             **The launcher entry is not here. It is on `ControlsActivity`** — shape iv in
             `docs/phase-3.md` §2, and the reason is a platform fact rather than taste.
@@ -347,6 +343,14 @@
             android:name=".shade.ScheduleReceiver"
             android:enabled="true"
             android:exported="false" />
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
     </application>
 
 </manifest>

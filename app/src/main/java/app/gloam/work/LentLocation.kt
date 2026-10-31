@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.Uri
+import android.os.Build
 import android.os.CancellationSignal
 import android.provider.Settings
 import android.util.Log
@@ -15,6 +16,8 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.location.LocationManagerCompat
 import app.gloam.data.AppPreferences
 import app.gloam.shade.Coordinates
 import app.gloam.shade.ScheduleKind
@@ -138,17 +141,24 @@ private suspend fun windowOpen(
  */
 private suspend fun Context.readApproximateLocation(): Coordinates? {
     val manager = getSystemService(LocationManager::class.java) ?: return null
-    if (!manager.isLocationEnabled) return null
+    if (!LocationManagerCompat.isLocationEnabled(manager)) return null
+    // The fused provider is public from Android 12; below it, the network provider is the coarse one.
+    val candidates =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            listOf(LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
+        } else {
+            listOf(LocationManager.NETWORK_PROVIDER)
+        }
     val provider =
-        listOf(LocationManager.FUSED_PROVIDER, LocationManager.NETWORK_PROVIDER)
-            .firstOrNull { manager.hasProvider(it) && manager.isProviderEnabled(it) }
+        candidates.firstOrNull { LocationManagerCompat.hasProvider(manager, it) && manager.isProviderEnabled(it) }
             ?: return null
 
     return try {
         suspendCancellableCoroutine { continuation ->
             val signal = CancellationSignal()
             continuation.invokeOnCancellation { signal.cancel() }
-            manager.getCurrentLocation(provider, signal, mainExecutor) { location ->
+            val executor = ContextCompat.getMainExecutor(this)
+            LocationManagerCompat.getCurrentLocation(manager, provider, signal, executor) { location ->
                 if (continuation.isActive) {
                     continuation.resume(location?.let { Coordinates(it.latitude, it.longitude) })
                 }

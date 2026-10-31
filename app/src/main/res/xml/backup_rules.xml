@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The Android 8-11 twin of data_extraction_rules.xml, which those versions do not read. Same one
+    exclusion, same reason; `BackupRulesTest` holds the two files to the same path.
+-->
+<full-backup-content>
+    <exclude domain="file" path="datastore/lent_location.preferences_pb" />
+</full-backup-content>
