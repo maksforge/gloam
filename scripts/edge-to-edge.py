@@ -1947,11 +1947,14 @@ def run_scene(scene: Scene, config: Config, out_dir: Path, retries: int = 0) -> 
     shot.write_bytes(adb("exec-out", "screencap", "-p", binary=True))
 
     insets = read_insets()
-    # A screen with no system bar at all is not one this app draws, so an empty read is the driver
-    # failing to see the bars, and every scene would otherwise pass for having been checked against
-    # nothing — the failure INSET_RE's comment names, now refused rather than only warned about.
-    if not insets:
-        return {"scene": scene.name, "family": scene.family, "error": "no system insets could be read"}
+    # Every scene this app draws has both bars, so a missing one is the driver or the device failing
+    # to show it, and the scene would otherwise pass for having been checked against less than the
+    # screen. CI's emulators did exactly that for weeks: no bars on ATD, no navigation bar on a
+    # profile with hardware keys (`ci.yml`).
+    missing = [kind for kind in ("statusBars", "navigationBars") if kind not in insets]
+    if missing:
+        error = f"no {' or '.join(missing)} inset could be read"
+        return {"scene": scene.name, "family": scene.family, "error": error}
     findings = check(dump_ui(), insets)
     result = {
         "scene": scene.name,
