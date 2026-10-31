@@ -193,9 +193,11 @@ jobs:
   # user setting rather than by platform release, and the phone is one device in one configuration;
   # an emulator observes the others. The floor is back at API 26 with `minSdk` (ADR-0008's
   # amendment), where every claim about drawing under the system bars is otherwise argued from theme
-  # XML. Gesture navigation is Android 10, so the floor has one cell, three-button. API 33 keeps both
+  # XML. Gesture navigation is Android 10, so the floor has one cell, three-button. API 32 keeps both
   # modes: it is the only level between "not forced edge-to-edge" (26) and "forced" (36), and the only
-  # one whose bars are read through the `ITYPE_*` names.
+  # one whose bars are read through the `ITYPE_*` names. **32 rather than 33** because the API 33
+  # emulator dies under this script on a phone profile (exit 139, `Failed to find ColorBuffer`, a
+  # host graphics fault), reproduced locally on both 1080x2400 and 1080x1920; 32 ran it clean.
   #
   # **Portrait only since 2026-09-13.** `MainActivity` is locked to portrait and every scene starts
   # from it, so the landscape cells would have captured portrait under a landscape name. They are
@@ -231,10 +233,10 @@ jobs:
           - api-level: 26
             target: default
             config: portrait-threebutton
-          - api-level: 33
+          - api-level: 32
             target: default
             config: portrait-gesture
-          - api-level: 33
+          - api-level: 32
             target: default
             config: portrait-threebutton
           - api-level: 36
